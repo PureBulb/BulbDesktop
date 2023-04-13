@@ -1,40 +1,41 @@
 #include "hookthread.h"
 
 #include <QtDebug>
-void HookThread::hookMouseMessage()
+
+
+
+
+void HookThread::inject()
 {
 
-
-}
-
-void HookThread::getProcessId()
-{
-
-    enableDebugPrivilege(SE_DEBUG_NAME);
+    char  dllPath[] = "E:/project/c#/test/MinHookDllDemo/x64/Debug/MinHookDllDemo.dll";
+    int buffSize = (strlen(dllPath) + 1) * sizeof(char) ;
     // 获取窗口所在的PID
     DWORD dwPID = 0;
+    qDebug()<<"inject into hwnd:"<<myWorkerW;
     GetWindowThreadProcessId(myWorkerW, &dwPID);
     if (dwPID == 0) {
-        qDebug()<<"获取PID失败";
+        loge("inject","获取PID失败\n");
+
         return;
     }
 
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwPID);
     if (hProcess == NULL) {
-        qDebug()<<"进程的句柄获取失败 ";
+        loge("inject","进程的句柄获取失败\n");
         return;
     }
     //权限，可添加的权限|可查询的权限
     HANDLE hToken;
     if (FALSE == OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
         // 权限修改失败
-        qDebug()<<"权限修改失败";
+        loge("inject","权限修改失败\n");
         return;
     }
     LUID luid;
     if (FALSE == LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &luid)) {
         // 特权信息查询失败
-        qDebug()<<"特权信息查询失败";
+        loge("inject","特权信息查询失败\n");
         return;
     };
     //3.调节进程的访问令牌的特权属性
@@ -50,7 +51,7 @@ void HookThread::getProcessId()
     // 【参数5】原特权的长度
     if (FALSE == AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL)) {
         // 提升特权失败
-        qDebug()<<"提升特权失败";
+        loge("inject","提升特权失败\n");
         return;
     };
 
@@ -61,55 +62,81 @@ void HookThread::getProcessId()
     // 【参数4】调用物理存储器
     // 【参数5】这块内存可读可写，可执行
     // 【返回】申请到的地址
-//    LPVOID lpAddr = VirtualAllocEx(hProcess, NULL, m_StrDLLPath.GetLength() * 2+2,MEM_COMMIT,PAGE_EXECUTE_READWRITE);
-//    if (lpAddr == NULL) {
-//        // 在远程进程中申请内存失败
-//        MessageBox(L"在远程进程中申请内存失败");
-//        return;
-//    }
 
-    myWndProc = GetWindowLongPtrW(myWorkerW,GWLP_WNDPROC);
-    qDebug()<<myWndProc;
-}
+    LPVOID lpAddr = VirtualAllocEx(hProcess, NULL,buffSize,MEM_COMMIT,PAGE_EXECUTE_READWRITE);
+    if (lpAddr == NULL) {
+        // 在远程进程中申请内存失败
 
-int HookThread::enableDebugPrivilege(const wchar_t* name)
-{
-    HANDLE token;
-        TOKEN_PRIVILEGES tp;
-        //打开进程令牌环
-        if(!OpenProcessToken(GetCurrentProcess(),
-            TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY,&token))
-        {
-            qDebug()<<"open process token error!\n";
-            return 0;
-        }
-        //获得进程本地唯一ID
-        LUID luid;
-        if(!LookupPrivilegeValue(NULL,name,&luid))
-        {
-            qDebug()<<"lookup privilege value error!\n";
-            return 0;
-        }
-        tp.PrivilegeCount=1;
-        tp.Privileges[0].Attributes=SE_PRIVILEGE_ENABLED;
-        tp.Privileges[0].Luid=luid;
-        //调整进程权限
-        if(!AdjustTokenPrivileges(token,0,&tp,sizeof(TOKEN_PRIVILEGES),NULL,NULL))
-        {
-            qDebug()<<"adjust token privilege error!\n";
-            return 0;
-        }
-        return 1;
-}
+        loge("inject","在远程进程中申请内存失败\n");
+        return;
+    }
+    // 把DLL路径写入到远程进程中
+        // 强行修改程序的内存
+        // 【参数1】程序的句柄
+        // 【参数2】申请到的内存首地址
+        // 【参数3】写入的内容
+        // 【参数4】要写入的字节数
+        // 【参数5】
+        if (FALSE == WriteProcessMemory(hProcess, lpAddr, dllPath,
+            buffSize, NULL)) {
+            // 在远程进程中写入数据失败
+            loge("inject","在远程进程中写入数据失败\n");
+            return ;
+        };
 
-HookThread::HookThread(HWND workerw)
-{
-    this->myWorkerW = workerw;
-    getProcessId();
+
+        // 调用Kernel32.dll中的LoadLibraryW方法用以加载DLL文件
+        PTHREAD_START_ROUTINE pfnStartAssr =
+            (PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle(L"Kernel32.dll"),
+    "LoadLibraryA");
+
+        // 在远程进程中开辟线程
+        // 【参数1】远程线程的句柄
+        // 【参数2】线程属性。NULL表示使用默认属性
+        // 【参数3】堆栈大小。0代表默认
+        // 【参数4】加载DLL文件的对象
+        // 【参数5】加载文件的路径
+        // 【参数6】延迟时间。0代表立即启动
+        // 【参数7】线程ID。为NULL就行了
+        HANDLE hRemoteThread = CreateRemoteThread(hProcess, NULL, 0, pfnStartAssr, lpAddr, 0,
+            NULL);
+        if (hRemoteThread == NULL) {
+            // 创建远程线程失败
+            loge("inject","创建远程线程失败\n");
+            // 释放内存
+            VirtualFreeEx(hProcess, lpAddr, 0, MEM_FREE);
+            return ;
+        }
+
+        logi("inject","注入成功\n");
+        WaitForSingleObject(hRemoteThread, INFINITE);
+//         关闭线程
+        CloseHandle(hRemoteThread);
+//         释放内存
+        VirtualFreeEx(hProcess, lpAddr, 0, MEM_FREE);
 
 }
 
 void HookThread::run()
 {
+    inject();
+}
+
+
+
+
+
+HWND HookThread::getMyWorkerW() const
+{
+    return myWorkerW;
+}
+
+HookThread::HookThread(HWND workerw)
+{
+    myWorkerW = workerw;
+
 
 }
+
+
+

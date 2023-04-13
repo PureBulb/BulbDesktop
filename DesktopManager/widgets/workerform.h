@@ -1,7 +1,9 @@
 #ifndef WORKERFORM_H
 #define WORKERFORM_H
 
+#include <Windows.h>
 #include <QWidget>
+#include <QPainter>
 #include <QPixmap>
 #include <QMovie>
 #include "context.h"
@@ -21,9 +23,13 @@ public:
 public slots:
     void onSettingsChange();
     void onQuit();
+    void onDecodeImage(QImage _image);
+
 protected:
     bool eventFilter(QObject *o,QEvent *e);
     bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     Ui::WorkerForm *ui;
     WindAdapter* winAdapter;
@@ -32,6 +38,7 @@ private:
     void setGraphBackground();
     bool hideIcon;
     QMovie *gif;
+    QImage image;
 };
 
 #endif // WORKERFORM_H

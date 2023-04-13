@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,16 +16,64 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    context.cpp \
+    log.cpp \
     main.cpp \
-    mainwindow.cpp
+    utils/audioUtils/AudioUtils.cpp \
+    utils/audioUtils/IAudioPlayer.cpp \
+    utils/hookthread.cpp \
+    utils/safequeue.cpp \
+    utils/videoUtils/AVFrameQueue.cpp \
+    utils/videoUtils/AVPacketQueue.cpp \
+    utils/videoUtils/AudioDecoder.cpp \
+    utils/videoUtils/DexmuxThread.cpp \
+    utils/videoUtils/IDecoderBase.cpp \
+    utils/videoUtils/videodecoder.cpp \
+    utils/windadapter.cpp \
+    utils/videoUtils/videoUtils.cpp \
+    widgets/mainwindow.cpp \
+    widgets/subregionform.cpp \
+    widgets/workerform.cpp
 
 HEADERS += \
-    mainwindow.h
+    context.h \
+    log.h \
+    utils/AVConfig.h \
+    utils/audioUtils/AudioUtils.h \
+    utils/audioUtils/IAudioPlayer.h \
+    utils/hookthread.h \
+    utils/safequeue.h \
+    utils/videoUtils/AVPacketQueue.h \
+    utils/videoUtils/AudioDecoder.h \
+    utils/videoUtils/AvFrameQueue.h \
+    utils/videoUtils/DexmuxThread.h \
+    utils/videoUtils/IDecoderBase.h \
+    utils/videoUtils/videodecoder.h \
+    utils/windadapter.h \
+    utils/videoUtils/videoUtils.h\
+    widgets/mainwindow.h \
+    widgets/subregionform.h \
+    widgets/workerform.h
 
 FORMS += \
-    mainwindow.ui
+    widgets/mainwindow.ui \
+    widgets/subregionform.ui \
+    widgets/workerform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+LIBS += -L$$PWD/../ffmpeg/lib
+LIBS += -luser32 \
+        -ladvapi32 \
+        -lavcodec \
+        -lavdevice \
+        -lavfilter \
+        -lavformat \
+        -lavutil \
+        -lswresample \
+        -lswscale
+
+INCLUDEPATH += $$PWD/../ffmpeg/include
+DEPENDPATH += $$PWD/../ffmpeg/include

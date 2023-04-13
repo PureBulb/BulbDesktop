@@ -11,8 +11,11 @@ private:
     static const char* startWallpaper;
     static const char* hideIcon;
     static const char* autoLaunch;
-    static const char* wallpaperPath;
+    static const char* graphWallpaperPath;
+    static const char* videoWallpaperPath;
+    static const char* gifWallpaperPath;
     static const char* wallpaperType;
+    static const char* doubleClickedHideIcon;
 
 public:
     enum wallpaperType{graph,gif,video};
@@ -28,6 +31,9 @@ public:
 
     static bool isAutoLaunch();
     static void setAutoLaunch(bool value);
+
+    static bool isDoubleClickedHideIcon();
+    static void setDoubleClickedHideIcon(bool value);
 
     static QString getWallpaperPath();
     static void setWallpaperPath(const QString &value);

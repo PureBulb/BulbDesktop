@@ -3,18 +3,31 @@
 
 #include <QThread>
 #include <windows.h>
-
-class HookThread :public QThread
+#include <tlhelp32.h>
+#include "log.h"
+class HookThread:public QThread
 {
+    Q_OBJECT
 private:
     static void hookMouseMessage();
-    void getProcessId();
-    int enableDebugPrivilege(const wchar_t *name);
+
+
+    BOOL SetWinHookInject(WCHAR * wzDllPath, WCHAR * wzProcessName);
+    UINT32 GetTargetThreadIdFromProcessName(const WCHAR *ProcessName);
     HWND myWorkerW;
+    HWND myWallPaperW;
     LONG myWndProc;
 public:
     HookThread(HWND workerw);
-    void run() override;
+    void inject();
+
+
+
+    // QThread interface
+    HWND getMyWorkerW() const;
+
+protected:
+    void run();
 };
 
 #endif // HOOKTHREAD_H

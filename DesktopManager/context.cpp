@@ -2,9 +2,14 @@
 QSettings* Context::settings = new QSettings("./setting.ini",QSettings::IniFormat);
 const char* Context::startWallpaper = "app/startWallpaper";
 const char* Context::hideIcon = "app/hideIcon";
+const char* Context::doubleClickedHideIcon = "app/doubleClickedHideIcon";
 const char* Context::autoLaunch = "app/autoLaunch";
-const char* Context::wallpaperPath = "app/wallpaperPath";
 const char* Context::wallpaperType = "app/wallpaperType";
+
+const char* Context::graphWallpaperPath = "graph/wallpaperPath";
+const char* Context::videoWallpaperPath = "video/wallpaperPath";
+const char* Context::gifWallpaperPath = "gif/wallpaperPath";
+
 
 Context::Context()
 {
@@ -42,15 +47,27 @@ void Context::setAutoLaunch(bool value)
     settings->setValue(autoLaunch,value);
 }
 
+bool Context::isDoubleClickedHideIcon()
+{
+    return settings->value(doubleClickedHideIcon).toBool();
+}
+
+void Context::setDoubleClickedHideIcon(bool value)
+{
+    settings->setValue(doubleClickedHideIcon,value);
+}
+
 QString Context::getWallpaperPath()
 {
-    return settings->value(wallpaperPath).toString();
+    enum wallpaperType type = (enum wallpaperType) getWallpaperType();
+    if(type == graph)
+        return settings->value(graphWallpaperPath).toString();
 
 }
 
 void Context::setWallpaperPath(const QString &value)
 {
-    settings->setValue(wallpaperPath,value);
+    settings->setValue(videoWallpaperPath,value);
 }
 
 int Context::getWallpaperType()

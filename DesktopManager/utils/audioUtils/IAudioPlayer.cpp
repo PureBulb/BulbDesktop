@@ -1,6 +1,11 @@
-#include "iaudioplay.h"
+#include "IAudioPlayer.h"
 
-IAudioPlay::IAudioPlay()
+IAudioPlayer::IAudioPlayer()
+{
+
+}
+
+IAudioPlayer::~IAudioPlayer()
 {
 
 }

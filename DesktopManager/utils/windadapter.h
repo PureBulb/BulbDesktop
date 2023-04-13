@@ -4,7 +4,7 @@
 #include <windows.h>
 #include <dwmapi.h>
 #include <QMessageBox>
-
+#include "log.h"
 
 #include "hookthread.h"
 class WindAdapter
@@ -22,6 +22,7 @@ public:
     void hideIcon();
     void showIcon();
     static void setMyWallpaperW(const HWND &value);
+    void reFindWallpaperW();
 
 protected:
     WindAdapter();
@@ -30,9 +31,6 @@ private:
 
 
     static BOOL CALLBACK  myEnumWindowsProc(_In_ HWND tophandle, _In_ LPARAM topparamhandle);
-    static LRESULT CALLBACK mouseProc(int nCode,WPARAM wParam,LPARAM lParam );
-
-
     static HWND myWorkerWMustHide;
     static HWND myWorkerW;
     static HWND myWallpaperW;
@@ -44,6 +42,7 @@ private:
     static UINT16 lastMsg;
 
     static WindAdapter* instance;
+    HookThread *Hookthread;
 
 };
 

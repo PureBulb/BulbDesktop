@@ -1,5 +1,4 @@
 #include "windadapter.h"
-#include <QtDebug>
 
 
 HWND WindAdapter::myWorkerWMustHide = 0;
@@ -12,7 +11,18 @@ HHOOK WindAdapter::mouseHook = nullptr;
 UINT16 WindAdapter::lastMsg = 0;;
 UINT16 WindAdapter::buttonMsg = 0;
 WindAdapter::WindAdapter()
+    :Hookthread(nullptr)
+{}
+
+BOOL WindAdapter::myEnumWindowsProc(HWND tophandle, LPARAM topparamhandle)
 {
+    myDefviewW = FindWindowEx(tophandle, nullptr, L"SHELLDLL_DefView", nullptr);
+    if (myDefviewW != nullptr)
+    {
+        WindAdapter::myWorkerWMustHide = FindWindowEx(nullptr, tophandle, L"WorkerW", nullptr);
+
+    }
+    return true;
 }
 
 HWND WindAdapter::getProgmanHWND()
@@ -57,9 +67,7 @@ HWND WindAdapter::findDefviewW()
         myWorkerW = hd;
         hd = FindWindowEx(nullptr, hd, L"WorkerW", nullptr);
     }
-    //todo: test myself hook
-    HookThread thead(myWorkerW);
-    // #######################
+
     return myDefviewW;
 }
 
@@ -67,7 +75,7 @@ HWND WindAdapter::underOnProgmanW(HWND windowHWND)
 {
 
     if(!myProgmanW){
-        qDebug()<<"WindAdapter::topOnProgmanW:\t"<<"can not find myProgmanW";
+        loge("WindAdapter::underOnProgmanW","can not find myProgmanW");
     }
     return SetParent(windowHWND,myProgmanW);
 }
@@ -77,7 +85,7 @@ HWND WindAdapter::topOnProgmanW(HWND windowHWND)
     if(!myDefviewW){
         findDefviewW();
         if(!myDefviewW)
-            qDebug()<<"WindAdapter::topOnProgmanW:\t"<<"can not find myDefviewW";
+            loge("WindAdapter::topOnProgmanW","can not find myDefviewW");
     }
     return SetParent(windowHWND,myDefviewW);
 }
@@ -94,13 +102,23 @@ WindAdapter *WindAdapter::getInstance(HWND wallpaperW)
 
 bool WindAdapter::removeHook()
 {
-    return UnhookWindowsHookEx(mouseHook);
+    return true;
 }
 
 bool WindAdapter::installHook()
 {
-    mouseHook = SetWindowsHookEx( WH_MOUSE_LL,&WindAdapter::mouseProc,GetModuleHandle(NULL),0);//设置钩子
-    return mouseHook;
+    //todo: test myself hook
+    if(myWorkerW == 0)
+        return false;
+    if(Hookthread == nullptr)
+        Hookthread = new HookThread(myWorkerW);
+    Hookthread->start();
+    while(SendMessage(Hookthread->getMyWorkerW(), WM_USER+100, 0, (LPARAM) myWallpaperW)!= WM_USER+100);
+
+
+    // todo: connect finished
+    // #######################
+    return true;
 }
 
 void WindAdapter::hideIcon()
@@ -111,55 +129,22 @@ void WindAdapter::hideIcon()
 void WindAdapter::showIcon()
 {
     ShowWindow(myWorkerW,SW_SHOW);
+
+
 }
 
 
-BOOL WindAdapter::myEnumWindowsProc(HWND tophandle, LPARAM topparamhandle)
-{
-    myDefviewW = FindWindowEx(tophandle, nullptr, L"SHELLDLL_DefView", nullptr);
-    if (myDefviewW != nullptr)
-    {
-        WindAdapter::myWorkerWMustHide = FindWindowEx(nullptr, tophandle, L"WorkerW", nullptr);
 
-    }
-    return true;
-}
 
-LRESULT WindAdapter::mouseProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
 
-    if(GetForegroundWindow()==myWorkerW && nCode==HC_ACTION)//当最前面的窗口是WorkerW（就是只有桌面）
-    {
-
-        POINT p;//定义一个坐标
-        GetCursorPos(&p);//获取鼠标坐标
-        ClientToScreen(myWallpaperW,&p);//转换成窗口坐标
-        //给buttonMsg赋值
-        if(wParam&MK_LBUTTON){
-//            qDebug()<<"左键";
-            buttonMsg=MK_LBUTTON;
-
-        }
-        else if(wParam&MK_MBUTTON){
-//            qDebug()<<"中键";
-            buttonMsg=MK_MBUTTON;
-        }
-        else if(wParam&MK_RBUTTON){
-//            qDebug()<<"右键";
-            buttonMsg=MK_MBUTTON;
-        }
-        else if(lastMsg==WM_MOUSEMOVE){
-//            qDebug()<<"移动";
-            buttonMsg=0;
-        }
-        SendMessage(myWallpaperW,wParam,buttonMsg,MAKEWPARAM(p.x,p.y));
-        if(wParam==lastMsg)
-            lastMsg=wParam;//将二者比较，判断状态变化，用于响应拖拽消息
-    }
-    return CallNextHookEx(mouseHook,nCode,wParam,lParam);
-}
 
 void WindAdapter::setMyWallpaperW(const HWND &value)
 {
     myWallpaperW = value;
 }
+
+void WindAdapter::reFindWallpaperW()
+{
+//    SendMessage(Hookthread->getMyWorkerW(), WM_USER+100, 0, 0);
+}
+

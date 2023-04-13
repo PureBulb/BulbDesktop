@@ -14,6 +14,7 @@ WorkerForm::WorkerForm(QWidget *parent) :
     ui->backgroundLabel->installEventFilter(this);
     hideIcon = isHideIcon();
     gif = nullptr;
+
 }
 
 WorkerForm::~WorkerForm()
@@ -34,16 +35,26 @@ void WorkerForm::onQuit()
     deleteLater();
 }
 
+void WorkerForm::onDecodeImage(QImage _image)
+{
+    image = _image;
+    update();
+}
+
 bool WorkerForm::eventFilter(QObject *o, QEvent *e)
 {
     if(o == ui->backgroundLabel && e->type() == QEvent::MouseButtonDblClick){
-        if(hideIcon)
+        if(hideIcon){
             winAdapter->hideIcon();
-        else
+        }
+        else{
             winAdapter->showIcon();
+        }
+
         hideIcon = !hideIcon;
 
     }
+
     return QWidget::eventFilter(o,e);
 }
 
@@ -63,6 +74,13 @@ bool WorkerForm::nativeEvent(const QByteArray &eventType, void *message, long *r
     return false;
 }
 
+void WorkerForm::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    image = image.scaled(ui->backgroundLabel->width(),ui->backgroundLabel->height());
+    painter.drawImage(QPoint(ui->backgroundLabel->x(),ui->backgroundLabel->y()),image);
+}
+
 void WorkerForm::init()
 {
     QDesktopWidget desktop;
@@ -74,6 +92,7 @@ void WorkerForm::init()
 
     if(isStartWallpaper()){
         showFullScreen();
+        winAdapter->reFindWallpaperW();
         winAdapter->underOnProgmanW((HWND)this->winId());
         if(isHideIcon()){
             qDebug()<<"hide Icon";
