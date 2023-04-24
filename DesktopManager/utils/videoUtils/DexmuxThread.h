@@ -38,10 +38,10 @@ public:
     AVRational getAudioTimeBase();
 protected:
     void run() override;
-//public slots:
-//    void onStop();
-//    void onPause();
-//    void onResume();
+public slots:
+    void onStop();
+    void onPause();
+    void onResume();
 
 };
 

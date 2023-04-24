@@ -2,12 +2,12 @@
 #define SUBREGIONFORM_H
 
 #include <QWidget>
-
+#include "BaseWidget.h"
 namespace Ui {
 class SubregionForm;
 }
 
-class SubregionForm : public QWidget
+class SubregionForm : public BaseWidget
 {
     Q_OBJECT
 

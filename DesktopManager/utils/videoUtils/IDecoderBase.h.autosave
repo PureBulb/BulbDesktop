@@ -17,6 +17,7 @@ class IDecoderBase:public ThreadBase
     Q_OBJECT
 public:
     IDecoderBase();
+    IDecoderBase(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
     virtual ~IDecoderBase() = 0;
     virtual void setPacketQueue(AVPacketQueue* _packets);
     virtual void setFrameQueue(AVFrameQueue* _frames);

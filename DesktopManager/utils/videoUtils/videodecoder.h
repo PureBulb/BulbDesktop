@@ -34,6 +34,7 @@ public:
     void toImage(AVFrame &frame);
 signals:
     void showImage(QImage);
+    void displayFinished();
 public slots:
     void onDisplayAudio(quint64 _baseTime);
 

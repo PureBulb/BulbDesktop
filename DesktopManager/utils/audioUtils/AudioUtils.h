@@ -18,6 +18,7 @@ public:
     bool writeData(QByteArray buff);
     int getFree();
     int getPeriodSize();
+    void setVolume(uint32_t value) override;
 protected:
     AudioUtils();
     ~AudioUtils();

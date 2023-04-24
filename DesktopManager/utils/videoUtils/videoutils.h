@@ -30,6 +30,7 @@ public slots:
     void onLowError(QString module,QString msg);
     void onVideoDecoderImg(QImage img);
     void videoStart();
+    void onDecodeFinished();
 
 signals:
     void error();
@@ -49,6 +50,8 @@ private:
     AVFrameQueue videoFrameQueue;
     AVFrameQueue audioFrameQueue;
     QWidget *background;
+    bool videoFinished;
+    bool audioFinished;
 };
 
 #endif // VIDEOUTILS_H

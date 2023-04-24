@@ -2,7 +2,7 @@
 #include "ui_subregionform.h"
 
 SubregionForm::SubregionForm(QWidget *parent) :
-    QWidget(parent),
+    BaseWidget(parent),
     ui(new Ui::SubregionForm)
 {
     ui->setupUi(this);

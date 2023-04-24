@@ -11,10 +11,11 @@ protected:
    virtual ~IAudioPlayer();
 public:
     virtual QIODevice* start() =0;
-//    virtual void play() =0;
     virtual void stop() =0;
     virtual void resume() = 0;
     virtual void pause() = 0;
+    // 0-100
+    virtual void setVolume(uint32_t volume) = 0;
 };
 
 #endif // IAUDIOPLAY_H

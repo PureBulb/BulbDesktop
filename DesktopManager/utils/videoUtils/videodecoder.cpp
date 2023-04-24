@@ -9,6 +9,7 @@ void VideoDecoder::realse()
     }
     if(swsContext)
         sws_freeContext(swsContext);
+
     startTime = 0;
     swsContext = nullptr;
     codecContext = nullptr;
@@ -82,7 +83,7 @@ void VideoDecoder::run()
         av_packet_free(&pkt);
         pkt = nullptr;
         //送包后取解码完成的帧
-        while(true){
+        while(!_stop){
 
             AVFrame* frame = av_frame_alloc();
             res = avcodec_receive_frame(codecContext,frame);
@@ -99,11 +100,13 @@ void VideoDecoder::run()
             }
             else if(res == AVERROR_EOF){
                 //完成解码
+                emit displayFinished();
                 return;
             }
 
         }
     }
+    emit displayFinished();
 }
 
 void VideoDecoder::toImage(AVFrame &frame)
@@ -153,3 +156,5 @@ void VideoDecoder::onDisplayAudio(quint64 _startTime)
 {
     startTime = _startTime;
 }
+
+

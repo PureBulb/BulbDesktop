@@ -7,32 +7,49 @@ WorkerForm::WorkerForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::WorkerForm)
 {
+    pause = 0;
     ui->setupUi(this);
     winAdapter = WindAdapter::getInstance((HWND)window()->winId());
     winAdapter->getWorker();
     winAdapter->installHook();
-    ui->backgroundLabel->installEventFilter(this);
-    hideIcon = isHideIcon();
+
+
     gif = nullptr;
+    graphShowTimer = nullptr;
+    video = nullptr;
+
+    ui->backgroundLabel->installEventFilter(this);
+    connect(getContext(),&Context::settingsChanged,this,&WorkerForm::onSettingsChanged);
 
 }
 
 WorkerForm::~WorkerForm()
 {
-    delete ui;
-    winAdapter->removeHook();
-    setHideIcon(hideIcon);
+    onQuit();
 }
 
-void WorkerForm::onSettingsChange()
-{
-    init();
-}
 
 void WorkerForm::onQuit()
 {
-
+    delete ui;
+    if(gif)
+        gif->deleteLater();
+    if(graphShowTimer)
+        graphShowTimer->deleteLater();
+    gif = nullptr;
+    graphShowTimer = nullptr;
+    winAdapter->removeHook();
     deleteLater();
+}
+
+void WorkerForm::onPause()
+{
+
+}
+
+void WorkerForm::onRestart()
+{
+
 }
 
 void WorkerForm::onDecodeImage(QImage _image)
@@ -58,43 +75,54 @@ bool WorkerForm::eventFilter(QObject *o, QEvent *e)
     return QWidget::eventFilter(o,e);
 }
 
-bool WorkerForm::nativeEvent(const QByteArray &eventType, void *message, long *result)
-{
-    MSG* msg = static_cast<MSG*>(message);
+//bool WorkerForm::nativeEvent(const QByteArray &eventType, void *message, long *result)
+//{
+//    MSG* msg = static_cast<MSG*>(message);
 
-    switch (msg->message) {
-    case WM_MOUSELEAVE:
+//    switch (msg->message) {
+//    case WM_MOUSELEAVE:
 //        qDebug()<<"test";
-        return true;//这里是为了去掉本来不该存在的mouseleave消息（邪术）
-    case WM_LBUTTONDBLCLK:
+//        return true;//这里是为了去掉本来不该存在的mouseleave消息（邪术）
+//    case WM_LBUTTONDBLCLK:
 //        qDebug()<<"test1";
-        return true;
-    }
+//        return true;
+//    }
 
-    return false;
-}
+//    return false;
+//}
 
 void WorkerForm::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    image = image.scaled(ui->backgroundLabel->width(),ui->backgroundLabel->height());
-    painter.drawImage(QPoint(ui->backgroundLabel->x(),ui->backgroundLabel->y()),image);
+    if(!image.isNull()){
+        image = image.scaled(ui->backgroundLabel->width(),ui->backgroundLabel->height());
+        painter.drawImage(QPoint(ui->backgroundLabel->x(),ui->backgroundLabel->y()),image);
+
+    }
+}
+
+Context *WorkerForm::getContext()
+{
+    return Context::getInstance();
 }
 
 void WorkerForm::init()
 {
     QDesktopWidget desktop;
-
-
-
     setWindowTitle("BulbWorkerW");
     setWindowFlags(windowFlags() | Qt::Dialog | Qt::FramelessWindowHint);
 
-    if(isStartWallpaper()){
+    //get Setting Info
+    hideIcon = getContext()->isHideIcon();
+    isStartWallpaper = getContext()->isStartWallpaper();
+    wallpaperType = (Context::WallPaperType)getContext()->getWallpaperType();
+    wallpaperPaths = getContext()->getWallpaperPaths();
+
+    if(isStartWallpaper){
         showFullScreen();
         winAdapter->reFindWallpaperW();
         winAdapter->underOnProgmanW((HWND)this->winId());
-        if(isHideIcon()){
+        if(hideIcon){
             qDebug()<<"hide Icon";
             winAdapter->hideIcon();
         }
@@ -107,14 +135,14 @@ void WorkerForm::init()
         this->hide();
         return ;
     }
-    switch(getWallpaperType()){
-        case wallpaperType::graph:
+    switch(wallpaperType){
+        case Context::WallPaperType::graph:
             setGraphBackground();
             break;
-        case wallpaperType::gif:
+        case Context::WallPaperType::gif:
             setGifBackground();
             break;
-        case wallpaperType::video:
+        case Context::WallPaperType::video:
             setVideoBackground();
             break;
         default:
@@ -123,24 +151,86 @@ void WorkerForm::init()
 
 }
 
+void WorkerForm::onSettingsChanged()
+{
+    //todo: stop all wallpaper
+    if(video){
+        video->onStop();
+        video->deleteLater();
+        video = nullptr;
+    }
+    if(graphShowTimer){
+        graphShowTimer->stop();
+        graphShowTimer->deleteLater();
+        graphShowTimer = nullptr;
+    }
+    init();
+}
+
 void WorkerForm::setVideoBackground()
 {
+    if(wallpaperPaths.size()>0){
+        if(!video){
+            video = new VideoUtils(wallpaperPaths.front());
+            connect(video,&VideoUtils::displayFinished,this,&WorkerForm::setVideoBackground);
+            connect(video,&VideoUtils::sendDecodeImg,this,&WorkerForm::onDecodeImage);
+            wallpaperPaths.pop_front();
+            video->play();
+        }
+        else{
+            video->deleteLater();
+            video = nullptr;
+            setVideoBackground();
+        }
+    }
+    else{
+        wallpaperPaths = getContext()->getWallpaperPaths();
+        setVideoBackground();
+    }
 
 }
 
 void WorkerForm::setGifBackground()
 {
-    if(!gif)
+    if(!gif){
         gif = new QMovie;
-    gif->setFileName(getWallpaperPath());
-    gif->setScaledSize(ui->backgroundLabel->size());
-    ui->backgroundLabel->setMovie(gif);
-    gif->start();
+        connect(gif,&QMovie::finished,this,&WorkerForm::setGifBackground);
+    }
+    else{
+        gif->stop();
+    }
+    if(wallpaperPaths.size()>0){
+        gif->setFileName(wallpaperPaths.front());
+        gif->setScaledSize(ui->backgroundLabel->size());
+        ui->backgroundLabel->setMovie(gif);
+        gif->start();
+        wallpaperPaths.pop_front();
+    }
+    else{
+        gif->stop();
+        wallpaperPaths = getContext()->getWallpaperPaths();
+        setGifBackground();
+    }
+
 }
 
 void WorkerForm::setGraphBackground()
 {
-    QString graphPath = getWallpaperPath();
-    ui->backgroundLabel->setPixmap(QPixmap(graphPath));
-    ui->backgroundLabel->setScaledContents(true);
+    if(!graphShowTimer){
+        graphShowTimer = new QTimer;
+        graphShowTimer->setInterval(1000);
+        connect(graphShowTimer,&QTimer::timeout,this,&WorkerForm::setGraphBackground);
+    }
+    if(wallpaperPaths.size()>0){
+        ui->backgroundLabel->setPixmap(QPixmap(wallpaperPaths.front()));
+        ui->backgroundLabel->setScaledContents(true);
+        wallpaperPaths.pop_front();
+        graphShowTimer->start();
+    }
+    else{
+        wallpaperPaths = getContext()->getWallpaperPaths();
+        setGraphBackground();
+    }
+
+
 }

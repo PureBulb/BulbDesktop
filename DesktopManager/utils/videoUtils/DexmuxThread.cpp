@@ -42,7 +42,7 @@ int DexmuxThread::open()
         close();
         return -1;
     }
-
+    return res;
 }
 //返回音频解码器参数
 AVCodecParameters *DexmuxThread::getAudioCodecParameters()
@@ -116,7 +116,24 @@ void DexmuxThread::run()
     }
     //塞一个空包才能够解码结束
     audioPacketQueue->enqueue(nullptr);
-    emit readPacketFinished();
+    videoPacketQueue->enqueue(nullptr);
+    if(!stop)
+        emit readPacketFinished();
+}
+
+void DexmuxThread::onStop()
+{
+    stop = true;
+}
+
+void DexmuxThread::onPause()
+{
+    pause = true;
+}
+
+void DexmuxThread::onResume()
+{
+    pause = false;
 }
 
 

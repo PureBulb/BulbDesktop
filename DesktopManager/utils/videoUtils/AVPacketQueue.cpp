@@ -12,6 +12,8 @@ AVPacketQueue::~AVPacketQueue()
     while(!queue.isEmpty()){
         AVPacket* res = nullptr;
         queue.dequeue(res,1);
+        if(res!=nullptr)
+            av_packet_unref(res);
         av_packet_free(&res);
     }
     queue.abort();

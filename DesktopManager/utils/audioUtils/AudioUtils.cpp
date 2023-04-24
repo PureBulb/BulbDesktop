@@ -1,4 +1,5 @@
 #include "AudioUtils.h"
+#include <QtDebug>
 AudioUtils* AudioUtils::instance = nullptr;
 QMutex AudioUtils::mutex;
 AudioUtils *AudioUtils::getInstance()
@@ -26,25 +27,23 @@ AudioUtils::~AudioUtils()
 
 QIODevice *AudioUtils::start()
 {
-    stop();
     mutex.lock();
-
     QAudioFormat format;
     format.setChannelCount(channels);
     format.setSampleRate(sampleRate);
-    format.setSampleSize(32);
+    format.setSampleSize(sampleSize);
     format.setCodec("audio/pcm");//解码格式
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::UnSignedInt);//设置音频类型
 
-    if(output){
-        output->deleteLater();
-        output = nullptr;
+//    if(output){
+//        output->deleteLater();
+//        output = nullptr;
+//    }
+    if(!output){
+        output = new QAudioOutput(format);        
     }
-
-    output = new QAudioOutput(format);
     io = output->start();
-
     mutex.unlock();
     return io;
 }
@@ -54,12 +53,13 @@ QIODevice *AudioUtils::start()
 void AudioUtils::stop()
 {
     mutex.lock();
-    if(output != nullptr){
+    if(output != nullptr ){
+        output->reset();
         output->stop();
         output->deleteLater();
         output = nullptr;
+        io = nullptr;
     }
-    io = nullptr;
     mutex.unlock();
 }
 
@@ -80,8 +80,10 @@ void AudioUtils::pause()
 bool AudioUtils::writeData(const char *buff, int buffSize)
 {
     mutex.lock();
-    if(!io)
+    if(!io){
+        mutex.unlock();
         return false;
+    }
     io->write(buff,buffSize);
     mutex.unlock();
     return true;
@@ -89,8 +91,10 @@ bool AudioUtils::writeData(const char *buff, int buffSize)
 bool AudioUtils::writeData(QByteArray buff)
 {
     mutex.lock();
-    if(!io)
+    if(!io ){
+        mutex.unlock();
         return false;
+    }
     io->write(buff);
     mutex.unlock();
     return true;
@@ -114,4 +118,14 @@ int AudioUtils::getPeriodSize()
         size = output->periodSize();
     mutex.unlock();
     return size;
+}
+
+void AudioUtils::setVolume(uint32_t value)
+{
+
+}
+
+void AudioUtils::setVolumn(int value)
+{
+
 }

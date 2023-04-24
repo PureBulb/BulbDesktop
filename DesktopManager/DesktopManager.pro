@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    components/trayiconmenu.cpp \
     context.cpp \
     log.cpp \
     main.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     utils/audioUtils/IAudioPlayer.cpp \
     utils/hookthread.cpp \
     utils/safequeue.cpp \
+    utils/threadbase.cpp \
     utils/videoUtils/AVFrameQueue.cpp \
     utils/videoUtils/AVPacketQueue.cpp \
     utils/videoUtils/AudioDecoder.cpp \
@@ -33,9 +35,11 @@ SOURCES += \
     utils/videoUtils/videoUtils.cpp \
     widgets/mainwindow.cpp \
     widgets/subregionform.cpp \
-    widgets/workerform.cpp
+    widgets/workerform.cpp \
+    widgets/BaseWidget.cpp
 
 HEADERS += \
+    components/trayiconmenu.h \
     context.h \
     log.h \
     utils/AVConfig.h \
@@ -43,6 +47,7 @@ HEADERS += \
     utils/audioUtils/IAudioPlayer.h \
     utils/hookthread.h \
     utils/safequeue.h \
+    utils/threadbase.h \
     utils/videoUtils/AVPacketQueue.h \
     utils/videoUtils/AudioDecoder.h \
     utils/videoUtils/AvFrameQueue.h \
@@ -51,11 +56,13 @@ HEADERS += \
     utils/videoUtils/videodecoder.h \
     utils/windadapter.h \
     utils/videoUtils/videoUtils.h\
+    widgets/BaseWidget.h \
     widgets/mainwindow.h \
     widgets/subregionform.h \
     widgets/workerform.h
 
 FORMS += \
+    components/trayiconmenu.ui \
     widgets/mainwindow.ui \
     widgets/subregionform.ui \
     widgets/workerform.ui
@@ -78,3 +85,6 @@ LIBS += -luser32 \
 INCLUDEPATH += $$PWD/../ffmpeg/include
 DEPENDPATH += $$PWD/../ffmpeg/include
 #5L2c6ICF77ya57qv55yf55qE55S154Gv5rOh
+
+RESOURCES += \
+    Resource.qrc

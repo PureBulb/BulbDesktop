@@ -1,12 +1,14 @@
 #ifndef SAFEAVPACKETQUEUE_H
 #define SAFEAVPACKETQUEUE_H
 
+#include <QObject>
 #include "../safequeue.h"
 extern "C"{
 #include "libavformat/avformat.h"
 }
 class AVPacketQueue
 {
+
     SafeQueue<AVPacket *> queue;
 public:
     AVPacketQueue();
