@@ -15,13 +15,14 @@ protected:
     bool _stop;
     bool _pause;
     bool finished;
-    void setThreadFinished();
+    virtual void setThreadFinished();
     void lock();
     void unlock();
+    void waitResume();
     virtual void run() override;
 public:
     ThreadBase();
-    virtual ~ThreadBase() = 0;
+    virtual ~ThreadBase();
 
     void stop();
     void pause();

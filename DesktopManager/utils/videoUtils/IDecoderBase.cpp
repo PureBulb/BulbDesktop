@@ -69,8 +69,26 @@ bool IDecoderBase::isInit()
     return packetQueueInit && frameQueueInit && parmInit;
 }
 
+void IDecoderBase::run()
+{
+
+}
+
+void IDecoderBase::setThreadFinished()
+{
+    ThreadBase::setThreadFinished();
+    emit displayFinished();
+}
+
+AVCodecContext *IDecoderBase::getCodecContext() const
+{
+    return codecContext;
+}
+
 IDecoderBase::~IDecoderBase()
 {
+    if(codecContext)
+        avcodec_free_context(&codecContext);
 
 }
 

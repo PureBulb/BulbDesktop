@@ -1,79 +1,45 @@
 #include "videodecoder.h"
 #include "QDebug"
 
-void VideoDecoder::realse()
-{
-    if(codecContext){
-        avcodec_close(codecContext);
-        avcodec_free_context(&codecContext);
-    }
-    if(swsContext)
-        sws_freeContext(swsContext);
 
-    startTime = 0;
-    swsContext = nullptr;
-    codecContext = nullptr;
-}
 
-VideoDecoder::VideoDecoder(AVPacketQueue *_packQueue, AVFrameQueue *_frameQueue)
-    :packQueue(_packQueue)
-    ,frameQueue(_frameQueue)
-    ,codecContext(nullptr)
+VideoDecoder::VideoDecoder(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCodecParameters *parm)
+    :IDecoderBase(_packets,_frames,parm)
     ,swsContext(nullptr)
-    ,startTime(0)
-    ,pts(0)
+    ,timeBase({0,0})
 {}
 
 VideoDecoder::~VideoDecoder()
 {
 
 }
-
-int VideoDecoder::init(AVCodecParameters *parm, AVRational _timeBase)
-{
-    //todo: add error emit signal
-    pts = 0;
-    int res = 0;
-    if(parm == nullptr){
-        return -1;
-    }
-    codecContext = avcodec_alloc_context3(NULL);
-    if(codecContext == nullptr){
-        return -1;
-    }
-    res = avcodec_parameters_to_context(codecContext,parm);
-    if(res<0){
-        return -1;
-    }
-    const AVCodec* codec = avcodec_find_decoder(codecContext->codec_id);
-    res = avcodec_open2(codecContext,codec,NULL);
-    if(res < 0){
-        return -1;
-    }
-    timeBase = _timeBase;
-}
-
 void VideoDecoder::run()
 {
-    int i = 0;
+    if(isInit()  && !_stop){
+        decode();
+    }
+    setThreadFinished();
+
+}
+
+void VideoDecoder::decode()
+{
     int res = 0;
     QString module = "VideoDecoder::run";
     while(!_stop){
-        if(_pause){
-            QThread::msleep(1);
-            continue;
-        }
-        if(packQueue->isEmpty()){
+        waitResume();
+        if(packets->isEmpty()){
             QThread::msleep(1);
             continue;
         }
 
         // 送包
-        AVPacket* pkt = packQueue->dequeue(10);
+        AVPacket* pkt = packets->dequeue(10);
         if(pkt){
             res = avcodec_send_packet(codecContext,pkt);
             if (res < 0) {  // 送入数据包失败
                 emit error(module,"send packet failed\n");
+                setThreadFinished();
                 return ;
             }
         }
@@ -84,10 +50,11 @@ void VideoDecoder::run()
         pkt = nullptr;
         //送包后取解码完成的帧
         while(!_stop){
-
+            waitResume();
             AVFrame* frame = av_frame_alloc();
             res = avcodec_receive_frame(codecContext,frame);
             if(res == 0){
+//                frames->enqueue(frame);
 //                avpicture_fill(frame->data,)
                 toImage(*frame);
                 av_frame_unref(frame);
@@ -100,13 +67,24 @@ void VideoDecoder::run()
             }
             else if(res == AVERROR_EOF){
                 //完成解码
-                emit displayFinished();
+
+
                 return;
             }
 
         }
     }
-    emit displayFinished();
+
+}
+
+void VideoDecoder::onDisplayAudio(qint64 _startTime)
+{
+    startTime = _startTime;
+}
+
+void VideoDecoder::setTimeBase(const AVRational &value)
+{
+    timeBase = value;
 }
 
 void VideoDecoder::toImage(AVFrame &frame)
@@ -132,29 +110,12 @@ void VideoDecoder::toImage(AVFrame &frame)
             realTime_micro = av_gettime()-startTime;
             realTime_second = realTime_micro / 1000000.0;
         }
-        //add
-
-
-
-//        if(frame.pts>realTime && startTime != 0){
-//            quint64 test = realTime-frame.pts;
-//            QThread::msleep(test);
-//            emit showImage(image);  //发送信号，将次imamge发送到要显示的控件，用paintEvent绘制出来
-//        }
-//        else if(frame.pts < realTime && startTime != 0){
-
-//        }
 
         emit showImage(image);
         av_frame_free(&pFrameRGB);
         av_free(rgbBuffer);
 
     }
-}
-
-void VideoDecoder::onDisplayAudio(quint64 _startTime)
-{
-    startTime = _startTime;
 }
 
 

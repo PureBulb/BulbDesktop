@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.1, 2023-04-24T16:19:40. -->
+<!-- Written by QtCreator 4.11.1, 2023-04-25T13:06:22. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -530,9 +530,8 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">DesktopManager2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/project/BulbDesktop_BCK_TEST/DesktopManager/DesktopManager.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">E:/project/BulbDesktop_BCK_TEST/DesktopManager/DesktopManager.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/project/Qt/BulbDesktop/DesktopManager/DesktopManager.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">E:/project/Qt/BulbDesktop/DesktopManager/DesktopManager.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
@@ -543,7 +542,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default"></value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">E:/project/Qt/build-BulbDesktop-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/DesktopManager</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

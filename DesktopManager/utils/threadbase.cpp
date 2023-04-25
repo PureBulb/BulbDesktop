@@ -6,6 +6,11 @@ ThreadBase::ThreadBase()
     ,finished(false)
 {}
 
+ThreadBase::~ThreadBase()
+{
+
+}
+
 void ThreadBase::setThreadFinished()
 {
     lock();
@@ -21,6 +26,18 @@ void ThreadBase::lock()
 void ThreadBase::unlock()
 {
     mutex.unlock();
+}
+
+void ThreadBase::waitResume()
+{
+    while(_pause){
+        msleep(1);
+    }
+}
+
+void ThreadBase::run()
+{
+
 }
 
 void ThreadBase::stop()

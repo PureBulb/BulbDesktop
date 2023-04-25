@@ -26,8 +26,10 @@ public:
     DEQUEUE_TYPE enqueue(T val){
 
         mutex.lock();
-        if(_abort)
+        if(_abort){
+            mutex.unlock();
             return ABORT;
+        }
         queue.enqueue(val);
         mutex.unlock();
         conditionLock.wakeOne();
@@ -53,16 +55,13 @@ public:
 
     }
     bool isEmpty(){
-        mutex.lock();
-        bool empty = queue.isEmpty();
-        mutex.unlock();
-        return empty;
+
+
+
+        return queue.isEmpty();
     }
     quint64 size(){
-        mutex.lock();
-        quint64 s = queue.size();
-        mutex.unlock();
-        return s;
+        return queue.size();
     }
 
     SafeQueue(){

@@ -16,27 +16,23 @@ class VideoDecoder:public IDecoderBase
 {
     Q_OBJECT
 private:
-    QMutex mutex;
-    AVPacketQueue*  packQueue;
-    AVFrameQueue*   frameQueue;
-    AVCodecContext* codecContext;
     SwsContext*     swsContext;
-    uint64_t        startTime;
-    uint64_t        pts;
-    AVRational timeBase;
-
-    void realse();
-public:
-    VideoDecoder(AVPacketQueue* _packQueue,AVFrameQueue* _frameQueue);
-    ~VideoDecoder();
-    int init(AVCodecParameters *parm,AVRational _timeBase);
-    void run() override;
+    int64_t         startTime;
+    AVRational      timeBase;
     void toImage(AVFrame &frame);
+
+public:
+    VideoDecoder(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
+    ~VideoDecoder();
+    void run() override;
+    void decode() override;
+
+    void setTimeBase(const AVRational &value);
+
+public slots:
+    void onDisplayAudio(qint64 _startTime);
 signals:
     void showImage(QImage);
-    void displayFinished();
-public slots:
-    void onDisplayAudio(quint64 _baseTime);
 
 };
 

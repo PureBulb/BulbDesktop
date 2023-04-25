@@ -4,15 +4,17 @@ DexmuxThread::DexmuxThread(QString _filePath, AVPacketQueue *_audioPacketQueue,A
     :audioStreamIndex(-1)
     ,videoStreamIndex(-1)
     ,formatContex(nullptr)
-    ,audioDecoder(nullptr)
-    ,videoDecoder(nullptr)
-    ,stop(false)
-    ,pause(false)
 
 {
     audioPacketQueue = _audioPacketQueue;
     videoPacketQueue = _videoPacketQueue;
     filePath = _filePath;
+}
+
+DexmuxThread::~DexmuxThread()
+{
+
+    close();
 }
 
 int DexmuxThread::open()
@@ -47,6 +49,7 @@ int DexmuxThread::open()
 //返回音频解码器参数
 AVCodecParameters *DexmuxThread::getAudioCodecParameters()
 {
+
     if(formatContex!=nullptr){
 
         return formatContex->streams[audioStreamIndex]->codecpar;
@@ -87,19 +90,19 @@ void DexmuxThread::run()
     QString module("dexmuxThread::run");
     int res = 0;
 
-    while(!stop){
-        if(pause){
-           QThread::sleep(20);
-           continue;
-        }
+    while(!_stop){
+        waitResume();
         AVPacket *pkt = av_packet_alloc();
         res = av_read_frame(formatContex,pkt);
         if(res<0){
-            if(res == AVERROR_EOF)
+            if(res == AVERROR_EOF){
+                setThreadFinished();
                 break;
+            }
             char errorBuff[256] = {0};
             av_strerror(res,errorBuff,256);
             emit error(module,QString(errorBuff));
+            setThreadFinished();
             break;
         }
         if(pkt->stream_index == videoStreamIndex){
@@ -117,23 +120,9 @@ void DexmuxThread::run()
     //塞一个空包才能够解码结束
     audioPacketQueue->enqueue(nullptr);
     videoPacketQueue->enqueue(nullptr);
-    if(!stop)
+    if(!_stop)
         emit readPacketFinished();
-}
-
-void DexmuxThread::onStop()
-{
-    stop = true;
-}
-
-void DexmuxThread::onPause()
-{
-    pause = true;
-}
-
-void DexmuxThread::onResume()
-{
-    pause = false;
+    setThreadFinished();
 }
 
 

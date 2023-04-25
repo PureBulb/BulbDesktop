@@ -9,7 +9,7 @@ extern "C"{
 #include "IDecoderBase.h"
 #include "AvFrameQueue.h"
 #include "AVPacketQueue.h"
-class DexmuxThread:public QThread
+class DexmuxThread:public ThreadBase
 {
     Q_OBJECT
 signals:
@@ -20,17 +20,12 @@ private:
     int videoStreamIndex;
     AVFormatContext *formatContex;
     QString filePath;
-    IDecoderBase *audioDecoder;
-    IDecoderBase *videoDecoder;
-    bool stop;
-    bool pause;
     AVPacketQueue *videoPacketQueue;
     AVPacketQueue *audioPacketQueue;
     void close();
-
 public:
-
     explicit DexmuxThread(QString _filePath, AVPacketQueue *_audioPacketQueue,AVPacketQueue *_videoPacketQueue);
+    ~DexmuxThread();
     int open();
     AVCodecParameters * getAudioCodecParameters();
     AVCodecParameters * getvideoCodecParameters();
@@ -38,10 +33,6 @@ public:
     AVRational getAudioTimeBase();
 protected:
     void run() override;
-public slots:
-    void onStop();
-    void onPause();
-    void onResume();
 
 };
 

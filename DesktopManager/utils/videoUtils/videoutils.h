@@ -10,11 +10,13 @@ extern "C"{
 }
 
 #include "log.h"
+#include "../audioUtils/audioutils.h"
 #include "DexmuxThread.h"
 #include "AudioDecoder.h"
 #include "videodecoder.h"
 #include "AVPacketQueue.h"
 #include "AvFrameQueue.h"
+#include "displayworker.h"
 
 class VideoUtils:public QObject
 {
@@ -24,14 +26,13 @@ public:
     ~VideoUtils();
     void play();
 public slots:
-    void onStop();
-    void onPause();
-    void onResume();
+    void stop();
+    void pause();
+    void resume();
     void onLowError(QString module,QString msg);
     void onVideoDecoderImg(QImage img);
     void videoStart();
-    void onDecodeFinished();
-
+    void onDisplayFinished();
 signals:
     void error();
     void displayFinished();
@@ -42,16 +43,17 @@ signals:
     void sendDecodeImg(QImage);
 private:
     void close();
-    DexmuxThread *dmt;
-    AudioDecoder *audioDecoder;
-    VideoDecoder *videoDecoder;
-    AVPacketQueue audioPacketQueue;
-    AVPacketQueue videoPacketQueue;
-    AVFrameQueue videoFrameQueue;
-    AVFrameQueue audioFrameQueue;
-    QWidget *background;
-    bool videoFinished;
-    bool audioFinished;
+    DexmuxThread*   dmt;
+    AudioDecoder*   audioDecoder;
+    VideoDecoder*   videoDecoder;
+    AudioUtils*     audio;
+    DisplayWorker*  displayWorker;
+    AVPacketQueue   audioPacketQueue;
+    AVPacketQueue   videoPacketQueue;
+    AVFrameQueue    videoFrameQueue;
+    AVFrameQueue    audioFrameQueue;
+    bool            _stop;
+
 };
 
 #endif // VIDEOUTILS_H

@@ -155,7 +155,7 @@ void WorkerForm::onSettingsChanged()
 {
     //todo: stop all wallpaper
     if(video){
-        video->onStop();
+        video->stop();
         video->deleteLater();
         video = nullptr;
     }
@@ -178,6 +178,7 @@ void WorkerForm::setVideoBackground()
             video->play();
         }
         else{
+            video->stop();
             video->deleteLater();
             video = nullptr;
             setVideoBackground();

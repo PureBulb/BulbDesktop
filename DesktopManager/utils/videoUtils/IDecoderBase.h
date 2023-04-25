@@ -17,16 +17,20 @@ class IDecoderBase:public ThreadBase
     Q_OBJECT
 public:
     IDecoderBase();
-    virtual ~IDecoderBase() = 0;
+    IDecoderBase(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
+    virtual ~IDecoderBase();
     virtual void setPacketQueue(AVPacketQueue* _packets);
     virtual void setFrameQueue(AVFrameQueue* _frames);
     virtual void setParameters(AVCodecParameters *parm);
     virtual void init(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
 
+    AVCodecContext *getCodecContext() const;
+
 protected:
     virtual void decode() = 0;
     bool isInit();
     virtual void run() override;
+    void setThreadFinished() override;
     bool packetQueueInit;
     bool frameQueueInit;
     bool parmInit;
@@ -35,6 +39,10 @@ protected:
     AVCodecContext* codecContext;
 signals:
     void error(QString,QString);
+    void decodeFinished();
+    void displayFinished();
+
+
 };
 
 #endif // DECODERBASE_H

@@ -122,10 +122,7 @@ int AudioUtils::getPeriodSize()
 
 void AudioUtils::setVolume(uint32_t value)
 {
-
+    output->setVolume(value/100.0);
 }
 
-void AudioUtils::setVolumn(int value)
-{
 
-}
