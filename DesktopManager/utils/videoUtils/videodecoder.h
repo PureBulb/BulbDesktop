@@ -19,6 +19,7 @@ private:
     SwsContext*     swsContext;
     int64_t         startTime;
     AVRational      timeBase;
+    qint64          pauseDurationTime;
     void toImage(AVFrame &frame);
 
 public:
@@ -31,6 +32,7 @@ public:
 
 public slots:
     void onDisplayAudio(qint64 _startTime);
+    void onDisplayResume(qint64 _pauseDurationTime);
 signals:
     void showImage(QImage);
 

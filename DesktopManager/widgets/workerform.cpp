@@ -44,13 +44,24 @@ void WorkerForm::onQuit()
 
 void WorkerForm::onPause()
 {
-
+    if(video){
+        video->pause();
+    }
+    if(gif){
+        gif->setPaused(true);
+    }
 }
 
-void WorkerForm::onRestart()
+void WorkerForm::onResume()
 {
-
+    if(video){
+        video->resume();
+    }
+    if(gif){
+        gif->setPaused(false);
+    }
 }
+
 
 void WorkerForm::onDecodeImage(QImage _image)
 {

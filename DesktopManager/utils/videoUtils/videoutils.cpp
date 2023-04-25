@@ -21,6 +21,7 @@ VideoUtils::VideoUtils(QString path)
     //音视频线程同步
     connect(audioDecoder,&AudioDecoder::displayAudio,videoDecoder,&VideoDecoder::onDisplayAudio);
     connect(audioDecoder,&AudioDecoder::displayAudio,this,&VideoUtils::videoStart);
+    connect(audioDecoder,&AudioDecoder::displayResume,videoDecoder,&VideoDecoder::onDisplayResume);
 
 }
 

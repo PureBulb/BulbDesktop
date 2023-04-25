@@ -30,7 +30,7 @@ void ThreadBase::unlock()
 
 void ThreadBase::waitResume()
 {
-    while(_pause){
+    while(_pause && !_stop){
         msleep(1);
     }
 }

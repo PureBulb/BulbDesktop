@@ -28,7 +28,7 @@ public slots:
     void onSettingsChanged();
     void onQuit();
     void onPause();
-    void onRestart();
+    void onResume();
     void onDecodeImage(QImage _image);
 
     void setVideoBackground();

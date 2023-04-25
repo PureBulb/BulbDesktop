@@ -177,6 +177,8 @@ void MainWindow::initWorkerForm()
     w->init();
     w->show();
     connect(this,&MainWindow::quitProcess,w,&WorkerForm::onQuit);
+    connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,w,&WorkerForm::onPause);
+    connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,w,&WorkerForm::onResume);
 
 }
 

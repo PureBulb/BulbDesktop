@@ -7,6 +7,7 @@ VideoDecoder::VideoDecoder(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCod
     :IDecoderBase(_packets,_frames,parm)
     ,swsContext(nullptr)
     ,timeBase({0,0})
+    ,pauseDurationTime(0)
 {}
 
 VideoDecoder::~VideoDecoder()
@@ -82,6 +83,14 @@ void VideoDecoder::onDisplayAudio(qint64 _startTime)
     startTime = _startTime;
 }
 
+void VideoDecoder::onDisplayResume(qint64 _pauseDurationTime)
+{
+    lock();
+    pauseDurationTime += _pauseDurationTime;
+    unlock();
+    resume();
+}
+
 void VideoDecoder::setTimeBase(const AVRational &value)
 {
     timeBase = value;
@@ -102,12 +111,12 @@ void VideoDecoder::toImage(AVFrame &frame)
         int h = sws_scale(swsContext,frame.data,frame.linesize,0,frame.height,pFrameRGB->data,pFrameRGB->linesize);
         QImage tmpImg((uchar *)rgbBuffer,frame.width,frame.height,QImage::Format_RGB32);
         QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
-        int64_t realTime_micro = av_gettime()-startTime;
+        int64_t realTime_micro = av_gettime()-startTime-pauseDurationTime;
         double realTime_second = realTime_micro / 1000000.0;
         double pts_second = frame.pts *av_q2d(timeBase);
         while(pts_second>realTime_second){
             QThread::msleep(1);
-            realTime_micro = av_gettime()-startTime;
+            realTime_micro = av_gettime()-startTime-pauseDurationTime;
             realTime_second = realTime_micro / 1000000.0;
         }
 
