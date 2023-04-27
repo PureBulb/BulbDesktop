@@ -5,7 +5,7 @@
 #include <QAudioOutput>
 #include "../AVConfig.h"
 #include "IAudioPlayer.h"
-
+#include <windows.h>
 class AudioUtils:public IAudioPlayer
 {
 public:
@@ -18,7 +18,8 @@ public:
     bool writeData(QByteArray buff);
     int getFree();
     int getPeriodSize();
-    void setVolume(uint32_t value) override;
+    void setVolume(uint8_t value) override;
+
 protected:
     AudioUtils();
     ~AudioUtils();

@@ -232,6 +232,9 @@
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <item>
                  <widget class="QPushButton" name="addVieoBtn">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
                   <property name="text">
                    <string>添加视频</string>
                   </property>
@@ -262,6 +265,9 @@
                    <string>添加gif</string>
                   </property>
                  </widget>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="gridLayout_4"/>
                 </item>
                </layout>
               </widget>

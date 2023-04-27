@@ -31,6 +31,7 @@ SOURCES += \
     utils/videoUtils/DexmuxThread.cpp \
     utils/videoUtils/IDecoderBase.cpp \
     utils/videoUtils/displayworker.cpp \
+    utils/videoUtils/syncclock.cpp \
     utils/videoUtils/videodecoder.cpp \
     utils/windadapter.cpp \
     utils/videoUtils/videoUtils.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     utils/videoUtils/DexmuxThread.h \
     utils/videoUtils/IDecoderBase.h \
     utils/videoUtils/displayworker.h \
+    utils/videoUtils/syncclock.h \
     utils/videoUtils/videodecoder.h \
     utils/windadapter.h \
     utils/videoUtils/videoUtils.h\

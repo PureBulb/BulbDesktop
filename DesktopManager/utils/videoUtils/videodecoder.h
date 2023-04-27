@@ -6,6 +6,7 @@
 #include "IDecoderBase.h"
 #include "AVPacketQueue.h"
 #include "AvFrameQueue.h"
+#include "syncclock.h"
 extern "C"{
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
@@ -20,6 +21,9 @@ private:
     int64_t         startTime;
     AVRational      timeBase;
     qint64          pauseDurationTime;
+    qint64          pauseTime;
+    qint64          resumeTime;
+    SyncClock*      clock;
     void toImage(AVFrame &frame);
 
 public:
@@ -29,6 +33,9 @@ public:
     void decode() override;
 
     void setTimeBase(const AVRational &value);
+    void pause();
+
+    void setClock(SyncClock *_clock);
 
 public slots:
     void onDisplayAudio(qint64 _startTime);

@@ -3,11 +3,11 @@
 
 #include <QMainWindow>
 #include <QScrollBar>
-#include <windows.h>
-#include <process.h>
+#include <QFileDialog>
 #include <QCloseEvent>
 #include <QSystemTrayIcon>
 #include <QWidgetAction>
+
 #include "BaseWidget.h"
 #include "workerform.h"
 #include "context.h"

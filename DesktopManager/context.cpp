@@ -120,7 +120,8 @@ QList<QString> Context::getWallpaperPaths()
         return settings->value(gifWallpaperPath).toStringList();
     if(type == video)
         return settings->value(videoWallpaperPath).toStringList();
-
+    //
+    return {};
 }
 
 void Context::addVideoWallpaperPath(const QString &value)

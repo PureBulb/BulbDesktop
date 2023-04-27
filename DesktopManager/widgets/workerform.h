@@ -30,6 +30,8 @@ public slots:
     void onPause();
     void onResume();
     void onDecodeImage(QImage _image);
+    void onNextWallpaper();
+    void onVolumeChange(uint8_t volume);
 
     void setVideoBackground();
     void setGifBackground();

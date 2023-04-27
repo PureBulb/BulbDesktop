@@ -13,11 +13,7 @@ TrayIconMenu::~TrayIconMenu()
     delete ui;
 }
 
-void TrayIconMenu::on_horizontalSlider_valueChanged(int value)
-{
-    ui->volumeLabel->setText(QString::number(value)+"%");
-    emit volumeChange(value);
-}
+
 
 void TrayIconMenu::on_quitBtn_clicked()
 {
@@ -57,4 +53,10 @@ void TrayIconMenu::setSettingWidget(BaseWidget *value)
 void TrayIconMenu::on_assistorBtn_clicked()
 {
     SubregionForm->show();
+}
+
+void TrayIconMenu::on_volumeSlider_valueChanged(int value)
+{
+    ui->volumeLabel->setText(QString::number(value)+"%");
+    emit volumeChange(value);
 }

@@ -6,8 +6,8 @@ extern "C"{
 #include "libswresample/swresample.h"
 }
 // ffmpeg 宏
-#define SAMPLE_FMT AV_SAMPLE_FMT_S32
-#define SAMPLE_SIZE 32 // audioUtils 使用的 与上面相等
+#define SAMPLE_FMT AV_SAMPLE_FMT_S16
+#define SAMPLE_SIZE 16 // audioUtils 使用的 与上面相等
 #define SAMPLE_RATE 48000
 #define AUDIO_CHANNEL 2
 #define AUDIO_BUFF_SIZE 10000

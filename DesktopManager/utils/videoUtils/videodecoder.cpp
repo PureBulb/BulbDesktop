@@ -8,11 +8,13 @@ VideoDecoder::VideoDecoder(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCod
     ,swsContext(nullptr)
     ,timeBase({0,0})
     ,pauseDurationTime(0)
+    ,pauseTime(0)
 {}
 
 VideoDecoder::~VideoDecoder()
 {
-
+    if(swsContext)
+        sws_freeContext(swsContext);
 }
 void VideoDecoder::run()
 {
@@ -60,20 +62,30 @@ void VideoDecoder::decode()
                 toImage(*frame);
                 av_frame_unref(frame);
                 av_frame_free(&frame);
+                frame = nullptr;
                 continue;
             }
             else if(res == AVERROR(EAGAIN)){
                 //无帧可取
+                av_frame_unref(frame);
+                av_frame_free(&frame);
+                frame = nullptr;
                 break;
             }
             else if(res == AVERROR_EOF){
                 //完成解码
 
-
+                av_frame_unref(frame);
+                av_frame_free(&frame);
+                frame = nullptr;
                 return;
             }
+            av_frame_unref(frame);
+            av_frame_free(&frame);
+            frame = nullptr;
 
         }
+
     }
 
 }
@@ -85,15 +97,28 @@ void VideoDecoder::onDisplayAudio(qint64 _startTime)
 
 void VideoDecoder::onDisplayResume(qint64 _pauseDurationTime)
 {
-    lock();
-    pauseDurationTime += _pauseDurationTime;
-    unlock();
     resume();
+    lock();
+    pauseDurationTime += av_gettime() - pauseTime;
+//    pauseDurationTime += _pauseDurationTime;
+    unlock();
+
 }
 
 void VideoDecoder::setTimeBase(const AVRational &value)
 {
     timeBase = value;
+}
+
+void VideoDecoder::pause()
+{
+    IDecoderBase::pause();
+    pauseTime = av_gettime();
+}
+
+void VideoDecoder::setClock(SyncClock *_clock)
+{
+    clock = _clock;
 }
 
 void VideoDecoder::toImage(AVFrame &frame)
@@ -111,15 +136,21 @@ void VideoDecoder::toImage(AVFrame &frame)
         int h = sws_scale(swsContext,frame.data,frame.linesize,0,frame.height,pFrameRGB->data,pFrameRGB->linesize);
         QImage tmpImg((uchar *)rgbBuffer,frame.width,frame.height,QImage::Format_RGB32);
         QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
-        int64_t realTime_micro = av_gettime()-startTime-pauseDurationTime;
-        double realTime_second = realTime_micro / 1000000.0;
-        double pts_second = frame.pts *av_q2d(timeBase);
-        while(pts_second>realTime_second){
-            QThread::msleep(1);
-            realTime_micro = av_gettime()-startTime-pauseDurationTime;
-            realTime_second = realTime_micro / 1000000.0;
-        }
+//        int64_t realTime_micro = av_gettime()-startTime-pauseDurationTime;
+//        double realTime_second = realTime_micro / 1000000.0;
+//        double pts_second = frame.pts *av_q2d(timeBase);
+//        while(pts_second>realTime_second){
+//            QThread::msleep(1);
+//            realTime_micro = av_gettime()-startTime-pauseDurationTime;
+//            realTime_second = realTime_micro / 1000000.0;
+//        }
 
+        double pts = frame.pts *av_q2d(timeBase);
+        double diff = pts - clock->getClock();
+        while(diff>0){
+            msleep(1);
+            diff = pts - clock->getClock();
+        }
         emit showImage(image);
         av_frame_free(&pFrameRGB);
         av_free(rgbBuffer);

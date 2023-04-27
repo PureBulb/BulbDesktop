@@ -20,7 +20,6 @@ public:
     void setSubregionForm(BaseWidget *value);
 
 private slots:
-    void on_horizontalSlider_valueChanged(int value);
 
     void on_quitBtn_clicked();
     void on_pauseBtn_clicked();
@@ -32,6 +31,8 @@ private slots:
     void on_settingsBtn_clicked();
 
     void on_assistorBtn_clicked();
+
+    void on_volumeSlider_valueChanged(int value);
 
 signals:
     void volumeChange(int value);

@@ -120,9 +120,14 @@ int AudioUtils::getPeriodSize()
     return size;
 }
 
-void AudioUtils::setVolume(uint32_t value)
+
+
+void AudioUtils::setVolume(uint8_t value)
 {
-    output->setVolume(value/100.0);
+    qreal linearVolume = value/100.0;
+
+    output->setVolume(linearVolume);
 }
+
 
 

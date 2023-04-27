@@ -47,8 +47,11 @@ void WorkerForm::onPause()
     if(video){
         video->pause();
     }
-    if(gif){
+    else if(gif){
         gif->setPaused(true);
+    }
+    else if(graphShowTimer){
+        graphShowTimer->stop();
     }
 }
 
@@ -60,6 +63,9 @@ void WorkerForm::onResume()
     if(gif){
         gif->setPaused(false);
     }
+    else if(graphShowTimer){
+        graphShowTimer->start();
+    }
 }
 
 
@@ -67,6 +73,25 @@ void WorkerForm::onDecodeImage(QImage _image)
 {
     image = _image;
     update();
+}
+
+void WorkerForm::onNextWallpaper()
+{
+    if(getContext()->getWallpaperType() == Context::gif){
+        setGifBackground();
+    }
+    else if(getContext()->getWallpaperType() == Context::graph){
+        setGraphBackground();
+    }
+    else if(getContext()->getWallpaperType() == Context::video){
+        setVideoBackground();
+    }
+}
+
+void WorkerForm::onVolumeChange(uint8_t volume)
+{
+    if(video)
+        video->setVolume(volume);
 }
 
 bool WorkerForm::eventFilter(QObject *o, QEvent *e)

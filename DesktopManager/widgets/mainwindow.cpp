@@ -133,6 +133,7 @@ void MainWindow::onResumeWallpaper()
 
 }
 
+
 void MainWindow::areaScrollerEventProcess(QObject *o, QEvent *e)
 {
     if(o == this->ui->baseCfgLabel && e->type() == QEvent::MouseButtonPress){
@@ -179,6 +180,8 @@ void MainWindow::initWorkerForm()
     connect(this,&MainWindow::quitProcess,w,&WorkerForm::onQuit);
     connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,w,&WorkerForm::onPause);
     connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,w,&WorkerForm::onResume);
+    connect(trayIconMenu,&TrayIconMenu::nextWallpaper,w,&WorkerForm::onNextWallpaper);
+    connect(trayIconMenu,&TrayIconMenu::volumeChange,w,&WorkerForm::onVolumeChange);
 
 }
 
@@ -218,17 +221,18 @@ void MainWindow::on_autoHideCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_addVieoBtn_clicked()
 {
-
+    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Videos(*.mp4 *.avi *.mov *.flv *.mpeg *.mpg);;all(*.*)");
 }
 
 void MainWindow::on_addGifBtn_clicked()
 {
+    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Gifs(*.gif);;all(*.*)");
 
 }
 
 void MainWindow::on_addGraphBtn_clicked()
 {
-
+    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Graphs(*.png *.jpg *.jpeg *.bmp *.svg);;all(*.*)");
 }
 
 void MainWindow::on_delaySlider_valueChanged(int value)

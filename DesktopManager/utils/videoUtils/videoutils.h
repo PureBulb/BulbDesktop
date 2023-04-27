@@ -17,7 +17,7 @@ extern "C"{
 #include "AVPacketQueue.h"
 #include "AvFrameQueue.h"
 #include "displayworker.h"
-
+#include "syncclock.h"
 class VideoUtils:public QObject
 {
     Q_OBJECT
@@ -25,6 +25,7 @@ public:
     VideoUtils(QString path);
     ~VideoUtils();
     void play();
+    static QImage getThumbnail(QString filename);
 public slots:
     void stop();
     void pause();
@@ -33,6 +34,10 @@ public slots:
     void onVideoDecoderImg(QImage img);
     void videoStart();
     void onDisplayFinished();
+    /*
+        range:0-100
+    */
+    void setVolume(uint8_t volume);
 signals:
     void error();
     void displayFinished();
@@ -47,12 +52,12 @@ private:
     AudioDecoder*   audioDecoder;
     VideoDecoder*   videoDecoder;
     AudioUtils*     audio;
-    DisplayWorker*  displayWorker;
     AVPacketQueue   audioPacketQueue;
     AVPacketQueue   videoPacketQueue;
     AVFrameQueue    videoFrameQueue;
     AVFrameQueue    audioFrameQueue;
     bool            _stop;
+    SyncClock       clock;
 
 };
 
