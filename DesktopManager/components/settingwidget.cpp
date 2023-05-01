@@ -206,9 +206,15 @@ void SettingWidget::on_typeComboBox_currentIndexChanged(int index)
 
 void SettingWidget::on_startWallpaperCheckbox_stateChanged(int arg1)
 {
-    if(Qt::CheckState::Checked == arg1)
+    if(Qt::CheckState::Checked == arg1){
+        if(getContext()->getWallpaperPaths().size()<=0){
+            QMessageBox::information(this,getContext()->getWallpaperTypeName()[getContext()->getWallpaperType()]+"至少要添加有一个壁纸",getContext()->getWallpaperTypeName()[getContext()->getWallpaperType()]+"至少要添加有一个壁纸");
+            return;
+        }
         getContext()->setStartWallpaper(true);
-    else
-        getContext()->setStartWallpaper(true);
+    }
+    else{
+        getContext()->setStartWallpaper(false);
+    }
 
 }
