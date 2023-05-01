@@ -18,6 +18,7 @@ VideoDecoder::~VideoDecoder()
 }
 void VideoDecoder::run()
 {
+    setThreadNotFinished();
     if(isInit()  && !_stop){
         decode();
     }
@@ -42,7 +43,6 @@ void VideoDecoder::decode()
             res = avcodec_send_packet(codecContext,pkt);
             if (res < 0) {  // 送入数据包失败
                 emit error(module,"send packet failed\n");
-                setThreadFinished();
                 return ;
             }
         }

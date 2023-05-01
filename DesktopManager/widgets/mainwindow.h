@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFile>
 #include <QScrollBar>
 #include <QFileDialog>
 #include <QCloseEvent>
@@ -13,6 +14,7 @@
 #include "context.h"
 #include "utils/videoUtils/videoutils.h"
 #include "../components/trayiconmenu.h"
+#include "../components/settingwidget.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -40,20 +42,9 @@ signals:
     void quitProcess();
 private slots:
 
-    void on_autoLaunchCheckBox_stateChanged(int arg1);
-    void on_doubleClickedHideCheckBox_stateChanged(int arg1);
-    void on_autoHideCheckBox_stateChanged(int arg1);
 
-
-    void on_addVieoBtn_clicked();
-
-    void on_addGifBtn_clicked();
-
-    void on_addGraphBtn_clicked();
-
-    void on_delaySlider_valueChanged(int value);
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
-    void on_typeComboBox_currentIndexChanged(int index);
+
 
 public slots:
     void onSettingsChanged() override;
@@ -65,11 +56,13 @@ private:
     void initui();
     void initTrayIcon();
     void initWorkerForm();
+
     void bindEvent();
 
     WorkerForm *w;
     QSystemTrayIcon *trayIcon;
     TrayIconMenu* trayIconMenu;
+
 
     // BaseWidget interface
 protected slots:

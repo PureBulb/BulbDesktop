@@ -52,7 +52,8 @@ void TrayIconMenu::setSettingWidget(BaseWidget *value)
 
 void TrayIconMenu::on_assistorBtn_clicked()
 {
-    SubregionForm->show();
+    //SubregionForm->show();
+    QMessageBox::information(this,"开发中","让生产队的驴歇歇吧");
 }
 
 void TrayIconMenu::on_volumeSlider_valueChanged(int value)

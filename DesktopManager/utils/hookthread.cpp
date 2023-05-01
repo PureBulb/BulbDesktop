@@ -7,8 +7,16 @@
 
 void HookThread::inject()
 {
+    #ifdef QT_DEBUG
+        QString workPath = QCoreApplication::applicationDirPath()+"../bin/MinHookDllDemo.dll";
+        loge("inject",workPath);
+        const char  *dllPath = workPath.toStdString().c_str();
+    #else
+        QString workPath = QCoreApplication::applicationDirPath()+"/MinHookDllDemo.dll";
+        loge("inject",workPath);
+        const char  *dllPath = workPath.toStdString().c_str();
+    #endif
 
-    char  dllPath[] = "E:/project/c#/test/MinHookDllDemo/x64/Debug/MinHookDllDemo.dll";
     int buffSize = (strlen(dllPath) + 1) * sizeof(char) ;
     // 获取窗口所在的PID
     DWORD dwPID = 0;
@@ -108,7 +116,7 @@ void HookThread::inject()
             return ;
         }
 
-        logi("inject","注入成功\n");
+        logi("inject",workPath);
         WaitForSingleObject(hRemoteThread, INFINITE);
 //         关闭线程
         CloseHandle(hRemoteThread);

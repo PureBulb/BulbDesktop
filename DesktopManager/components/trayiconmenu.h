@@ -2,6 +2,7 @@
 #define TRAYICONMENU_H
 
 #include <QWidget>
+#include <QMessageBox>
 #include "../widgets/BaseWidget.h"
 namespace Ui {
 class TrayIconMenu;

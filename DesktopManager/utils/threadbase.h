@@ -16,6 +16,7 @@ protected:
     bool _pause;
     bool finished;
     virtual void setThreadFinished();
+    virtual void setThreadNotFinished();
     void lock();
     void unlock();
     void waitResume();

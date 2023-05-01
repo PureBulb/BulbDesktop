@@ -16,6 +16,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    components/settingwidget.cpp \
+    components/thumbnaillabel.cpp \
     components/trayiconmenu.cpp \
     context.cpp \
     log.cpp \
@@ -41,6 +43,8 @@ SOURCES += \
     widgets/BaseWidget.cpp
 
 HEADERS += \
+    components/settingwidget.h \
+    components/thumbnaillabel.h \
     components/trayiconmenu.h \
     context.h \
     log.h \
@@ -66,6 +70,7 @@ HEADERS += \
     widgets/workerform.h
 
 FORMS += \
+    components/settingwidget.ui \
     components/trayiconmenu.ui \
     widgets/mainwindow.ui \
     widgets/subregionform.ui \
@@ -92,3 +97,15 @@ DEPENDPATH += $$PWD/../ffmpeg/include
 
 RESOURCES += \
     Resource.qrc
+
+
+#QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO
+#QMAKE_CFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
+#QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
+
+
+QMAKE_CXXFLAGS_RELEASE -= -O
+QMAKE_CXXFLAGS_RELEASE -= -O1
+QMAKE_CXXFLAGS_RELEASE -= -O2
+QMAKE_CXXFLAGS_RELEASE -= -O3
+QMAKE_CXXFLAGS_RELEASE += -O0

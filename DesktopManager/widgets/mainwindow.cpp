@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     initTrayIcon();
     initui();
+    SettingWidget* settingW = new SettingWidget();
+    ui->ConfigScrollArea->setWidget(settingW);
+
 }
 
 MainWindow::~MainWindow()
@@ -24,11 +27,6 @@ bool MainWindow::eventFilter(QObject *o, QEvent *e)
     areaScrollerEventProcess(o,e);
 
     return false;
-}
-
-Context* MainWindow::getContext()
-{
-    return Context::getInstance();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -48,30 +46,16 @@ void MainWindow::init()
 
 void MainWindow::onSettingsChanged()
 {
-    loge("MainWindow","onSettingChanged\n");
+
+    init();
 }
 
 //todo: reset config re-init windows
 void MainWindow::initui()
 {
     setWindowTitle("Bulb 桌面助手");
-    ui->baseCfgGroupBox->setMinimumSize(ui->ConfigScrollArea->size());
-    ui->videoCfgGroupBox->setMinimumSize(ui->ConfigScrollArea->size());
-    ui->graphCfgGroupBox->setMinimumSize(ui->ConfigScrollArea->size());
-    ui->gifCfgGroupBox->setMinimumSize(ui->ConfigScrollArea->size());
-    ui->pluginCfgGroupBox->setMinimumSize(ui->ConfigScrollArea->size());
-    //init content
-    ui->delaySlider->setValue(getContext()->getGraphShowDelay());
-    ui->autoLaunchCheckBox->setChecked(getContext()->isAutoLaunch());
-    ui->autoHideCheckBox->setChecked(getContext()->isHideIcon());
 
-    ui->typeComboBox->setItemText(1,getContext()->getWallpaperTypeName()[0]);
-    ui->typeComboBox->setItemText(2,getContext()->getWallpaperTypeName()[1]);
-    ui->typeComboBox->setItemText(3,getContext()->getWallpaperTypeName()[2]);
-    ui->typeComboBox->setItemText(4,getContext()->getWallpaperTypeName()[3]);
-    ui->typeComboBox->setCurrentIndex(getContext()->getWallpaperType()+1);
 
-    ui->doubleClickedHideCheckBox->setChecked(getContext()->isDoubleClickedHideIcon());
     trayIcon->setToolTip("SystemTray Program");
 
     //初始化WorkerForm
@@ -80,6 +64,7 @@ void MainWindow::initui()
     //设置页面左侧滚动条隐藏
     ui->labelsScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->labelsScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
 
     bindEvent();
 }
@@ -110,11 +95,7 @@ void MainWindow::bindEvent()
     ui->graphCfgLabel->installEventFilter(this);
     ui->gifCfgLabel->installEventFilter(this);
     ui->pluginCfgLabel->installEventFilter(this);
-    ui->baseCfgGroupBox->installEventFilter(this);
-    ui->videoCfgGroupBox->installEventFilter(this);
-    ui->graphCfgGroupBox->installEventFilter(this);
-    ui->gifCfgGroupBox->installEventFilter(this);
-    ui->pluginCfgGroupBox->installEventFilter(this);
+
     //    connect(trayIcon,&QSystemTrayIcon::activated,this,&MainWindow::onTrayIconActivated);
 }
 
@@ -136,110 +117,60 @@ void MainWindow::onResumeWallpaper()
 
 void MainWindow::areaScrollerEventProcess(QObject *o, QEvent *e)
 {
-    if(o == this->ui->baseCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->baseCfgGroupBox->y());
-    }
-    else if(o == this->ui->videoCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->videoCfgGroupBox->y());
-    }
-    else if(o == this->ui->graphCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->graphCfgGroupBox->y());
-    }
-    else if(o == this->ui->gifCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->gifCfgGroupBox->y());
-    }
-    else if(o == this->ui->pluginCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->pluginCfgGroupBox->y());
-    }
-    else if(o == this->ui->baseCfgGroupBox && e->type() == QEvent::MouseButtonPress){
-        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->baseCfgLabel->y());
-    }
-    else if(o == this->ui->videoCfgLabel && e->type() == QEvent::MouseButtonPress){
-        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->videoCfgLabel->y());
-    }
-    else if(o == this->ui->gifCfgGroupBox && e->type() == QEvent::MouseButtonPress){
-        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->gifCfgLabel->y());
-    }
-    else if(o == this->ui->graphCfgGroupBox && e->type() == QEvent::MouseButtonPress){
-        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->graphCfgLabel->y());
-    }
-    else if(o == this->ui->pluginCfgGroupBox && e->type() == QEvent::MouseButtonPress){
-        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->pluginCfgLabel->y());
-    }
+//    if(o == this->ui->baseCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->baseCfgGroupBox->y());
+//    }
+//    else if(o == this->ui->videoCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->videoCfgGroupBox->y());
+//    }
+//    else if(o == this->ui->graphCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->graphCfgGroupBox->y());
+//    }
+//    else if(o == this->ui->gifCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->gifCfgGroupBox->y());
+//    }
+//    else if(o == this->ui->pluginCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->ConfigScrollArea->verticalScrollBar()->setValue(ui->pluginCfgGroupBox->y());
+//    }
+//    else if(o == this->ui->baseCfgGroupBox && e->type() == QEvent::MouseButtonPress){
+//        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->baseCfgLabel->y());
+//    }
+//    else if(o == this->ui->videoCfgLabel && e->type() == QEvent::MouseButtonPress){
+//        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->videoCfgLabel->y());
+//    }
+//    else if(o == this->ui->gifCfgGroupBox && e->type() == QEvent::MouseButtonPress){
+//        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->gifCfgLabel->y());
+//    }
+//    else if(o == this->ui->graphCfgGroupBox && e->type() == QEvent::MouseButtonPress){
+//        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->graphCfgLabel->y());
+//    }
+//    else if(o == this->ui->pluginCfgGroupBox && e->type() == QEvent::MouseButtonPress){
+//        ui->labelsScrollArea->verticalScrollBar()->setValue(ui->pluginCfgLabel->y());
+//    }
 }
 
 
 
 void MainWindow::initWorkerForm()
 {
-    if(w)
-        w->deleteLater();
-    w = new WorkerForm();
-    w->init();
-    w->show();
-    connect(this,&MainWindow::quitProcess,w,&WorkerForm::onQuit);
-    connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,w,&WorkerForm::onPause);
-    connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,w,&WorkerForm::onResume);
-    connect(trayIconMenu,&TrayIconMenu::nextWallpaper,w,&WorkerForm::onNextWallpaper);
-    connect(trayIconMenu,&TrayIconMenu::volumeChange,w,&WorkerForm::onVolumeChange);
-
-}
-
-
-
-void MainWindow::on_autoLaunchCheckBox_stateChanged(int arg1)
-{
-    if(arg1 == Qt::CheckState::Checked){
-        getContext()->setAutoLaunch(true);
-    }
-    else{
-        getContext()->setAutoLaunch(false);
+    if(!w){
+        w = new WorkerForm();
+        w->init();
+        w->show();
+        connect(this,&MainWindow::quitProcess,w,&WorkerForm::onQuit);
+        connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,w,&WorkerForm::onPause);
+        connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,w,&WorkerForm::onResume);
+        connect(trayIconMenu,&TrayIconMenu::nextWallpaper,w,&WorkerForm::onNextWallpaper);
+        connect(trayIconMenu,&TrayIconMenu::volumeChange,w,&WorkerForm::onVolumeChange);
     }
 
-}
 
-void MainWindow::on_doubleClickedHideCheckBox_stateChanged(int arg1)
-{
-    if(arg1 == Qt::CheckState::Checked){
-        getContext()->setDoubleClickedHideIcon(true);
-    }
-    else{
-        getContext()->setDoubleClickedHideIcon(false);
-    }
-}
 
-void MainWindow::on_autoHideCheckBox_stateChanged(int arg1)
-{
-    if(arg1 == Qt::CheckState::Checked){
-        getContext()->setHideIcon(true);
-    }
-    else{
-        getContext()->setHideIcon(false);
-    }
+
+
 }
 
 
-void MainWindow::on_addVieoBtn_clicked()
-{
-    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Videos(*.mp4 *.avi *.mov *.flv *.mpeg *.mpg);;all(*.*)");
-}
-
-void MainWindow::on_addGifBtn_clicked()
-{
-    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Gifs(*.gif);;all(*.*)");
-
-}
-
-void MainWindow::on_addGraphBtn_clicked()
-{
-    QFileDialog::getOpenFileNames(this,"选择视频文件","/","Graphs(*.png *.jpg *.jpeg *.bmp *.svg);;all(*.*)");
-}
-
-void MainWindow::on_delaySlider_valueChanged(int value)
-{
-    ui->delayLabel->setText(QString::number(value)+QString("分钟"));
-    getContext()->setGraphShowDelay(value);
-}
 
 void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
@@ -259,7 +190,3 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void MainWindow::on_typeComboBox_currentIndexChanged(int index)
-{
-    getContext()->setWallpaperType(Context::WallPaperType(index-1));
-}

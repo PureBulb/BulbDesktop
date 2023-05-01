@@ -46,11 +46,41 @@ void VideoUtils::play()
 
 QImage VideoUtils::getThumbnail(QString filename)
 {
-    //ffmpeg -i video_name.mp4 -vf select='eq(pict_type\,I)' -vsync 2 -s 1920*1080 -f image2 core-%02d.jpeg
-    QString cmd("./bin/ffmpeg.exe -i %1 -vf select=\'eq\(pict_type\\,I)\' -vsync 2 -s 192*108 - f image2 ./thumbnail/%thumbnail-%2.jpg");
-    cmd.arg(filename).arg(filename.split(".")[0]);
-    system(cmd.toStdString().c_str());
-    return QImage(QString("./thumbnail/%thumbnail-%2.jpg").arg(filename.split(".")[0]));
+    //./bin/ffmpeg.exe -i D:/test.mp4 -vf select='eq(pict_type\,I)' -vsync 2 -s 1920*1080 -frames 1 -f image2 ./thumbnail/thumbnail-test.jpg
+    QString filenameWithoutPath = filename.split("/").back();
+
+    QString workPath = QCoreApplication::applicationDirPath();
+
+    #ifdef QT_DEBUG
+        QString exec = "./bin/ffmpeg.exe";
+        QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+    #else
+        QString exec = "./ffmpeg.exe";
+        QString outputFilename = QString("../thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+    #endif
+    QStringList cmd;
+    cmd<<"-i" <<filename<< "-vf" <<"select=\'eq\(pict_type\\,I)\'"<<"-vsync"<< "2"<< "-s"<<"192*108"<< "-frames" <<"1" <<"-f"<<"image2"<<outputFilename;
+    //QString cmd("start ./bin/ffmpeg.exe -i %1 -vf select=\'eq\(pict_type\\,I)\' -vsync 2 -s 192*108 -frames 1 -f image2 %2\n");
+    //cmd = cmd.arg(filename).arg(outputFilename);
+    if(!QFile(outputFilename).exists()){
+        QProcess p;
+        int code = p.execute(exec,cmd);
+    }
+    return QImage(outputFilename);
+}
+
+void VideoUtils::deleteThumbnail(QString filename)
+{
+    QString filenameWithoutPath = filename.split("/").back();
+    #ifdef QT_DEBUG
+    QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+    #else
+    QString outputFilename = QString("../thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+    #endif
+    QFile file(outputFilename);
+    if(file.exists()){
+        file.remove();
+    }
 }
 
 void VideoUtils::stop()

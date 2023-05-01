@@ -2,6 +2,7 @@
 #define CONTEXT_H
 
 #include <QObject>
+#include <QMessageBox>
 #include <QSettings>
 #include <QString>
 #include <QList>
@@ -28,7 +29,8 @@ private:
     static QStringList wallpaperTypeName;
     Context();
 
-    static void addWallpaperPath(QString pathType, const QString &value);
+    static void addWallpaperPath(QString pathType, const QList<QString> value);
+    static void setWallpaperPath(QString pathType, const QList<QString> value);
 public:
     enum wallpaperType{graph,gif,video};
     typedef enum wallpaperType WallPaperType;
@@ -48,13 +50,16 @@ public:
 
     static bool isDoubleClickedHideIcon();
     static void setDoubleClickedHideIcon(bool value);
-
+     //只获取目前模式的wallpaperPath
     static QList<QString> getWallpaperPaths();
+    static QList<QString> getVideoWallpaperPaths();
+    static QList<QString> getGraphWallpaperPaths();
+    static QList<QString> getGifWallpaperPaths();
 
 
-    static void addVideoWallpaperPath(const QString &value);
-    static void addGraphWallpaperPath(const QString &value);
-    static void addGifWallpaperPath(const QString &value);
+    static void addVideoWallpaperPath(const QList<QString> value);
+    static void addGraphWallpaperPath(const QList<QString> value);
+    static void addGifWallpaperPath(const QList<QString> value);
 
     static void deleteVideoWallpaperPath(const QString &value);
     static void deleteGraphWallpaperPath(const QString &value);

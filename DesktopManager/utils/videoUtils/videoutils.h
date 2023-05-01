@@ -8,7 +8,7 @@ extern "C"{
     #include "libavcodec/avcodec.h"
     #include "libavformat/avformat.h"
 }
-
+#include <QCoreApplication>
 #include "log.h"
 #include "../audioUtils/audioutils.h"
 #include "DexmuxThread.h"
@@ -18,6 +18,8 @@ extern "C"{
 #include "AvFrameQueue.h"
 #include "displayworker.h"
 #include "syncclock.h"
+
+#include<QProcess>
 class VideoUtils:public QObject
 {
     Q_OBJECT
@@ -26,6 +28,7 @@ public:
     ~VideoUtils();
     void play();
     static QImage getThumbnail(QString filename);
+    static void deleteThumbnail(QString filename);
 public slots:
     void stop();
     void pause();

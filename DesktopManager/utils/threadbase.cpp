@@ -3,7 +3,7 @@
 ThreadBase::ThreadBase()
     :_stop(false)
     ,_pause(false)
-    ,finished(false)
+    ,finished(true)
 {}
 
 ThreadBase::~ThreadBase()
@@ -15,6 +15,13 @@ void ThreadBase::setThreadFinished()
 {
     lock();
     finished = true;
+    unlock();
+}
+
+void ThreadBase::setThreadNotFinished()
+{
+    lock();
+    finished = false;
     unlock();
 }
 

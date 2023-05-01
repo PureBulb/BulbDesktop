@@ -71,6 +71,7 @@ AudioDecoder::~AudioDecoder()
 
 void AudioDecoder::run()
 {
+    setThreadNotFinished();
     if(isInit() && !_stop){
         decode();
     }
@@ -80,6 +81,7 @@ void AudioDecoder::run()
 
 void AudioDecoder::decode()
 {
+
     QByteArray buffer;
     QString module = "AudioDecoder::run";
     int res = 0;
@@ -159,6 +161,7 @@ void AudioDecoder::decode()
             frame = nullptr;
         }
     }
+
 
 
 }

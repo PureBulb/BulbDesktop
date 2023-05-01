@@ -199,6 +199,7 @@ void WorkerForm::onSettingsChanged()
         graphShowTimer->stop();
         graphShowTimer->deleteLater();
         graphShowTimer = nullptr;
+        ui->backgroundLabel->clear();
     }
     init();
 }
@@ -255,7 +256,7 @@ void WorkerForm::setGraphBackground()
 {
     if(!graphShowTimer){
         graphShowTimer = new QTimer;
-        graphShowTimer->setInterval(1000);
+        graphShowTimer->setInterval(getContext()->getGraphShowDelay()*60*1000);
         connect(graphShowTimer,&QTimer::timeout,this,&WorkerForm::setGraphBackground);
     }
     if(wallpaperPaths.size()>0){

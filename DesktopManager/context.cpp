@@ -23,12 +23,29 @@ Context::Context()
 
 }
 
-void Context::addWallpaperPath(QString pathType,const QString &value)
+void Context::addWallpaperPath(QString pathType, const QList<QString> value)
 {
-    QList<QVariant> paths = settings->value(pathType).toList();
-    paths.push_back(value);
     if(instance){
+        QList<QVariant> paths = settings->value(pathType).toList();
+        for(auto item: value){
+            paths.push_back(item);
+        }
         settings->setValue(pathType,paths);
+        emit instance->settingsChanged();
+    }
+    else{
+        loge("context","setxx:didn't have instance\n");
+    }
+}
+
+void Context::setWallpaperPath(QString pathType, const QList<QString> value)
+{
+    if(instance){
+        QList<QVariant> data;
+        for(auto item: value){
+            data.append(item);
+        }
+        settings->setValue(pathType,data);
         emit instance->settingsChanged();
     }
     else{
@@ -124,19 +141,65 @@ QList<QString> Context::getWallpaperPaths()
     return {};
 }
 
-void Context::addVideoWallpaperPath(const QString &value)
+QList<QString> Context::getVideoWallpaperPaths()
+{
+    return settings->value(videoWallpaperPath).toStringList();
+}
+
+QList<QString> Context::getGraphWallpaperPaths()
+{
+    return settings->value(graphWallpaperPath).toStringList();
+}
+
+QList<QString> Context::getGifWallpaperPaths()
+{
+    return settings->value(gifWallpaperPath).toStringList();
+}
+
+void Context::addVideoWallpaperPath(const QList<QString> value)
 {
     addWallpaperPath(videoWallpaperPath,value);
 }
 
-void Context::addGraphWallpaperPath(const QString &value)
+void Context::addGraphWallpaperPath(const QList<QString> value)
 {
     addWallpaperPath(graphWallpaperPath,value);
 }
 
-void Context::addGifWallpaperPath(const QString &value)
+void Context::addGifWallpaperPath(const QList<QString> value)
 {
     addWallpaperPath(gifWallpaperPath,value);
+}
+
+void Context::deleteVideoWallpaperPath(const QString &value)
+{
+    QStringList paths = getVideoWallpaperPaths();
+    if(paths.size() <=1){
+        QMessageBox::information(nullptr,"至少要有一个视频 ","至少要有一个视频 ");
+        return ;
+    }
+    if(paths.contains(value)){
+        paths.removeOne(value);
+    }
+    setWallpaperPath(videoWallpaperPath,paths);
+}
+
+void Context::deleteGraphWallpaperPath(const QString &value)
+{
+    QStringList paths = getGraphWallpaperPaths();
+    if(paths.contains(value)){
+        paths.removeOne(value);
+    }
+    setWallpaperPath(graphWallpaperPath,paths);
+}
+
+void Context::deleteGifWallpaperPath(const QString &value)
+{
+    QStringList paths = getGifWallpaperPaths();
+    if(paths.contains(value)){
+        paths.removeOne(value);
+    }
+    setWallpaperPath(gifWallpaperPath,paths);
 }
 
 int Context::getWallpaperType()

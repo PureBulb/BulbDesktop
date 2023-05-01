@@ -2,6 +2,7 @@
 #define HOOKTHREAD_H
 
 #include <QThread>
+#include <QCoreApplication>
 #include <windows.h>
 #include <tlhelp32.h>
 #include "log.h"
