@@ -32,6 +32,9 @@ private slots:
     void on_delaySlider_valueChanged(int value);
 
     void on_typeComboBox_currentIndexChanged(int index);
+
+    void on_startWallpaperCheckbox_stateChanged(int arg1);
+
 public:
     explicit SettingWidget(QWidget *parent = nullptr);
     ~SettingWidget();

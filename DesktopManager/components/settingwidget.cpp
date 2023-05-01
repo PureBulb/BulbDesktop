@@ -201,3 +201,14 @@ void SettingWidget::on_typeComboBox_currentIndexChanged(int index)
         getContext()->setWallpaperType(Context::WallPaperType(index-1));
     }
 }
+
+
+
+void SettingWidget::on_startWallpaperCheckbox_stateChanged(int arg1)
+{
+    if(Qt::CheckState::Checked == arg1)
+        getContext()->setStartWallpaper(true);
+    else
+        getContext()->setStartWallpaper(true);
+
+}
