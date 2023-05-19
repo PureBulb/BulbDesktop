@@ -37,6 +37,7 @@ SOURCES += \
     utils/videoUtils/videodecoder.cpp \
     utils/windadapter.cpp \
     utils/videoUtils/videoUtils.cpp \
+    widgets/baseworkerform.cpp \
     widgets/mainwindow.cpp \
     widgets/subregionform.cpp \
     widgets/workerform.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     utils/windadapter.h \
     utils/videoUtils/videoUtils.h\
     widgets/BaseWidget.h \
+    widgets/baseworkerform.h \
     widgets/mainwindow.h \
     widgets/subregionform.h \
     widgets/workerform.h

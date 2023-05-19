@@ -82,9 +82,7 @@ void MainWindow::initTrayIcon()
     menu->addAction(action);
     trayIcon->setContextMenu(menu);
 
-    connect(trayIconMenu,&TrayIconMenu::nextWallpaper,this,&MainWindow::onNextWallpaper);
-    connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,this,&MainWindow::onPauseWallpaper);
-    connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,this,&MainWindow::onResumeWallpaper);
+
 
 }
 
@@ -99,20 +97,7 @@ void MainWindow::bindEvent()
     //    connect(trayIcon,&QSystemTrayIcon::activated,this,&MainWindow::onTrayIconActivated);
 }
 
-void MainWindow::onNextWallpaper()
-{
 
-}
-
-void MainWindow::onPauseWallpaper()
-{
-
-}
-
-void MainWindow::onResumeWallpaper()
-{
-
-}
 
 
 void MainWindow::areaScrollerEventProcess(QObject *o, QEvent *e)

@@ -12,11 +12,12 @@
 #include "context.h"
 #include "../utils/videoUtils/videoutils.h"
 #include "utils/windadapter.h"
+#include "baseworkerform.h"
 namespace Ui {
 class WorkerForm;
 }
 
-class WorkerForm : public QWidget
+class WorkerForm : public BaseWorkerForm
 {
     Q_OBJECT
 
@@ -30,13 +31,15 @@ public slots:
     void onPause();
     void onResume();
     void onDecodeImage(QImage _image);
-    void onNextWallpaper();
     void onVolumeChange(uint8_t volume);
 
     void setVideoBackground();
     void setGifBackground();
     void setGraphBackground();
-
+public slots:
+    void onNextWallpaper() override;
+    void onPauseWallpaper() override;
+    void onResumeWallpaper() override;
 protected:
     bool eventFilter(QObject *o,QEvent *e) override;
 //    bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;

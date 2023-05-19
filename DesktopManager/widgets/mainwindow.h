@@ -65,9 +65,6 @@ private:
 
 
     // BaseWidget interface
-protected slots:
-    void onNextWallpaper() override;
-    void onPauseWallpaper() override;
-    void onResumeWallpaper() override;
+
 };
 #endif // MAINWINDOW_H

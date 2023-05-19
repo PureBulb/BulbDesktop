@@ -4,7 +4,7 @@
 #include <QtDebug>
 #include <QDesktopWidget>
 WorkerForm::WorkerForm(QWidget *parent) :
-    QWidget(parent),
+    BaseWorkerForm(parent),
     ui(new Ui::WorkerForm)
 {
     pause = 0;
@@ -86,6 +86,16 @@ void WorkerForm::onNextWallpaper()
     else if(getContext()->getWallpaperType() == Context::video){
         setVideoBackground();
     }
+}
+
+void WorkerForm::onPauseWallpaper()
+{
+
+}
+
+void WorkerForm::onResumeWallpaper()
+{
+
 }
 
 void WorkerForm::onVolumeChange(uint8_t volume)

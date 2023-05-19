@@ -109,20 +109,6 @@ void SettingWidget::onSettingsChanged()
     init();
 }
 
-void SettingWidget::onNextWallpaper()
-{
-
-}
-
-void SettingWidget::onPauseWallpaper()
-{
-
-}
-
-void SettingWidget::onResumeWallpaper()
-{
-
-}
 
 
 void SettingWidget::on_autoLaunchCheckBox_stateChanged(int arg1)

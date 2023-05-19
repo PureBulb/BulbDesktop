@@ -15,9 +15,7 @@ protected:
     Context* getContext();
 protected slots:
     virtual void onSettingsChanged() = 0;
-    virtual void onNextWallpaper() = 0;
-    virtual void onPauseWallpaper() = 0;
-    virtual void onResumeWallpaper() = 0;
+
 };
 
 #endif // BASEWIDGET_H

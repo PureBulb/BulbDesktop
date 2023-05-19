@@ -53,9 +53,7 @@ protected:
 
 protected slots:
     void onSettingsChanged();
-    void onNextWallpaper();
-    void onPauseWallpaper();
-    void onResumeWallpaper();
+
 };
 
 #endif // SETTINGWIDGET_H
