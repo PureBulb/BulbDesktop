@@ -8,8 +8,9 @@
 void HookThread::inject()
 {
     #ifdef QT_DEBUG
-        QString workPath = QCoreApplication::applicationDirPath()+"../bin/MinHookDllDemo.dll";
-        loge("inject",workPath);
+        QString workPath = "E:/project/Qt/build-BulbDesktop-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/DesktopManager/bin/MinHookDllDemo.dll";
+//        QString workPath = QCoreApplication::applicationDirPath()+"/../bin/MinHookDllDemo.dll";
+        logi("inject",workPath);
         const char  *dllPath = workPath.toStdString().c_str();
     #else
         QString workPath = QCoreApplication::applicationDirPath()+"/MinHookDllDemo.dll";

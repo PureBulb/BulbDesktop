@@ -8,6 +8,7 @@ SettingWidget::SettingWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     init();
+    preType = (Context::WallPaperType)getContext()->getWallpaperType();
 }
 
 SettingWidget::~SettingWidget()
@@ -199,6 +200,12 @@ void SettingWidget::on_typeComboBox_currentIndexChanged(int index)
 {
     if(inited){
         getContext()->setWallpaperType(Context::WallPaperType(index-1));
+        if(getContext()->getWallpaperPaths().size()<=0){
+            QMessageBox::information(nullptr,"无法选择 ","该模式下缺少壁纸文件 ");
+            getContext()->setWallpaperType((Context::WallPaperType)preType);
+            return ;
+        }
+        preType = (Context::WallPaperType)(index-1);
     }
 }
 

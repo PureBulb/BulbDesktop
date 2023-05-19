@@ -153,7 +153,8 @@ void WorkerForm::init()
     isStartWallpaper = getContext()->isStartWallpaper();
     wallpaperType = (Context::WallPaperType)getContext()->getWallpaperType();
     wallpaperPaths = getContext()->getWallpaperPaths();
-
+    if(wallpaperPaths.size()<=0)
+        return ;
     if(isStartWallpaper){
         showFullScreen();
         winAdapter->reFindWallpaperW();

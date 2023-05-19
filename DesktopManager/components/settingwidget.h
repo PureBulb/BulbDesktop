@@ -43,6 +43,7 @@ private:
     Ui::SettingWidget *ui;
     QList<QLabel*> thumbnails;
     bool inited;
+    Context::WallPaperType preType;
     void initUi();
     void initThumbnail();
 

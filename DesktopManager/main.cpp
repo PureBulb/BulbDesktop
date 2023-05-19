@@ -8,8 +8,6 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
-//    VideoUtils v("D:/test.mp4");
-//    v.play();
     MainWindow w;
     w.show();
     return a.exec();
