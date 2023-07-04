@@ -17,10 +17,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    genericplugin.cpp
+    EverythingPlugin.cpp
 
 HEADERS += \
-    genericplugin.h
+    EverythingPlugin.h
 
 DISTFILES += EverythingPlugin.json
 
@@ -29,3 +29,9 @@ unix {
     target.path = $$[QT_INSTALL_PLUGINS]/generic
 }
 !isEmpty(target.path): INSTALLS += target
+
+#libs
+LIBS += -L$$PWD/../../everything/lib
+LIBS += -lEverything64
+INCLUDEPATH += $$PWD/../../DesktopManager/plugins
+INCLUDEPATH += $$PWD/../../everything/include

@@ -15,6 +15,7 @@
 #include "utils/videoUtils/videoutils.h"
 #include "../components/trayiconmenu.h"
 #include "../components/settingwidget.h"
+#include "AssistantForm.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -28,8 +29,6 @@ public:
     ~MainWindow();
     bool eventFilter(QObject *o, QEvent *e) override;
 
-
-
     //TODO: 退出时要重新set parent把窗口转回本进程
 
 protected:
@@ -42,9 +41,7 @@ signals:
     void quitProcess();
 private slots:
 
-
     void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
-
 
 public slots:
     void onSettingsChanged() override;
@@ -62,8 +59,7 @@ private:
     WorkerForm *w;
     QSystemTrayIcon *trayIcon;
     TrayIconMenu* trayIconMenu;
-
-
+    AssistantForm *assistantForm;
     // BaseWidget interface
 
 };

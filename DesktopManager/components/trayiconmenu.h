@@ -18,7 +18,7 @@ public:
 
     void setSettingWidget(BaseWidget *value);
 
-    void setSubregionForm(BaseWidget *value);
+    void setAssistantForm(BaseWidget *value);
 
 private slots:
 
@@ -44,7 +44,7 @@ private:
     Ui::TrayIconMenu *ui;
 
     BaseWidget *settingWidget;
-    BaseWidget *SubregionForm;
+    BaseWidget *assistantForm;
 };
 
 #endif // TRAYICONMENU_H

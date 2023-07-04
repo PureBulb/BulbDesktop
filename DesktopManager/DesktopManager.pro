@@ -16,15 +16,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    components/assistantitem.cpp \
     components/settingwidget.cpp \
     components/thumbnaillabel.cpp \
     components/trayiconmenu.cpp \
     context.cpp \
     log.cpp \
     main.cpp \
+    plugins/IAssistantPlugin.cpp \
     utils/audioUtils/AudioUtils.cpp \
     utils/audioUtils/IAudioPlayer.cpp \
     utils/hookthread.cpp \
+    utils/pluginUtils/assistantpluginutils.cpp \
+    utils/pluginUtils/pluginutils.cpp \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
     utils/videoUtils/AVFrameQueue.cpp \
@@ -37,22 +41,26 @@ SOURCES += \
     utils/videoUtils/videodecoder.cpp \
     utils/windadapter.cpp \
     utils/videoUtils/videoUtils.cpp \
-    widgets/baseworkerform.cpp \
+    widgets/AssistantForm.cpp \
+    widgets/BaseWorkerform.cpp \
     widgets/mainwindow.cpp \
-    widgets/subregionform.cpp \
     widgets/workerform.cpp \
     widgets/BaseWidget.cpp
 
 HEADERS += \
+    components/assistantitem.h \
     components/settingwidget.h \
     components/thumbnaillabel.h \
     components/trayiconmenu.h \
     context.h \
     log.h \
+    plugins/IAssistantPlugin.h \
     utils/AVConfig.h \
     utils/audioUtils/AudioUtils.h \
     utils/audioUtils/IAudioPlayer.h \
     utils/hookthread.h \
+    utils/pluginUtils/assistantpluginutils.h \
+    utils/pluginUtils/pluginutils.h \
     utils/safequeue.h \
     utils/threadbase.h \
     utils/videoUtils/AVPacketQueue.h \
@@ -65,17 +73,18 @@ HEADERS += \
     utils/videoUtils/videodecoder.h \
     utils/windadapter.h \
     utils/videoUtils/videoUtils.h\
+    widgets/AssistantForm.h \
     widgets/BaseWidget.h \
-    widgets/baseworkerform.h \
+    widgets/BaseWorkerform.h \
     widgets/mainwindow.h \
-    widgets/subregionform.h \
     widgets/workerform.h
 
 FORMS += \
+    components/assistantitem.ui \
     components/settingwidget.ui \
     components/trayiconmenu.ui \
+    widgets/assistantform.ui \
     widgets/mainwindow.ui \
-    widgets/subregionform.ui \
     widgets/workerform.ui
 
 # Default rules for deployment.

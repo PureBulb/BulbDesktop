@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     initTrayIcon();
     initui();
+
     SettingWidget* settingW = new SettingWidget();
     ui->ConfigScrollArea->setWidget(settingW);
 
@@ -55,11 +56,9 @@ void MainWindow::initui()
 {
     setWindowTitle("Bulb 桌面助手");
 
-
-    trayIcon->setToolTip("SystemTray Program");
-
     //初始化WorkerForm
     initWorkerForm();
+    //初始化 助手从窗口
 
     //设置页面左侧滚动条隐藏
     ui->labelsScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -72,9 +71,12 @@ void MainWindow::initui()
 void MainWindow::initTrayIcon()
 {
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon(":/recource/icons/icon.png"));
+    trayIcon->setToolTip("SystemTray Program");
+    trayIcon->setIcon(QIcon(":/resource/icons/icon.png"));
     trayIconMenu = new TrayIconMenu(this);
     trayIconMenu->setSettingWidget(this);
+    assistantForm = new AssistantForm();
+    trayIconMenu->setAssistantForm(assistantForm);
 //    trayIconMenu->setSubregionForm();
     QWidgetAction* action = new QWidgetAction(this);
     QMenu* menu = new QMenu(this);
@@ -164,7 +166,7 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
             this->show();
         break;
         case QSystemTrayIcon::Trigger:
-            trayIcon->showMessage("提示","双击打开设置,右键打开菜单",QIcon(":/recource/icons/icon.png"));
+            trayIcon->showMessage("提示","双击打开设置,右键打开菜单",QIcon(":/resource/icons/icon.png"));
         break;
         case QSystemTrayIcon::Context:
             trayIcon->contextMenu()->show();

@@ -5,7 +5,7 @@ ThumbnailLabel::ThumbnailLabel(QWidget *parent, Context::WallPaperType _type, QS
     ,type(_type)
     ,path(_path)
     ,thumbnail(_thumbnail)
-    ,deleteIcon(":/recource/icons/delete.png")
+    ,deleteIcon(":/resource/icons/delete.png")
 {
     installEventFilter(this);
     setMinimumSize(192,108);

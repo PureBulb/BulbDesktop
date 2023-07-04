@@ -1,18 +1,31 @@
 #ifndef GENERICPLUGIN_H
 #define GENERICPLUGIN_H
 
-#include <QGenericPlugin>
-
-class GenericPlugin : public QGenericPlugin
+#include <IAssistantPlugin.h>
+#include <Everything.h>
+class EverythingPlugin : public QObject,public IAssistantPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QGenericPluginFactoryInterface" FILE "EverythingPlugin.json")
+    Q_PLUGIN_METADATA(IID PLUGIN_IID FILE "EverythingPlugin.json")
+    Q_INTERFACES(IAssistantPlugin)
 
 public:
-    explicit GenericPlugin(QObject *parent = nullptr);
+    explicit EverythingPlugin(QObject *parent = nullptr);
 
-private:
-    QObject *create(const QString &name, const QString &spec) override;
+    // IAssistantPlugin interface
+
+
+    bool query(QString queryStr, QList<QueryResult>& result);
+
+    void loaded();
+
+    void unload();
+
+    // IAssistantPlugin interface
+protected:
+    void onItemClick(QueryResult result);
+    void onBtn1Click(QueryResult result);
+    void onBtn2Click(QueryResult result);
 };
 
 #endif // GENERICPLUGIN_H

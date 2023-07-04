@@ -40,9 +40,9 @@ void TrayIconMenu::on_settingsBtn_clicked()
     settingWidget->show();
 }
 
-void TrayIconMenu::setSubregionForm(BaseWidget *value)
+void TrayIconMenu::setAssistantForm(BaseWidget *value)
 {
-    SubregionForm = value;
+    assistantForm = value;
 }
 
 void TrayIconMenu::setSettingWidget(BaseWidget *value)
@@ -52,8 +52,8 @@ void TrayIconMenu::setSettingWidget(BaseWidget *value)
 
 void TrayIconMenu::on_assistorBtn_clicked()
 {
-    //SubregionForm->show();
-    QMessageBox::information(this,"开发中","让生产队的驴歇歇吧 ");
+    assistantForm->show();
+//    QMessageBox::information(this,"开发中","让生产队的驴歇歇吧 ");
 }
 
 void TrayIconMenu::on_volumeSlider_valueChanged(int value)

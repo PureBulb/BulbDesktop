@@ -1,4 +1,4 @@
-#include "baseworkerform.h"
+#include "BaseWorkerform.h"
 
 BaseWorkerForm::BaseWorkerForm(QWidget *parent)
     :BaseWidget(parent)

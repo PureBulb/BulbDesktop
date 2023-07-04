@@ -20,6 +20,7 @@ extern "C"{
 #include "syncclock.h"
 
 #include<QProcess>
+// todo: 1. pre-load video 2. add a display thread
 class VideoUtils:public QObject
 {
     Q_OBJECT

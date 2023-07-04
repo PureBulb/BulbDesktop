@@ -1,12 +1,11 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    DesktopManager \
-    injectLib
+    AssistantPlugins \
+    DesktopManager
 
 
 CONFIG += qt \
     qt
 
 QT += widgets
-

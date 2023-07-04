@@ -21,8 +21,6 @@ public:
     ResultType getType() {return type;};
     void setType(const ResultType &value){type = value;};
 
-
-
     std::function<void ()> getItemClick() {return itemClick;};
     void setItemClick(const std::function<void (QueryResult)> value){
         itemClick = std::bind(value,*this);

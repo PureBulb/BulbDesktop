@@ -12,7 +12,7 @@
 #include "context.h"
 #include "../utils/videoUtils/videoutils.h"
 #include "utils/windadapter.h"
-#include "baseworkerform.h"
+#include "BaseWorkerform.h"
 namespace Ui {
 class WorkerForm;
 }
@@ -24,9 +24,9 @@ class WorkerForm : public BaseWorkerForm
 public:
     explicit WorkerForm(QWidget *parent = nullptr);
     ~WorkerForm();
-    void init();
+    void init() override;
 public slots:
-    void onSettingsChanged();
+    void onSettingsChanged() override;
     void onQuit();
     void onPause();
     void onResume();
