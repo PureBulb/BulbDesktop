@@ -160,10 +160,19 @@ void ProgramsPlugin::onItemClick(QueryResult result)
     ShellExecute(NULL, L"open", cmd.toStdWString().c_str() ,NULL,NULL,SW_SHOWMAXIMIZED);
 }
 
+QIcon ProgramsPlugin::getIconFunc(QueryResult result)
+{
+    QFileIconProvider provider;
+    QIcon icon = provider.icon(QFileInfo(result.getDescription()));
+    return icon;
+}
+
+
+
 
 bool ProgramsPlugin::query(QString queryStr, QList<QueryResult> &result)
 {
-    //todo: reg table , link
+    //TODO: reg table , link
     if(queryStr.size() == 0){
         return false;
     }
@@ -180,6 +189,7 @@ bool ProgramsPlugin::query(QString queryStr, QList<QueryResult> &result)
         data.setItemClick(getOnItemClickFunc());
         data.setBtn1Click(getOnBtn1ClickFunc());
         data.setBtn2Click(getOnBtn2ClickFunc());
+        data.setIconFunc(getGetIconFunc());
         result.append(data);
         resultCount++;
     }

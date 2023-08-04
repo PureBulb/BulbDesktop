@@ -5,12 +5,12 @@
 #include <algorithm>
 #include <QList>
 
-#include "pluginutils.h"
+#include "BasePluginUtils.h"
 
 
 #define ASSISTANT_PLUGINS_DIR "./AssistantPlugins"
 
-class AssistantPluginUtils : public PluginUtils
+class AssistantPluginUtils : public BasePluginUtils
 {
 private:
     void object2Interface();
@@ -23,7 +23,10 @@ public:
     void load();
 
     ~AssistantPluginUtils();
-     //todo: context setting manager link
+
+
+    void unload();
+    void setSettings(SettingManager *settings);
 };
 
 #endif // ASSISTANTPLUGINUTILS_H

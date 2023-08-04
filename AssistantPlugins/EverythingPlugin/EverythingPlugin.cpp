@@ -22,11 +22,13 @@ bool EverythingPlugin::query(QString queryStr, QList<QueryResult> &result)
         wchar_t buff[512];
         data.setType(Everything_IsFileResult(i)?file:folder);
         data.setTitle(QString::fromWCharArray(Everything_GetResultFileNameW(i)));
+        Everything_GetResultFullPathNameW(i,buff,512);
+        data.setDescription(QString::fromWCharArray(buff));
         data.setItemClick(getOnItemClickFunc());
         data.setBtn1Click(getOnBtn1ClickFunc());
         data.setBtn2Click(getOnBtn2ClickFunc());
-        Everything_GetResultFullPathNameW(i,buff,512);
-        data.setDescription(QString::fromWCharArray(buff));
+        data.setIconFunc(getGetIconFunc());
+
         result.push_back(data);
     }
     qDebug()<<"EverythingPlugin query finished";
@@ -46,6 +48,11 @@ void EverythingPlugin::unload()
 void EverythingPlugin::onItemClick(QueryResult result)
 {
     qDebug()<<"everything plugin is clciked";
+    const QString cmd = QString("%1").arg(result.getDescription());
+
+        // 执行命令
+    qDebug()<<cmd.toStdString().c_str();
+    ShellExecute(NULL, L"open", cmd.toStdWString().c_str() ,NULL,NULL,SW_SHOWMAXIMIZED);
 }
 
 void EverythingPlugin::onBtn1Click(QueryResult result)
@@ -56,6 +63,13 @@ void EverythingPlugin::onBtn1Click(QueryResult result)
 void EverythingPlugin::onBtn2Click(QueryResult result)
 {
 
+}
+
+QIcon EverythingPlugin::getIconFunc(QueryResult result)
+{
+    QFileIconProvider provider;
+    QIcon icon = provider.icon(QFileInfo(result.getDescription()));
+    return icon;
 }
 
 

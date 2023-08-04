@@ -1,6 +1,6 @@
 #include "thumbnaillabel.h"
 
-ThumbnailLabel::ThumbnailLabel(QWidget *parent, Context::WallPaperType _type, QString _path,QImage _thumbnail)
+ThumbnailLabel::ThumbnailLabel(QWidget *parent, WallpaperType _type, QString _path, QImage _thumbnail)
     :QLabel(parent)
     ,type(_type)
     ,path(_path)
@@ -26,23 +26,22 @@ bool ThumbnailLabel::eventFilter(QObject *o, QEvent *e)
             setPixmap(QPixmap::fromImage(thumbnail));
         }
         else if(e->type() == QEvent::MouseButtonPress){
-            if(type == Context::video){
-                getContext()->deleteVideoWallpaperPath(path);
+            if(type == WallpaperType::video){
+                emit removedSelf(path);
                 VideoUtils::deleteThumbnail(path);
             }
-            if(type == Context::graph){
-                getContext()->deleteGraphWallpaperPath(path);
+            if(type == WallpaperType::graph){
+                emit removedSelf(path);
             }
-            if(type == Context::gif){
-                getContext()->deleteGifWallpaperPath(path);
+            if(type == WallpaperType::gif){
+                emit removedSelf(path);
             }
         }
     } while (false);
     return false;
 }
 
-
-Context *ThumbnailLabel::getContext()
+WallpaperType ThumbnailLabel::getType() const
 {
-    return Context::getInstance();
+    return type;
 }

@@ -16,7 +16,7 @@ public:
     explicit TrayIconMenu(QWidget *parent = nullptr);
     ~TrayIconMenu();
 
-    void setSettingWidget(BaseWidget *value);
+    void setSettingWidget(QWidget *value);
 
     void setAssistantForm(BaseWidget *value);
 
@@ -43,7 +43,7 @@ signals:
 private:
     Ui::TrayIconMenu *ui;
 
-    BaseWidget *settingWidget;
+    QWidget *settingWidget;
     BaseWidget *assistantForm;
 };
 

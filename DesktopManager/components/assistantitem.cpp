@@ -19,17 +19,16 @@ AssistantItem::AssistantItem(QueryResult &result, QListWidget *parent) :
     ui(new Ui::AssistantItem)
 {
     ui->setupUi(this);
-    //todo: create by plugin or callback by plugin?
+
     type = result.getType();
-    QFileIconProvider provider;
-    QIcon icon = provider.icon(QFileInfo(result.getDescription()));
-    setIcon(icon);
+    auto getIconFunc = result.getIconFunc();
+    setIcon(getIconFunc());
     setTitle(result.getTitle());
     setDescription(result.getDescription());
 
 }
 
-AssistantItem *AssistantItem::setIcon(QIcon &image)
+AssistantItem *AssistantItem::setIcon(QIcon image)
 {
 
     ui->iconLabel->setPixmap(image.pixmap(64,64));

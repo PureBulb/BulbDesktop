@@ -2,7 +2,7 @@
 #define ASSISTANTITEM_H
 
 #include <QListWidgetItem>
-#include <QFileIconProvider>
+
 #include <QPicture>
 
 #include "../plugins/IAssistantPlugin.h"
@@ -19,7 +19,7 @@ protected:
 public:
     explicit AssistantItem(QListWidget *parent = nullptr);
     explicit AssistantItem(QueryResult &result,QListWidget *parent = nullptr);
-    AssistantItem* setIcon(QIcon &image);
+    AssistantItem* setIcon(QIcon image);
     AssistantItem* setTitle(QString title);
     AssistantItem* setDescription(QString description);
     ~AssistantItem();

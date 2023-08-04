@@ -16,19 +16,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Manager.cpp \
+    SettingManager.cpp \
     components/assistantitem.cpp \
-    components/settingwidget.cpp \
     components/thumbnaillabel.cpp \
     components/trayiconmenu.cpp \
     context.cpp \
     log.cpp \
     main.cpp \
-    plugins/IAssistantPlugin.cpp \
+    utils/WindAdapterV2.cpp \
     utils/audioUtils/AudioUtils.cpp \
     utils/audioUtils/IAudioPlayer.cpp \
     utils/hookthread.cpp \
-    utils/pluginUtils/assistantpluginutils.cpp \
-    utils/pluginUtils/pluginutils.cpp \
+    utils/pluginUtils/AssistantPluginUtils.cpp \
+    utils/pluginUtils/BasePluginUtils.cpp \
+    utils/pluginUtils/WallpaperPluginUtils.cpp \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
     utils/videoUtils/AVFrameQueue.cpp \
@@ -43,24 +45,29 @@ SOURCES += \
     utils/videoUtils/videoUtils.cpp \
     widgets/AssistantForm.cpp \
     widgets/BaseWorkerform.cpp \
+    widgets/SettingWidget.cpp \
     widgets/mainwindow.cpp \
     widgets/workerform.cpp \
     widgets/BaseWidget.cpp
 
 HEADERS += \
+    Manager.h \
+    SettingManager.h \
     components/assistantitem.h \
-    components/settingwidget.h \
     components/thumbnaillabel.h \
     components/trayiconmenu.h \
     context.h \
     log.h \
     plugins/IAssistantPlugin.h \
+    plugins/IWallpaperPlugin.h \
     utils/AVConfig.h \
+    utils/WindAdapterV2.h \
     utils/audioUtils/AudioUtils.h \
     utils/audioUtils/IAudioPlayer.h \
     utils/hookthread.h \
-    utils/pluginUtils/assistantpluginutils.h \
-    utils/pluginUtils/pluginutils.h \
+    utils/pluginUtils/AssistantPluginUtils.h \
+    utils/pluginUtils/BasePluginUtils.h \
+    utils/pluginUtils/WallpaperPluginUtils.h \
     utils/safequeue.h \
     utils/threadbase.h \
     utils/videoUtils/AVPacketQueue.h \
@@ -76,13 +83,14 @@ HEADERS += \
     widgets/AssistantForm.h \
     widgets/BaseWidget.h \
     widgets/BaseWorkerform.h \
+    widgets/SettingWidget.h \
     widgets/mainwindow.h \
     widgets/workerform.h
 
 FORMS += \
     components/assistantitem.ui \
-    components/settingwidget.ui \
     components/trayiconmenu.ui \
+    widgets/SettingWidget.ui \
     widgets/assistantform.ui \
     widgets/mainwindow.ui \
     widgets/workerform.ui

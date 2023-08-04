@@ -200,7 +200,7 @@ void WorkerForm::init()
 
 void WorkerForm::onSettingsChanged()
 {
-    //todo: stop all wallpaper
+    //TODO: stop all wallpaper
     if(video){
         video->stop();
         video->deleteLater();

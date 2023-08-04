@@ -12,3 +12,10 @@ SettingWidget::~SettingWidget()
 {
     delete ui;
 }
+
+void SettingWidget::addSettingItem(QHash<QString, QWidget *> widgets)
+{
+   for(auto key:widgets.keys()){
+        ui->tabWidget->addTab(widgets[key],key);
+   }
+}

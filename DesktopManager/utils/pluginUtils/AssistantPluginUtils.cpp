@@ -1,13 +1,14 @@
-#include "assistantpluginutils.h"
+#include "AssistantPluginUtils.h"
 #include <QtDebug>
 
 void AssistantPluginUtils::object2Interface()
 {
     for(auto loader:loaders){
+
         QObject* instance = loader->instance();
         IAssistantPlugin* plugin = qobject_cast<IAssistantPlugin*>(instance);
-
         if(plugin){
+            qDebug()<<instance->metaObject()->className();
             plugin->loaded();
             int i = 0;
             for(i = 0;i<plugins.size();i++){
@@ -27,7 +28,7 @@ void AssistantPluginUtils::object2Interface()
 }
 
 AssistantPluginUtils::AssistantPluginUtils(QObject *parent)
-    :PluginUtils(ASSISTANT_PLUGINS_DIR,parent)
+    :BasePluginUtils(ASSISTANT_PLUGINS_DIR,parent)
 {
 
 }
@@ -44,7 +45,7 @@ QList<QueryResult> AssistantPluginUtils::query(QString query)
 
 void AssistantPluginUtils::load()
 {
-    PluginUtils::load();
+    BasePluginUtils::load();
     object2Interface();
 }
 
@@ -55,4 +56,14 @@ AssistantPluginUtils::~AssistantPluginUtils()
     for(auto i :plugins){
         i->unload();
     }
+}
+
+void AssistantPluginUtils::unload()
+{
+
+}
+
+void AssistantPluginUtils::setSettings(SettingManager *settings)
+{
+
 }

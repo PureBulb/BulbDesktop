@@ -1,8 +1,8 @@
 #include "widgets/mainwindow.h"
 
 #include <QApplication>
-#include <utils/pluginUtils/assistantpluginutils.h>
-#include "windows.h"
+#include <utils/pluginUtils/wallpaperpluginutils.h>
+#include <Manager.h>
 
 int main(int argc, char *argv[])
 {
@@ -10,19 +10,21 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-//    AssistantPluginUtils utils;
+    Manager manager;
+//    MainWindow w;
+//    w.show();
+
+//    WallpaperPluginUtils utils;
 //    utils.load();
-//    QList<QueryResult> result = utils.query("huochai");
-//    for(auto i : result){
+//    QHash<QString, QVariant> settings;
+//    SettingManager manager;
+//    QStringList paths;
+//    paths<<"D:/test2.mp4"<<"D:/test3.mp4";
+//    settings["video.paths"] = paths;
+//    settings["type"] = 2;
+//    utils.setSettings(&manager);
 
-//        const QString cmd = QString("%1").arg(i.description);
-
-//            // 执行命令
-//        qDebug()<<cmd.toStdString().c_str();
-//        ShellExecute(NULL, L"open", cmd.toStdWString().c_str() ,NULL,NULL,SW_SHOWMAXIMIZED);
-//    }
+    //utils.nextWallpaper();
 
 
     return a.exec();

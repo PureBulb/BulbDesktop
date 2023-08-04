@@ -1,12 +1,12 @@
-#include "pluginutils.h"
+#include "BasePluginUtils.h"
 #include <QtDebug>
 
-PluginUtils::PluginUtils(QObject *parent)
+BasePluginUtils::BasePluginUtils(QObject *parent)
     :QObject(parent)
 {
 }
 
-PluginUtils::PluginUtils(QString pathName, QObject *parent)
+BasePluginUtils::BasePluginUtils(QString pathName, QObject *parent)
     :QObject(parent)
     ,path(pathName)
 {
@@ -15,7 +15,7 @@ PluginUtils::PluginUtils(QString pathName, QObject *parent)
 
 }
 
-void PluginUtils::load()
+void BasePluginUtils::load()
 {
     for(auto dirName:subDir){
         QString realDir = (path.absolutePath()+"/"+ dirName+"/");
@@ -24,16 +24,16 @@ void PluginUtils::load()
         qDebug()<<realDir;
         qDebug()<<pluginName;
         QFile file(pluginName);
-          if (!file.exists())
-          {
-              QMessageBox::warning(nullptr,"错误信息","找不到文件");
-              return ;
-          }
+        if (!file.exists())
+        {
+            QMessageBox::warning(nullptr,"错误信息","找不到文件");
+            return ;
+        }
         QPluginLoader *pluginLoader = new QPluginLoader(pluginName);
 
 
         if(pluginLoader->load()){
-                loaders.push_back(pluginLoader);
+            loaders.push_back(pluginLoader);
         }
         else{
 
@@ -44,7 +44,7 @@ void PluginUtils::load()
 
 }
 
-void PluginUtils::unload()
+void BasePluginUtils::unload()
 {
     for(auto loader:loaders){
         if(!loader->unload()){
@@ -53,9 +53,14 @@ void PluginUtils::unload()
     }
 }
 
-PluginUtils::~PluginUtils()
+BasePluginUtils::~BasePluginUtils()
 {
     for(auto loader:loaders){
         loader->deleteLater();
     }
+}
+
+void BasePluginUtils::setSettings(SettingManager *settings)
+{
+
 }

@@ -1,7 +1,6 @@
-QT += gui
-
+QT       += core gui multimedia widgets
 TEMPLATE = lib
-DEFINES += BASEWALLPAPERPLUGIN_LIBRARY
+CONFIG += plugin
 
 CONFIG += c++11
 
@@ -17,14 +16,68 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    basewallpaperplugin.cpp
+    components/thumbnaillabel.cpp \
+    settingsform.cpp \
+    utils/audioUtils/AudioUtils.cpp \
+    utils/audioUtils/IAudioPlayer.cpp \
+    utils/safequeue.cpp \
+    utils/threadbase.cpp \
+    utils/videoUtils/AVPacketQueue.cpp \
+    utils/videoUtils/AudioDecoder.cpp \
+    utils/videoUtils/AvFrameQueue.cpp \
+    utils/videoUtils/DexmuxThread.cpp \
+    utils/videoUtils/IDecoderBase.cpp \
+    utils/videoUtils/displayworker.cpp \
+    utils/videoUtils/syncclock.cpp \
+    utils/videoUtils/videodecoder.cpp \
+    utils/videoUtils/videoUtils.cpp\
+    BaseWallpaperManager.cpp \
+    BaseWallpaperPlugin.cpp \
+    wallpaper.cpp
 
 HEADERS += \
-    BaseWallpaperPlugin_global.h \
-    basewallpaperplugin.h
-
+    common.h \
+    components/thumbnaillabel.h \
+    settingsform.h \
+    utils/AVConfig.h \
+    utils/audioUtils/AudioUtils.h \
+    utils/audioUtils/IAudioPlayer.h \
+    utils/safequeue.h \
+    utils/threadbase.h \
+    utils/videoUtils/AVPacketQueue.h \
+    utils/videoUtils/AudioDecoder.h \
+    utils/videoUtils/AvFrameQueue.h \
+    utils/videoUtils/DexmuxThread.h \
+    utils/videoUtils/IDecoderBase.h \
+    utils/videoUtils/displayworker.h \
+    utils/videoUtils/syncclock.h \
+    utils/videoUtils/videodecoder.h \
+    utils/windadapter.h \
+    utils/videoUtils/videoUtils.h\
+    BaseWallpaperPlugin.h \
+    BaseWallpaperManager.h \
+    wallpaper.h \
+    IWallpaperPlugin.h
+FORMS += \
+    settingsform.ui \
+    wallpaper.ui
+DISTFILES += BaseWallpaperPlugin.json
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+#libs
+LIBS += -L$$PWD/../../ffmpeg/lib
+LIBS += -luser32 \
+        -ladvapi32 \
+        -lavcodec \
+        -lavdevice \
+        -lavfilter \
+        -lavformat \
+        -lavutil \
+        -lswresample \
+        -lswscale
+#INCLUDEPATH += $$PWD/../../DesktopManager/plugins
+INCLUDEPATH += $$PWD/../../ffmpeg/include

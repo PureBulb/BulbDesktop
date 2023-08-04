@@ -1,3 +1,5 @@
 {
-    "dependencies" : ["Everything64.dll"]
+    "plugin-name" : "文件搜索",
+    "dependencies" : ["Everything64.dll"],
+    "type" : "assistant"
 }

@@ -51,7 +51,7 @@ void MainWindow::onSettingsChanged()
     init();
 }
 
-//todo: reset config re-init windows
+//TODO: reset config re-init windows
 void MainWindow::initui()
 {
     setWindowTitle("Bulb 桌面助手");

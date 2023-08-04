@@ -4,21 +4,23 @@
 #include <QLabel>
 #include <QEvent>
 #include <QImage>
-#include "context.h"
+
+#include "../common.h"
 #include "../utils/videoUtils/videoutils.h"
 class ThumbnailLabel:public QLabel
 {
     Q_OBJECT
 public:
-    ThumbnailLabel(QWidget* parent, Context::WallPaperType _type, QString _path, QImage _thumbnail);
-    void removePath();
+    ThumbnailLabel(QWidget* parent,WallpaperType _type, QString _path, QImage _thumbnail);
+    WallpaperType getType() const;
+
 signals:
-    void removedSelf();
+    void removedSelf(QString filename);
 protected:
     bool eventFilter(QObject *o,QEvent *e) override;
 private:
-    Context* getContext();
-    Context::WallPaperType type;
+
+    WallpaperType type;
     QString path;
     QImage thumbnail;
     QImage deleteIcon;

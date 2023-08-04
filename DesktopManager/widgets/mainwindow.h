@@ -14,7 +14,7 @@
 #include "context.h"
 #include "utils/videoUtils/videoutils.h"
 #include "../components/trayiconmenu.h"
-#include "../components/settingwidget.h"
+#include "../widgets/SettingWidget.h"
 #include "AssistantForm.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

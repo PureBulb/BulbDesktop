@@ -13,13 +13,38 @@ AssistantForm::AssistantForm(QWidget *parent) :
 AssistantForm::~AssistantForm()
 {
     delete ui;
+
     utils.unload();
+}
+
+void AssistantForm::nextPage()
+{
+    for(int64_t i = pageCount*PAGE_SIZE,j=0;i<results.size()&&j<PAGE_SIZE;i++,j++){
+        auto itemData = results[i];
+        AssistantItem *item = new AssistantItem(itemData);
+        item->setSizeHint(item->size());
+    //    item->show();
+        ui->itemsWidget->addItem(item);
+        ui->itemsWidget->setItemWidget(item,item);
+        connect(item,&AssistantItem::clicked,itemData.getItemClick());
+    }
+    pageCount++;
+}
+
+void AssistantForm::cleanData()
+{
+    pageCount = 0;
+    results.clear();
+    ui->itemsWidget->clear();
 }
 
 void AssistantForm::init()
 {
     utils.load();
 
+    //bind event
+    installEventFilter(this);
+    connect(ui->itemsWidget->verticalScrollBar(),&QScrollBar::valueChanged,this,&AssistantForm::onItemWidgetScrollBarChanged);
 }
 
 void AssistantForm::onSettingsChanged()
@@ -27,19 +52,19 @@ void AssistantForm::onSettingsChanged()
 
 }
 
+void AssistantForm::onItemWidgetScrollBarChanged(int value)
+{
+    if(ui->itemsWidget->verticalScrollBar()->maximum() == value) {
+        nextPage();
+    }
+}
+
 void AssistantForm::query(const QString &arg1)
 {
-        qDebug()<<arg1.trimmed();
-        QList<QueryResult> result = utils.query(arg1.trimmed());
-        ui->itemsWidget->clear();
-        for(auto i : result){
-            AssistantItem *item = new AssistantItem(i);
-            item->setSizeHint(item->size());
-        //    item->show();
-            ui->itemsWidget->addItem(item);
-            ui->itemsWidget->setItemWidget(item,item);
-            connect(item,&AssistantItem::clicked,i.getItemClick());
-        }
+    cleanData();
+    results = utils.query(arg1.trimmed());
+    nextPage();
+
 }
 
 void AssistantForm::on_inputEdit_textChanged(const QString &arg1)
@@ -63,5 +88,17 @@ void AssistantForm::on_inputEdit_textChanged(const QString &arg1)
     });
     editorQueryTimer->start();
 }
+
+bool AssistantForm::event(QEvent *event)
+{
+    if(event->type() == QEvent::ActivationChange  ){
+        if(QApplication::activeWindow() != this){
+            cleanData();
+            this->hide();
+        }
+    }
+    return QWidget::event(event);
+}
+
 
 

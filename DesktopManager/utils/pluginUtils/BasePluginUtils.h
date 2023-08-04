@@ -8,7 +8,9 @@
 #include <windows.h>
 #include <QPluginLoader>
 #include <QMessageBox>
-class PluginUtils:public QObject
+
+#include "../../SettingManager.h"
+class BasePluginUtils:public QObject
 {
     Q_OBJECT
 protected:
@@ -19,13 +21,15 @@ protected:
 
 public:
 
-    PluginUtils(QObject * parent = nullptr);
-    PluginUtils(QString pathName, QObject * parent = nullptr);
+    BasePluginUtils(QObject * parent = nullptr);
+    BasePluginUtils(QString pathName, QObject * parent = nullptr);
 
     virtual void load();
     virtual void unload();
 
-    virtual ~PluginUtils();
+    virtual void setSettings(SettingManager * settings);
+
+    virtual ~BasePluginUtils();
 };
 
 #endif // PLUGINUTILS_H

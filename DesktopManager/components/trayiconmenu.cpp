@@ -45,7 +45,7 @@ void TrayIconMenu::setAssistantForm(BaseWidget *value)
     assistantForm = value;
 }
 
-void TrayIconMenu::setSettingWidget(BaseWidget *value)
+void TrayIconMenu::setSettingWidget(QWidget *value)
 {
     settingWidget = value;
 }

@@ -8,6 +8,8 @@
 
 #include <QSettings>
 #include <QDir>
+#include <QFileInfo>
+#include <QFileIconProvider>
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -55,6 +57,12 @@ public:
     // IAssistantPlugin interface
 protected:
     void onItemClick(QueryResult result);
+
+
+
+    // IAssistantPlugin interface
+protected:
+    QIcon getIconFunc(QueryResult result);
 };
 
 #endif // PROGRAMSPLUGIN_H

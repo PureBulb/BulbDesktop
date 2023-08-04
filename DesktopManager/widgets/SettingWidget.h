@@ -15,6 +15,9 @@ public:
     explicit SettingWidget(QWidget *parent = nullptr);
     ~SettingWidget();
 
+    void addSettingItem(QHash<QString,QWidget*> widgets);
+
+
 private:
     Ui::SettingWidget *ui;
 };

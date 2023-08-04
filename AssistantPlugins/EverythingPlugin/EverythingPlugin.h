@@ -3,6 +3,7 @@
 
 #include <IAssistantPlugin.h>
 #include <Everything.h>
+#include <QFileIconProvider>
 class EverythingPlugin : public QObject,public IAssistantPlugin
 {
     Q_OBJECT
@@ -26,6 +27,9 @@ protected:
     void onItemClick(QueryResult result);
     void onBtn1Click(QueryResult result);
     void onBtn2Click(QueryResult result);
+
+
+    QIcon getIconFunc(QueryResult result);
 };
 
 #endif // GENERICPLUGIN_H

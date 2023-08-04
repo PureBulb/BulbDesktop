@@ -2,7 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     AssistantPlugins \
-    DesktopManager
+    DesktopManager \
+    WallpaperPlugins
 
 
 CONFIG += qt \

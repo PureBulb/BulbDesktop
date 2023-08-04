@@ -1,3 +1,5 @@
 {
-    "dependencies" : [ ]
+    "plugin-name" : "程序搜索",
+    "dependencies" : [ ],
+    "type" : "assistant"
 }
