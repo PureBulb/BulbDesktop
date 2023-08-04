@@ -19,7 +19,9 @@ void Manager::initTray()
     settingWidget = new SettingWidget();
     trayIconMenu->setSettingWidget(settingWidget);
     assistantForm = new AssistantForm();
-    trayIconMenu->setAssistantForm(assistantForm);
+    atomId = GlobalAddAtomA("Bulb");
+    if(RegisterHotKey(HWND(assistantForm->winId()),atomId,MOD_CONTROL,'1'))
+        trayIconMenu->setAssistantForm(assistantForm);
 //    trayIconMenu->setSubregionForm();
     QWidgetAction* action = new QWidgetAction(this);
     QMenu* menu = new QMenu();
@@ -27,6 +29,7 @@ void Manager::initTray()
     menu->addAction(action);
     trayIcon->setContextMenu(menu);
 
+    connect(trayIconMenu,&TrayIconMenu::exit,this,&Manager::onExit);
     connect(trayIconMenu,&TrayIconMenu::volumeChange,&wallpaperPluginUtils,&WallpaperPluginUtils::onVolumeChanged);
     connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::pause);
     connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::resume);
@@ -80,4 +83,11 @@ void Manager::onTrigggedIcons()
         winAdapter->showIcon();
     }
     hideIcons = !hideIcons;
+}
+
+void Manager::onExit()
+{
+    UnregisterHotKey((HWND)assistantForm->winId(),atomId);
+    GlobalDeleteAtom(atomId);
+    QApplication::quit();
 }

@@ -24,21 +24,27 @@ void AudioDecoder::resume()
         lock();
         resumeTime = av_gettime();
         pauseDurationTime = resumeTime - pauseTime;
+        emit displayResume(pauseDurationTime);
         unlock();
     }
-    if(decodeFinished)
-        emit displayResume(pauseDurationTime);
+
+
 
 }
 
 void AudioDecoder::setTimeBase(const AVRational &_timeBase)
 {
+    lock();
     timeBase = _timeBase;
+    unlock();
 }
 
 void AudioDecoder::setClock(SyncClock *_clock)
 {
+
+    lock();
     clock = _clock;
+    unlock();
 }
 
 void AudioDecoder::setVolume(double value)
@@ -86,7 +92,9 @@ void AudioDecoder::decode()
     QString module = "AudioDecoder::run";
     int res = 0;
     while(!_stop){
+        qDebug()<<"wait resume";
         waitResume();
+         qDebug()<<"wait resume ok---";
         if(packets->isEmpty()){
             msleep(1);
             continue;
@@ -161,9 +169,6 @@ void AudioDecoder::decode()
             frame = nullptr;
         }
     }
-
-
-
 }
 
 int AudioDecoder::toPCM(AVFrame &frame,char *out)

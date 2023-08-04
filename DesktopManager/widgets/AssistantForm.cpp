@@ -1,12 +1,13 @@
 #include "AssistantForm.h"
 #include "ui_assistantform.h"
-
+#include <QtDebug>
 AssistantForm::AssistantForm(QWidget *parent) :
-    BaseWidget(parent),
+    QWidget(parent),
     ui(new Ui::AssistantForm),
     editorQueryTimer(nullptr)
 {
     ui->setupUi(this);
+
     init();
 }
 
@@ -98,6 +99,24 @@ bool AssistantForm::event(QEvent *event)
         }
     }
     return QWidget::event(event);
+}
+
+bool AssistantForm::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+    if(eventType == "windows_generic_MSG")
+        {
+            MSG* pMsg = reinterpret_cast<MSG*>(message);
+            if(pMsg->message == WM_HOTKEY)
+            {
+                atomId = GlobalFindAtomA("Bulb");
+                qDebug()<<pMsg->wParam;
+                if(pMsg->wParam == atomId){
+                    qDebug()<<"hot key press";
+                }
+
+            }
+        }
+        return QWidget::nativeEvent(eventType,message,result);
 }
 
 

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QMessageBox>
-#include "../widgets/BaseWidget.h"
+
 namespace Ui {
 class TrayIconMenu;
 }
@@ -18,7 +18,7 @@ public:
 
     void setSettingWidget(QWidget *value);
 
-    void setAssistantForm(BaseWidget *value);
+    void setAssistantForm(QWidget *value);
 
 private slots:
 
@@ -40,11 +40,13 @@ signals:
     void nextWallpaper();
     void pauseWallpaper();
     void resumeWallpaper();
+
+    void exit();
 private:
     Ui::TrayIconMenu *ui;
 
     QWidget *settingWidget;
-    BaseWidget *assistantForm;
+    QWidget *assistantForm;
 };
 
 #endif // TRAYICONMENU_H

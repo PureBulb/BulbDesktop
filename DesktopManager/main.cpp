@@ -1,5 +1,3 @@
-#include "widgets/mainwindow.h"
-
 #include <QApplication>
 #include <utils/pluginUtils/wallpaperpluginutils.h>
 #include <Manager.h>

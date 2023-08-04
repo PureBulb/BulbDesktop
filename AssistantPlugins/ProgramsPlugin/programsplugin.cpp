@@ -68,7 +68,6 @@ void ProgramsPlugin::store(QList<QueryResult> &result)
          qDebug()<<"program index db open success";
          if(!db.tables().contains(TABLE_NAME))
              createTable();
-         qDebug()<<db.tables();
          for(auto i : result){
              QString letter = ChineseLetterHelper::GetPinyins(i.getTitle());
 
@@ -80,7 +79,7 @@ void ProgramsPlugin::store(QList<QueryResult> &result)
              query.bindValue(":pinyin",(letter!=""?letter:i.getTitle()).toLower());
 
 
-             qDebug()<<query.lastQuery();
+
              if(!query.exec())
              {
                  qDebug() << query.lastError();
@@ -100,7 +99,6 @@ void ProgramsPlugin::createTable()
                           path VARCHAR (512)  NOT NULL,\
                           pinyin VARCHAR (255)  NOT NULL\
                           );";
-    qDebug()<<sql;
         //QSqlQuery构造前，需要db已打开并连接
         //未指定db或者db无效时使用默认连接进行操作
         QSqlQuery query;

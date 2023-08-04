@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include <QWidgetAction>
 #include <QMenu>
+#include <QApplication>
 
 #include "widgets/AssistantForm.h"
 #include "widgets/SettingWidget.h"
@@ -29,6 +30,7 @@ private:
     QSystemTrayIcon *trayIcon;
     TrayIconMenu* trayIconMenu;
     AssistantForm *assistantForm;
+    ATOM atomId;
 
     bool hideIcons;
 private:
@@ -41,6 +43,7 @@ protected slots:
     void onCoreSettingsChanged();
     void onPluginSettingsChanged(QString pluginName,QHash<QString, QVariant> _settings);
     void onTrigggedIcons();
+    void onExit();
 
 };
 

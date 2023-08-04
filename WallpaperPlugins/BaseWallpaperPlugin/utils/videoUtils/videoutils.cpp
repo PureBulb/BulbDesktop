@@ -1,5 +1,6 @@
 #include "videoutils.h"
-
+#include <QtDebug>
+#include "../../log.h"
 VideoUtils::VideoUtils(QString path)
     :_stop(false)
 {
@@ -33,6 +34,7 @@ VideoUtils::~VideoUtils()
 
 void VideoUtils::play()
 {
+
     clock = SyncClock();
     audioDecoder->setClock(&clock);
     videoDecoder->setClock(&clock);
@@ -85,12 +87,19 @@ void VideoUtils::deleteThumbnail(QString filename)
 
 void VideoUtils::stop()
 {
+    qDebug()<<"test debug";
     audioDecoder->stop();
+    qDebug()<<"test debug1";
     videoDecoder->stop();
+    qDebug()<<"test debug2";
     dmt->stop();
+    qDebug()<<"test debug3";
     audioDecoder->join();
+    qDebug()<<"audio stop";
     videoDecoder->join();
+    qDebug()<<"video stop";
     dmt->join();
+     qDebug()<<"dmt stop";
     audioDecoder->deleteLater();
     videoDecoder->deleteLater();
     dmt->deleteLater();

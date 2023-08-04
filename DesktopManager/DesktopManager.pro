@@ -19,42 +19,24 @@ SOURCES += \
     Manager.cpp \
     SettingManager.cpp \
     components/assistantitem.cpp \
-    components/thumbnaillabel.cpp \
     components/trayiconmenu.cpp \
     context.cpp \
     log.cpp \
     main.cpp \
     utils/WindAdapterV2.cpp \
-    utils/audioUtils/AudioUtils.cpp \
-    utils/audioUtils/IAudioPlayer.cpp \
     utils/hookthread.cpp \
     utils/pluginUtils/AssistantPluginUtils.cpp \
     utils/pluginUtils/BasePluginUtils.cpp \
     utils/pluginUtils/WallpaperPluginUtils.cpp \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
-    utils/videoUtils/AVFrameQueue.cpp \
-    utils/videoUtils/AVPacketQueue.cpp \
-    utils/videoUtils/AudioDecoder.cpp \
-    utils/videoUtils/DexmuxThread.cpp \
-    utils/videoUtils/IDecoderBase.cpp \
-    utils/videoUtils/displayworker.cpp \
-    utils/videoUtils/syncclock.cpp \
-    utils/videoUtils/videodecoder.cpp \
-    utils/windadapter.cpp \
-    utils/videoUtils/videoUtils.cpp \
     widgets/AssistantForm.cpp \
-    widgets/BaseWorkerform.cpp \
-    widgets/SettingWidget.cpp \
-    widgets/mainwindow.cpp \
-    widgets/workerform.cpp \
-    widgets/BaseWidget.cpp
+    widgets/SettingWidget.cpp
 
 HEADERS += \
     Manager.h \
     SettingManager.h \
     components/assistantitem.h \
-    components/thumbnaillabel.h \
     components/trayiconmenu.h \
     context.h \
     log.h \
@@ -62,38 +44,21 @@ HEADERS += \
     plugins/IWallpaperPlugin.h \
     utils/AVConfig.h \
     utils/WindAdapterV2.h \
-    utils/audioUtils/AudioUtils.h \
-    utils/audioUtils/IAudioPlayer.h \
     utils/hookthread.h \
     utils/pluginUtils/AssistantPluginUtils.h \
     utils/pluginUtils/BasePluginUtils.h \
     utils/pluginUtils/WallpaperPluginUtils.h \
     utils/safequeue.h \
     utils/threadbase.h \
-    utils/videoUtils/AVPacketQueue.h \
-    utils/videoUtils/AudioDecoder.h \
-    utils/videoUtils/AvFrameQueue.h \
-    utils/videoUtils/DexmuxThread.h \
-    utils/videoUtils/IDecoderBase.h \
-    utils/videoUtils/displayworker.h \
-    utils/videoUtils/syncclock.h \
-    utils/videoUtils/videodecoder.h \
-    utils/windadapter.h \
     utils/videoUtils/videoUtils.h\
     widgets/AssistantForm.h \
-    widgets/BaseWidget.h \
-    widgets/BaseWorkerform.h \
-    widgets/SettingWidget.h \
-    widgets/mainwindow.h \
-    widgets/workerform.h
+    widgets/SettingWidget.h
 
 FORMS += \
     components/assistantitem.ui \
     components/trayiconmenu.ui \
     widgets/SettingWidget.ui \
-    widgets/assistantform.ui \
-    widgets/mainwindow.ui \
-    widgets/workerform.ui
+    widgets/assistantform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

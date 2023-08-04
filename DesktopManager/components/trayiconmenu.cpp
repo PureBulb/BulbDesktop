@@ -17,7 +17,7 @@ TrayIconMenu::~TrayIconMenu()
 
 void TrayIconMenu::on_quitBtn_clicked()
 {
-    QApplication::quit();
+    emit exit();
 }
 
 void TrayIconMenu::on_pauseBtn_clicked()
@@ -40,7 +40,7 @@ void TrayIconMenu::on_settingsBtn_clicked()
     settingWidget->show();
 }
 
-void TrayIconMenu::setAssistantForm(BaseWidget *value)
+void TrayIconMenu::setAssistantForm(QWidget *value)
 {
     assistantForm = value;
 }

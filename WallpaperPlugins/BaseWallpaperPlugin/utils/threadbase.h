@@ -14,7 +14,7 @@ protected:
     QMutex mutex;
     bool _stop;
     bool _pause;
-    bool finished;
+    volatile bool finished;
     virtual void setThreadFinished();
     virtual void setThreadNotFinished();
     void lock();

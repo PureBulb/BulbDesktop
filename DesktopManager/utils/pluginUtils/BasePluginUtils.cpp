@@ -1,6 +1,6 @@
 #include "BasePluginUtils.h"
 #include <QtDebug>
-
+#include "../../log.h"
 BasePluginUtils::BasePluginUtils(QObject *parent)
     :QObject(parent)
 {
@@ -36,7 +36,7 @@ void BasePluginUtils::load()
             loaders.push_back(pluginLoader);
         }
         else{
-
+            loge("pluginLoader::load",pluginLoader->errorString());
             QMessageBox::information(nullptr,"error",pluginLoader->errorString());
             pluginLoader->deleteLater();
         }

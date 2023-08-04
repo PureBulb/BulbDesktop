@@ -4,14 +4,13 @@
 #include <QTimer>
 #include <QIcon>
 #include <QScrollBar>
-#include "BaseWidget.h"
 #include "../components/assistantitem.h"
 #include "../utils/pluginUtils/AssistantPluginUtils.h"
 namespace Ui {
 class AssistantForm;
 }
 
-class AssistantForm : public BaseWidget
+class AssistantForm : public QWidget
 {
     Q_OBJECT
 
@@ -27,6 +26,9 @@ private:
     QList<QueryResult> results;
     const int64_t PAGE_SIZE = 10;
     int64_t pageCount;
+
+    ATOM atomId;
+
     void nextPage();
     void cleanData();
     // BaseWidget interface
@@ -35,8 +37,8 @@ protected:
     void init();
 
 
-
 protected slots:
+
     void onSettingsChanged();
 
     void onItemWidgetScrollBarChanged(int);
@@ -55,6 +57,10 @@ private slots:
 public:
     //TODO: hot key
     bool event(QEvent *event);
+
+    // QWidget interface
+protected:
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 };
 
 #endif // ASSISTANTFORM_H
