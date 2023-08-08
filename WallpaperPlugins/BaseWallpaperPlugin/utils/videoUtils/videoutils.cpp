@@ -57,8 +57,8 @@ QImage VideoUtils::getThumbnail(QString filename)
         QString exec = "./bin/ffmpeg.exe";
         QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
     #else
-        QString exec = "./ffmpeg.exe";
-        QString outputFilename = QString("../thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+        QString exec = "./WallpaperPlugins/BaseWallPaperPlugin/ffmpeg.exe";
+        QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
     #endif
     QStringList cmd;
     cmd<<"-i" <<filename<< "-vf" <<"select=\'eq\(pict_type\\,I)\'"<<"-vsync"<< "2"<< "-s"<<"192*108"<< "-frames" <<"1" <<"-f"<<"image2"<<outputFilename;

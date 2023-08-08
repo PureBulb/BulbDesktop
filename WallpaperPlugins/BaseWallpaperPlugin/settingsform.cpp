@@ -8,7 +8,7 @@ SettingsForm::SettingsForm(QHash<QString, QVariant> &_settings, QWidget *parent)
 {
     ui->setupUi(this);
     initUi();
-
+    connect(this,&SettingsForm::settingChanged,this,&SettingsForm::onSettingChanged);
 }
 
 SettingsForm::~SettingsForm()
@@ -84,6 +84,10 @@ void SettingsForm::onRemoveThumbnail(QString filename)
     ThumbnailLabel * senderObj = (ThumbnailLabel *)sender();
     if(senderObj->getType() == WallpaperType::graph){
         QStringList paths = setting[INI_GRAPH_PATHS].toStringList();
+        if(paths.size()<=1){
+            QMessageBox::information(nullptr,"警告","至少要有一个壁纸");
+            return;
+        }
         paths.removeAll(filename);
         setting[INI_GRAPH_PATHS] = paths;
         ui->graphThumbnailLayout->removeWidget(senderObj);
@@ -91,6 +95,10 @@ void SettingsForm::onRemoveThumbnail(QString filename)
 
     else if(senderObj->getType() == WallpaperType::video){
         QStringList paths = setting[INI_VIDEO_PATHS].toStringList();
+        if(paths.size()<=1){
+            QMessageBox::information(nullptr,"警告","至少要有一个壁纸");
+            return;
+        }
         paths.removeAll(filename);
         setting[INI_VIDEO_PATHS] = paths;
         auto children = ui->videoThumbnailLayout->children();
@@ -100,6 +108,10 @@ void SettingsForm::onRemoveThumbnail(QString filename)
     else if(senderObj->getType() == WallpaperType::gif){
         QStringList paths = setting[INI_GIF_PATHS].toStringList();
         paths.removeAll(filename);
+        if(paths.size()<=1){
+            QMessageBox::information(nullptr,"警告","至少要有一个壁纸");
+            return;
+        }
         setting[INI_GIF_PATHS] = paths;
         ui->gifThumbnailLayout->removeWidget(senderObj);
     }
@@ -184,6 +196,11 @@ QStringList SettingsForm::getWallpaperPaths()
             return setting[INI_VIDEO_PATHS].toStringList();
 
     }
+}
+
+void SettingsForm::onSettingChanged(QHash<QString, QVariant>)
+{
+    initUi();
 }
 
 

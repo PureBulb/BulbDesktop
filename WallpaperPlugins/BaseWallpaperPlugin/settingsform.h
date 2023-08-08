@@ -50,6 +50,8 @@ private:
     QStringList getWallpaperPaths();
 protected:
     void init();
+protected:
+    void onSettingChanged(QHash<QString, QVariant>);
 signals:
     void settingChanged(QHash<QString, QVariant>);
 };

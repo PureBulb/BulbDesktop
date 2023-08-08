@@ -90,6 +90,7 @@ void BaseWallpaperPlugin::stop()
 
 void BaseWallpaperPlugin::dipatchSettingChanged(QHash<QString, QVariant> _settings)
 {
+    wallpaperManager.setSettings(_settings);
     emit settingsChanged(_settings);
 }
 
