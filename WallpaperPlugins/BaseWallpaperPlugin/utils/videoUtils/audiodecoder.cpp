@@ -92,9 +92,9 @@ void AudioDecoder::decode()
     QString module = "AudioDecoder::run";
     int res = 0;
     while(!_stop){
-        qDebug()<<"wait resume";
+//        qDebug()<<"wait resume";
         waitResume();
-         qDebug()<<"wait resume ok---";
+//         qDebug()<<"wait resume ok---";
         if(packets->isEmpty()){
             msleep(1);
             continue;

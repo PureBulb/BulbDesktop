@@ -1,5 +1,6 @@
 #include "EverythingPlugin.h"
 #include <QtDebug>
+
 EverythingPlugin::EverythingPlugin(QObject *parent)
     : QObject(parent)
 {
@@ -10,6 +11,7 @@ EverythingPlugin::EverythingPlugin(QObject *parent)
 
 bool EverythingPlugin::query(QString queryStr, QList<QueryResult> &result)
 {
+    qDebug()<<"[info]:EverythingPlugin::query query str:"+queryStr;
     if(queryStr.size() == 0){
         return true;
     }

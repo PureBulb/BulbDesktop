@@ -64,6 +64,7 @@ void ProgramsPlugin::store(QList<QueryResult> &result)
     else
         db = QSqlDatabase::addDatabase("QSQLITE");
      db.setDatabaseName(DB_NAME);
+     qDebug()<<"enable drivers"<<db.drivers();
      if(db.open()){
          qDebug()<<"program index db open success";
          if(!db.tables().contains(TABLE_NAME))
@@ -87,6 +88,9 @@ void ProgramsPlugin::store(QList<QueryResult> &result)
 
          }
 
+     }
+     else{
+         qDebug()<<"[error]"+db.lastError().text();
      }
 }
 
@@ -171,6 +175,7 @@ QIcon ProgramsPlugin::getIconFunc(QueryResult result)
 bool ProgramsPlugin::query(QString queryStr, QList<QueryResult> &result)
 {
     //TODO: reg table , link
+    qDebug()<<"[info]:ProgramsPlugin::query query str:"+queryStr;
     if(queryStr.size() == 0){
         return false;
     }

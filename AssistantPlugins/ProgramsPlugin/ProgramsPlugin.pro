@@ -1,4 +1,4 @@
-QT += widgets sql
+QT += sql widgets
 
 TEMPLATE = lib
 CONFIG += plugin

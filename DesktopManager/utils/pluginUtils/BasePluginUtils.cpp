@@ -26,7 +26,9 @@ void BasePluginUtils::load()
         QFile file(pluginName);
         if (!file.exists())
         {
-            QMessageBox::warning(nullptr,"错误信息","找不到文件");
+
+            QMessageBox::warning(nullptr,"错误信息","找不到文件"+pluginName);
+            qDebug()<<"[error]:can't find file :"+pluginName;
             return ;
         }
         QPluginLoader *pluginLoader = new QPluginLoader(pluginName);
