@@ -3,8 +3,6 @@
 
 #include <QtDebug>
 
-
-
 Wallpaper::Wallpaper(QWidget *parent)
     :QWidget(parent)
     ,ui(new Ui::Wallpaper)

@@ -15,10 +15,6 @@ BaseWallpaperPlugin::BaseWallpaperPlugin()
     connect(this,&BaseWallpaperPlugin::settingChangeSucceeded,&wallpaperManager,&BaseWallpaperManager::updateSettings);
 }
 
-
-
-
-
 void BaseWallpaperPlugin::loaded()
 {
     qDebug()<<"Base wallpaper is loaded";
@@ -94,6 +90,3 @@ void BaseWallpaperPlugin::updatePluginSettings(QHash<QString, QVariant> _setting
 {
     setSettings(_settings);
 }
-
-
-

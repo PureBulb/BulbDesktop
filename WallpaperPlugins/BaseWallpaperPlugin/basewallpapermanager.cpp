@@ -180,7 +180,9 @@ void BaseWallpaperManager::volumeChanged(uint8_t value)
 void BaseWallpaperManager::updateSettings(QHash<QString, QVariant> _settings)
 {
     setSettings(_settings);
+    wallpaperPaths = getWallpaperPaths(); //刷新壁纸，以防切换的时候保留上一次类型的壁纸路径
     restart();
+
 }
 
 
@@ -194,6 +196,7 @@ QStringList BaseWallpaperManager::getWallpaperPaths()
     if(settings[INI_TYPE].toInt() == WallpaperType::video)
         return settings[INI_VIDEO_PATHS].toStringList();
     return QStringList();
+
 }
 
 BaseWallpaperManager::BaseWallpaperManager()
