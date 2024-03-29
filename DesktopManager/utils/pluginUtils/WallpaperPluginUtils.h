@@ -33,9 +33,10 @@ private:
 signals:
     void pluginSettingChanged(QString,QHash<QString, QVariant> );
     void triggedIcons();
+
 public slots:
     void nextWallpaper();
-    void settingChanged(QHash<QString, QVariant> _settings);
+    void onSettingChanged(QHash<QString, QVariant> _settings);
     QVector<QWidget *> getWallpaperWidgets();
     void onRequestSettings();
     //value 0-100

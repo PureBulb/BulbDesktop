@@ -6,8 +6,6 @@ void Manager::pluginsLoad()
     wallpaperPluginUtils.load();
     connect(&wallpaperPluginUtils,&WallpaperPluginUtils::pluginSettingChanged,this,&Manager::onPluginSettingsChanged);
     connect(&wallpaperPluginUtils,&WallpaperPluginUtils::triggedIcons,this,&Manager::onTrigggedIcons);
-
-
 }
 
 void Manager::initTray()

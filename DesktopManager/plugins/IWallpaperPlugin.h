@@ -19,9 +19,12 @@ public:
     virtual void unloaded() {}
     virtual void activated() {}
     virtual void finished() {}
-    virtual void setSettings(QHash<QString,QVariant> settings) {}
+
+    virtual void setSettings(QHash<QString,QVariant> settings){}
+
     virtual QVector<QWidget *> getWallpapers() {}
     virtual QWidget* getSettingWidget() {}
+
     //value 0-100
     virtual void setVolume(uint8_t value) {}
     virtual void pause() {}
@@ -31,11 +34,17 @@ public:
 
 signals:
     void displayFinished();
-    void settingsChanged(QHash<QString,QVariant> settings);
-    void requestSettings();
+    // void settingsChanged(QHash<QString,QVariant> settings);
+    void requestSettings(QHash<QString,QVariant> settings);
     void triggedIcons();
 protected slots:
-    void onTriggedIcons(){emit triggedIcons();};
+    void onTriggedIcons(){emit triggedIcons();}
+public slots:
+    virtual void updatePluginSettings(QHash<QString,QVariant> _settings){};
+    void responseSettings(QHash<QString,QVariant> settings){emit settingChangeSucceeded(settings);}
+signals:
+    void settingChangeSucceeded(QHash<QString, QVariant> _settings);
+
 };
 /*
  * json meta demo

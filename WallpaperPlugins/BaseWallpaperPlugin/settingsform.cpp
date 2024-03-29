@@ -8,7 +8,7 @@ SettingsForm::SettingsForm(QHash<QString, QVariant> &_settings, QWidget *parent)
 {
     ui->setupUi(this);
     initUi();
-    connect(this,&SettingsForm::settingChanged,this,&SettingsForm::onSettingChanged);
+    // connect(this,&SettingsForm::settingChanged,this,&SettingsForm::onSettingChanged);
 }
 
 SettingsForm::~SettingsForm()
@@ -19,6 +19,7 @@ SettingsForm::~SettingsForm()
 void SettingsForm::setSettings(QHash<QString, QVariant> &_settings)
 {
     setting = _settings;
+    initUi();
 }
 
 void SettingsForm::on_addVieoBtn_clicked()
@@ -26,10 +27,13 @@ void SettingsForm::on_addVieoBtn_clicked()
     if(inited){
         QStringList filenames = QFileDialog::getOpenFileNames(this,"选择视频文件","/","Videos(*.mp4 *.avi *.mov *.flv *.mpeg *.mpg);;all(*.*)");
         QStringList originPath = setting[INI_VIDEO_PATHS].toStringList();
-        originPath.append(filenames);
+        for(auto filename:filenames){
+            if(!originPath.contains(filename))
+                originPath.append(filename);
+        }
         setting[INI_VIDEO_PATHS] = originPath;
     }
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
 }
 
 void SettingsForm::on_addGifBtn_clicked()
@@ -37,11 +41,15 @@ void SettingsForm::on_addGifBtn_clicked()
     if(inited){
        QStringList filenames = QFileDialog::getOpenFileNames(this,"选择视频文件","/","Gifs(*.gif);;all(*.*)");
        QStringList originPath = setting[INI_GIF_PATHS].toStringList();
-       originPath.append(filenames);
+       for(auto filename:filenames){
+           if(!originPath.contains(filename))
+               originPath.append(filename);
+       }
+
        setting[INI_GIF_PATHS] = originPath;
 
    }
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
 }
 
 void SettingsForm::on_addGraphBtn_clicked()
@@ -49,11 +57,16 @@ void SettingsForm::on_addGraphBtn_clicked()
     if(inited){
         QStringList filenames = QFileDialog::getOpenFileNames(this,"选择视频文件","/","Graphs(*.png *.jpg *.jpeg *.bmp *.svg);;all(*.*)");
         QStringList originPath = setting[INI_GRAPH_PATHS].toStringList();
-        originPath.append(filenames);
+        for(auto filename:filenames){
+            if(!originPath.contains(filename))
+                originPath.append(filename);
+            else
+                QMessageBox::information(nullptr,"图片已存在列表","不能重复添加");
+        }
         setting[INI_GRAPH_PATHS] = originPath;
 
     }
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
 }
 
 void SettingsForm::on_delaySlider_valueChanged(int value)
@@ -62,7 +75,7 @@ void SettingsForm::on_delaySlider_valueChanged(int value)
         ui->delayLabel->setText(QString::number(value)+QString("分钟"));
         setting[INI_GRAPH_DELAY] = value;
     }
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
 }
 
 void SettingsForm::on_typeComboBox_currentIndexChanged(int index)
@@ -76,7 +89,7 @@ void SettingsForm::on_typeComboBox_currentIndexChanged(int index)
         }
         preType = WallpaperType(index-1);
     }
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
 }
 
 void SettingsForm::onRemoveThumbnail(QString filename)
@@ -116,7 +129,7 @@ void SettingsForm::onRemoveThumbnail(QString filename)
         ui->gifThumbnailLayout->removeWidget(senderObj);
     }
 
-    emit settingChanged(setting);
+    emit settingFormChanged(setting);
     initThumbnail();
 }
 
@@ -198,8 +211,10 @@ QStringList SettingsForm::getWallpaperPaths()
     }
 }
 
-void SettingsForm::onSettingChanged(QHash<QString, QVariant>)
+void SettingsForm::updateSettings(QHash<QString, QVariant> setting)
 {
+    setting = setting;
+    logi("SettingsForm::onSettingChanged","onSettingChanged");
     initUi();
 }
 

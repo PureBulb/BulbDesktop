@@ -34,11 +34,16 @@ public:
 
 signals:
     void displayFinished();
-    void settingsChanged(QHash<QString,QVariant> settings);
-    void requestSettings();
+    // void settingsChanged(QHash<QString,QVariant> settings);
+    void requestSettings(QHash<QString,QVariant> settings);
     void triggedIcons();
 protected slots:
     void onTriggedIcons(){emit triggedIcons();}
+public slots:
+    virtual void updatePluginSettings(QHash<QString,QVariant> _settings){};
+    void responseSettings(QHash<QString,QVariant> settings){emit settingChangeSucceeded(settings);}
+signals:
+    void settingChangeSucceeded(QHash<QString, QVariant> _settings);
 
 };
 /*

@@ -12,7 +12,7 @@ void WallpaperPluginUtils::object2Interface()
             plugins.insert(pluginName,instance);
             instance->loaded();
             connect(instance,&IWallpaperPlugin::triggedIcons,this,&WallpaperPluginUtils::onTriggedIcons);
-            connect(instance,&IWallpaperPlugin::settingsChanged,this,&WallpaperPluginUtils::settingChanged);
+            connect(instance,&IWallpaperPlugin::requestSettings,this,&WallpaperPluginUtils::onSettingChanged);
         }
 
     }
@@ -63,15 +63,17 @@ void WallpaperPluginUtils::nextWallpaper()
 
 }
 
-void WallpaperPluginUtils::settingChanged(QHash<QString, QVariant> _settings)
+void WallpaperPluginUtils::onSettingChanged(QHash<QString, QVariant> _settings)
 {
 
     for(auto i = plugins.keyValueBegin();i!=plugins.keyValueEnd();i++){
         if((*i).second==sender()){
             emit pluginSettingChanged((*i).first,_settings);
+            (*i).second->responseSettings(_settings);
             break;
         }
     }
+    emit
 }
 
 
@@ -122,7 +124,6 @@ void WallpaperPluginUtils::setSettings(SettingManager *manager)
     for(auto plugin = plugins.begin();plugin!=plugins.end();plugin++){
         auto settings = settingsManager->getPluginSettings(plugin.key());
         plugin.value()->setSettings(settings);
-        connect(plugin.value(),&IWallpaperPlugin::requestSettings,this,&WallpaperPluginUtils::onRequestSettings);
     }
 }
 

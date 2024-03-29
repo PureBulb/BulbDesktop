@@ -55,6 +55,8 @@ public slots:
 
     void volumeChanged(uint8_t value);
 
+    void updateSettings(QHash<QString,QVariant> _settings);
+
 
 
 

@@ -5,13 +5,14 @@ void BaseWallpaperPlugin::bindWallPaperEvent()
 {
     for(auto wallpaper:wallpaperManager.getWallpapers()){
         connect(wallpaper,&Wallpaper::triggedIcons,this,&BaseWallpaperPlugin::onTriggedIcons);
+
     }
 }
 
 BaseWallpaperPlugin::BaseWallpaperPlugin()
     :settingForm(nullptr)
 {
-
+    connect(this,&BaseWallpaperPlugin::settingChangeSucceeded,&wallpaperManager,&BaseWallpaperManager::updateSettings);
 }
 
 
@@ -46,7 +47,8 @@ void BaseWallpaperPlugin::setSettings(QHash<QString, QVariant> _settings)
     wallpaperManager.setSettings(settings);
     if(settingForm == nullptr){
         settingForm = new SettingsForm(settings);
-        connect(settingForm,&SettingsForm::settingChanged,this,&BaseWallpaperPlugin::dipatchSettingChanged);
+        connect(settingForm,&SettingsForm::settingFormChanged,this,&BaseWallpaperPlugin::requestSettings);
+        connect(this,&BaseWallpaperPlugin::settingChangeSucceeded,settingForm,&SettingsForm::updateSettings);
     }
     else{
         settingForm->setSettings(settings);
@@ -88,10 +90,10 @@ void BaseWallpaperPlugin::stop()
     wallpaperManager.stop();
 }
 
-void BaseWallpaperPlugin::dipatchSettingChanged(QHash<QString, QVariant> _settings)
+void BaseWallpaperPlugin::updatePluginSettings(QHash<QString, QVariant> _settings)
 {
-    wallpaperManager.setSettings(_settings);
-    emit settingsChanged(_settings);
+    setSettings(_settings);
 }
+
 
 

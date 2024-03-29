@@ -1,4 +1,5 @@
 #include <QApplication>
+
 #include <utils/pluginUtils/wallpaperpluginutils.h>
 #include <Manager.h>
 
@@ -8,22 +9,18 @@ int main(int argc, char *argv[])
 
 
     QApplication a(argc, argv);
+    QString strKey = "Bulb Desktop wallpaper";
+    LPCWSTR wstrKey = strKey.toStdWString().c_str();
+    HANDLE hMetex = CreateMutex(NULL,FALSE,wstrKey);
+
+    if(GetLastError() == ERROR_ALREADY_EXISTS){
+        //如果互斥体存在，说明程序已经有实例在运行了,释放资源然后关闭本实例
+        if(hMetex){
+            CloseHandle(hMetex);
+            hMetex = NULL;
+        }
+        return -1;
+    }
     Manager manager;
-//    MainWindow w;
-//    w.show();
-
-//    WallpaperPluginUtils utils;
-//    utils.load();
-//    QHash<QString, QVariant> settings;
-//    SettingManager manager;
-//    QStringList paths;
-//    paths<<"D:/test2.mp4"<<"D:/test3.mp4";
-//    settings["video.paths"] = paths;
-//    settings["type"] = 2;
-//    utils.setSettings(&manager);
-
-    //utils.nextWallpaper();
-
-
     return a.exec();
 }

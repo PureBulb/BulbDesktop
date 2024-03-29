@@ -104,6 +104,7 @@ void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
     graphShowDelay = settings["graph.graphShowDelay"].toUInt();
 
     //TODO: re-init?
+    // restart();
 
 
 }
@@ -176,6 +177,12 @@ void BaseWallpaperManager::volumeChanged(uint8_t value)
     }
 }
 
+void BaseWallpaperManager::updateSettings(QHash<QString, QVariant> _settings)
+{
+    setSettings(_settings);
+    restart();
+}
+
 
 
 QStringList BaseWallpaperManager::getWallpaperPaths()
@@ -213,12 +220,16 @@ BaseWallpaperManager::~BaseWallpaperManager()
 
 void BaseWallpaperManager::restart()
 {
-    if(gif)
+    if(gif){
         gif->deleteLater();
-    if(graphShowTimer)
+    }
+    if(graphShowTimer){
         graphShowTimer->deleteLater();
-    if(video)
+    }
+    if(video){
+        video->stop();
         video->deleteLater();
+    }
     gif = nullptr;
     graphShowTimer = nullptr;
     video = nullptr;

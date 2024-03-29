@@ -32,8 +32,7 @@ public:
     void resume();
 
     void stop();
-
-private slots:
-    void dipatchSettingChanged(QHash<QString, QVariant> _settings);
+public slots:
+    void updatePluginSettings(QHash<QString,QVariant> _settings);
 };
 #endif // BASEWALLPAPERPLUGIN_H

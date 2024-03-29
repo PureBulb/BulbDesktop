@@ -9,6 +9,7 @@
 #include <QVariant>
 
 #include "common.h"
+#include "log.h"
 #include "utils/videoUtils/videoutils.h"
 #include "components/thumbnaillabel.h"
 namespace Ui {
@@ -50,10 +51,10 @@ private:
     QStringList getWallpaperPaths();
 protected:
     void init();
-protected:
-    void onSettingChanged(QHash<QString, QVariant>);
+public slots:
+    void updateSettings(QHash<QString, QVariant>);
 signals:
-    void settingChanged(QHash<QString, QVariant>);
+    void settingFormChanged(QHash<QString, QVariant>);
 };
 
 #endif // SETTINGSFORM_H
