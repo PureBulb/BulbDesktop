@@ -3,6 +3,7 @@
 
 #include <QImage>
 #include <QObject>
+#include <QDir>
 // 纯c项目在c++ 中使用
 extern "C"{
     #include "libavcodec/avcodec.h"

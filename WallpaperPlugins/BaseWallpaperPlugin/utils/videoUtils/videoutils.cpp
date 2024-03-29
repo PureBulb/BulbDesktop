@@ -56,10 +56,15 @@ QImage VideoUtils::getThumbnail(QString filename)
     #ifdef QT_DEBUG
         QString exec = "./bin/ffmpeg.exe";
         QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+
     #else
         QString exec = "./WallpaperPlugins/BaseWallPaperPlugin/ffmpeg.exe";
         QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+
     #endif
+    if(!QFile("./thumbnail/").exists()){
+        QDir().mkdir("./thumbnail/");
+    }
     QStringList cmd;
     cmd<<"-i" <<filename<< "-vf" <<"select=\'eq\(pict_type\\,I)\'"<<"-vsync"<< "2"<< "-s"<<"192*108"<< "-frames" <<"1" <<"-f"<<"image2"<<outputFilename;
     //QString cmd("start ./bin/ffmpeg.exe -i %1 -vf select=\'eq\(pict_type\\,I)\' -vsync 2 -s 192*108 -frames 1 -f image2 %2\n");
@@ -67,6 +72,9 @@ QImage VideoUtils::getThumbnail(QString filename)
     if(!QFile(outputFilename).exists()){
         QProcess p;
         int code = p.execute(exec,cmd);
+
+        if(code < 0)
+            loge("VideoUtils::getThumbnail","output:"+p.readAllStandardOutput()+"\t error"+p.readAllStandardError());
     }
     return QImage(outputFilename);
 }
