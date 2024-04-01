@@ -214,13 +214,14 @@ int AudioDecoder::toPCM(AVFrame &frame,char *out)
     {
         char errorBuff[256] = {0};
         av_strerror(len,errorBuff,256);
-        qDebug()<<errorBuff;
+        logInstance->loge("AudioDecoder::toPCM",errorBuff);
         mutex.unlock();
         return 0;
     }
     int outsize = av_samples_get_buffer_size(NULL, codecContext->channels,
         len,sampleFmt,1);//对齐会出问题
     if(pts!= AV_NOPTS_VALUE){
+
         double _pts = frame.pts*av_q2d(timeBase);
         clock->setClock(_pts);
 

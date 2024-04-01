@@ -23,14 +23,13 @@ BaseWallpaperPlugin::BaseWallpaperPlugin()
 
 void BaseWallpaperPlugin::loaded()
 {
-    qDebug()<<"Base wallpaper is loaded";
     // you can bind event in this func
     bindWallPaperEvent();
 }
 
 void BaseWallpaperPlugin::unloaded()
 {
-    qDebug()<<"Base wallpaper is unloaded";
+    logInstance->logi("BaseWallpaperPlugin::unloaded","base is unloaded");
 }
 
 void BaseWallpaperPlugin::activated()

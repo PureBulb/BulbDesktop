@@ -32,7 +32,6 @@ public slots:
 protected:
     bool eventFilter(QObject *o,QEvent *e) override;
     void paintEvent(QPaintEvent *event) override;
-    void mouseMoveEvent(QMouseEvent* e) override;
     bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 signals:
     void triggedIcons();
@@ -40,6 +39,12 @@ signals:
 private:
     QImage image;
     Ui::Wallpaper *ui;
+    //鼠标痕迹使用的，感觉未来会删掉先起名test
+    int testx;
+    int testy;
+    int lstTestx = 0;
+    int lstTesty = 0;
+
 };
 
 #endif // WORKERFORM_H

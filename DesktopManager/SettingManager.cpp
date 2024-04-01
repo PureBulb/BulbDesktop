@@ -1,5 +1,5 @@
 #include "SettingManager.h"
-
+#include "QDebug"
 QHash<QString, QVariant> SettingManager::getSettingsByGroup(QString groupName)
 {
     QHash<QString,QVariant> result;
@@ -13,6 +13,7 @@ QHash<QString, QVariant> SettingManager::getSettingsByGroup(QString groupName)
 
 void SettingManager::writeSettingsByGroup(QString groupName,QHash<QString,QVariant> _settings)
 {
+
     QHash<QString,QVariant> result;
     settings.beginGroup(groupName);
     for(auto key:_settings.keys()){

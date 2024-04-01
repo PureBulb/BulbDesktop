@@ -90,6 +90,7 @@ bool AudioUtils::writeData(const char *buff, int buffSize)
 }
 bool AudioUtils::writeData(QByteArray buff)
 {
+    // 注意这里一定要将plugin/audio正确导入否则io 请求写入的buffsize为0
     mutex.lock();
     if(!io ){
         mutex.unlock();
@@ -116,6 +117,8 @@ int AudioUtils::getPeriodSize()
     int size = 0;
     if(output)
         size = output->periodSize();
+    else
+        qDebug()<<"output is null";
     mutex.unlock();
     return size;
 }

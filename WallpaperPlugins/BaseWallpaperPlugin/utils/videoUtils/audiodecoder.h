@@ -7,6 +7,7 @@
 
 #include <QMutex>
 #include <QByteArray>
+#include "utils/logdispacher.h"
 #include "IDecoderBase.h"
 #include "AVPacketQueue.h"
 #include "AvFrameQueue.h"
@@ -30,6 +31,7 @@ class AudioDecoder:public IDecoderBase
     int64_t         pts;
     SyncClock*      clock;
     double          volume; //0.0-1.0
+    LogDispacher*   logInstance;
 public:
     AudioDecoder(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
     ~AudioDecoder();

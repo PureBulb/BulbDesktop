@@ -12,8 +12,8 @@ signals:
     void threadResume();
 protected:
     QMutex mutex;
-    bool _stop;
-    bool _pause;
+    volatile bool _stop;
+    volatile bool _pause;
     volatile bool finished;
     virtual void setThreadFinished();
     virtual void setThreadNotFinished();

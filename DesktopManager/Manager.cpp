@@ -69,6 +69,7 @@ void Manager::onCoreSettingsChanged()
 
 void Manager::onPluginSettingsChanged(QString pluginName, QHash<QString, QVariant> _settings)
 {
+    qDebug()<<pluginName<<_settings;
     settingsManager.setPluginSettings(pluginName,_settings);
 }
 

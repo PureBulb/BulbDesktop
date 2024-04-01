@@ -99,6 +99,7 @@ void BaseWallpaperManager::setVideoBackground()
 
 void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
 {
+    qDebug()<<_settings;    //没有我会被优化掉，无语死了
     settings = _settings;
 
     graphShowDelay = settings["graph.graphShowDelay"].toUInt();
