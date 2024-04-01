@@ -53,15 +53,15 @@ QImage VideoUtils::getThumbnail(QString filename)
 
     QString workPath = QCoreApplication::applicationDirPath();
 
-    #ifdef QT_DEBUG
-        QString exec = "./bin/ffmpeg.exe";
-        QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
+    // #ifdef QT_DEBUG
+    //     QString exec = "./bin/ffmpeg.exe";
+    //     QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
 
-    #else
+    // #else
         QString exec = "./WallpaperPlugins/BaseWallPaperPlugin/ffmpeg.exe";
         QString outputFilename = QString("./thumbnail/thumbnail-%2.jpg").arg(filenameWithoutPath);
 
-    #endif
+    // #endif
     if(!QFile("./thumbnail/").exists()){
         QDir().mkdir("./thumbnail/");
     }
