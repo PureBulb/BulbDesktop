@@ -234,8 +234,8 @@ QT_END_NAMESPACE
 4. 创建```DesktopManager\release\setting.ini``` 并复制以下内容
 ```ini
 [BaseWallpaper]
-video.paths=至少要有一个有效的视频文件路径
-graph.paths=D:/test.png
+video.paths=resource/videos/test2.mp4
+graph.paths=resource/images/test.jpg
 #2是video模式
 type=2 
 graph.delay=20
