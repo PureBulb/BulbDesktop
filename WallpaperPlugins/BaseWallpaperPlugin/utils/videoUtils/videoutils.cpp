@@ -1,10 +1,10 @@
 #include "videoutils.h"
 #include <QtDebug>
-#include "../../log.h"
+
 VideoUtils::VideoUtils(QString path)
     :_stop(false)
 {
-
+    logInstance = LogDispacher::getInstance();
     audio = AudioUtils::getInstance();
     dmt = new DexmuxThread(path,&audioPacketQueue,&videoPacketQueue);
     dmt->open();
@@ -74,7 +74,7 @@ QImage VideoUtils::getThumbnail(QString filename)
         int code = p.execute(exec,cmd);
 
         if(code < 0)
-            loge("VideoUtils::getThumbnail","output:"+p.readAllStandardOutput()+"\t error"+p.readAllStandardError());
+            LogDispacher::getInstance()->loge("VideoUtils::getThumbnail","output:"+p.readAllStandardOutput()+"\t error"+p.readAllStandardError());
     }
     return QImage(outputFilename);
 }

@@ -44,6 +44,11 @@ public slots:
     void responseSettings(QHash<QString,QVariant> settings){emit settingChangeSucceeded(settings);}
 signals:
     void settingChangeSucceeded(QHash<QString, QVariant> _settings);
+    void reportError(QString module, QString msg);
+    void reportInfo(QString module, QString msg);
+    void reportWarring(QString module, QString msg);
+    void reportDebug(QString module, QString msg);
+
 
 };
 /*

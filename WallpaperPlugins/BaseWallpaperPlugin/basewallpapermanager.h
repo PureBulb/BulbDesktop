@@ -7,9 +7,9 @@
 #include <QPixmap>
 
 #include "common.h"
+#include "utils/logdispacher.h"
 #include "wallpaper.h"
 #include "utils/videoUtils/videoutils.h"
-
 class BaseWallpaperManager:public QObject
 {
     Q_OBJECT
@@ -17,7 +17,7 @@ private:
 
     QHash<QString,QVariant> settings;
     uint64_t graphShowDelay;
-
+    LogDispacher* logInstance;
     QVector<Wallpaper*> wallpapers;
     QStringList wallpaperPaths;
 

@@ -9,7 +9,7 @@
 #include <QVariant>
 
 #include "common.h"
-#include "log.h"
+#include "utils/logdispacher.h"
 #include "utils/videoUtils/videoutils.h"
 #include "components/thumbnaillabel.h"
 namespace Ui {
@@ -45,6 +45,7 @@ private:
     QHash<QString,QVariant>& setting;
     WallpaperType preType;
     bool inited;
+    LogDispacher* instance;
 private:
     void initUi();
     void initThumbnail();

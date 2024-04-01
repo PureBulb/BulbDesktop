@@ -13,6 +13,11 @@ void WallpaperPluginUtils::object2Interface()
             instance->loaded();
             connect(instance,&IWallpaperPlugin::triggedIcons,this,&WallpaperPluginUtils::onTriggedIcons);
             connect(instance,&IWallpaperPlugin::requestSettings,this,&WallpaperPluginUtils::onSettingChanged);
+            //绑定日志功能
+            connect(instance,&IWallpaperPlugin::reportDebug,this,&WallpaperPluginUtils::logDebugHandler);
+            connect(instance,&IWallpaperPlugin::reportInfo,this,&WallpaperPluginUtils::logInfoHandler);
+            connect(instance,&IWallpaperPlugin::reportWarring,this,&WallpaperPluginUtils::logWarringHandler);
+            connect(instance,&IWallpaperPlugin::reportError,this,&WallpaperPluginUtils::logErrorHandler);
         }
 
     }
@@ -116,6 +121,26 @@ void WallpaperPluginUtils::resume()
 void WallpaperPluginUtils::onTriggedIcons()
 {
     emit triggedIcons();
+}
+
+void WallpaperPluginUtils::logInfoHandler(QString module, QString msg)
+{
+    logi("wallpaperPlugin::"+module,msg);
+}
+
+void WallpaperPluginUtils::logDebugHandler(QString module, QString msg)
+{
+    logd("wallpaperPlugin::"+module,msg);
+}
+
+void WallpaperPluginUtils::logWarringHandler(QString module, QString msg)
+{
+    logw("wallpaperPlugin::"+module,msg);
+}
+
+void WallpaperPluginUtils::logErrorHandler(QString module, QString msg)
+{
+    loge("wallpaperPlugin::"+module,msg);
 }
 
 void WallpaperPluginUtils::setSettings(SettingManager *manager)

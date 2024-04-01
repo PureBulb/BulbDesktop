@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QThread>
 #include "BasePluginUtils.h"
+#include "log.h"
 #include "../../plugins/IWallpaperPlugin.h"
 
 #define WALLPAPER_PLUGINS_DIR "./WallpaperPlugins"
@@ -46,6 +47,12 @@ public slots:
 
     void onTriggedIcons();
     // BasePluginUtils interface
+
+    void logInfoHandler(QString module,QString msg);
+    void logDebugHandler(QString module,QString msg);
+    void logWarringHandler(QString module,QString msg);
+    void logErrorHandler(QString module,QString msg);
+
 public:
     void setSettings(SettingManager *manager);
     QHash<QString,QWidget*> getSettingForms();

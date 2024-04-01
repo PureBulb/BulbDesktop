@@ -1,6 +1,6 @@
 #include "basewallpapermanager.h"
 #include <QtDebug>
-#include "log.h"
+#include "BaseWallpaperManager.h"
 QVector<Wallpaper *> BaseWallpaperManager::getWallpapers() const
 {
     return wallpapers;
@@ -68,7 +68,7 @@ void BaseWallpaperManager::setGraphBackground()
 
 void BaseWallpaperManager::setVideoBackground()
 {
-    logi("BaseWallpaperManager::setVideoBackground","video entry");
+    logInstance->logi("BaseWallpaperManager::setVideoBackground","video entry");
     if(wallpaperPaths.size()>0){
         if(!video){
             video = new VideoUtils(wallpaperPaths.front());
@@ -76,16 +76,16 @@ void BaseWallpaperManager::setVideoBackground()
             for(auto wallpaper:wallpapers)
                 connect(video,&VideoUtils::sendDecodeImg,wallpaper,&Wallpaper::onDecodeImage);
             wallpaperPaths.pop_front();
-            logi("BaseWallpaperManager::setVideoBackground","play entry");
+            logInstance->logi("BaseWallpaperManager::setVideoBackground","play entry");
             video->play();
-            logi("BaseWallpaperManager::setVideoBackground","play out");
+            logInstance->logi("BaseWallpaperManager::setVideoBackground","play out");
         }
         else{
-            logi("BaseWallpaperManager::setVideoBackground","video stop");
+            logInstance->logi("BaseWallpaperManager::setVideoBackground","video stop");
             video->stop();
             video->deleteLater();
             video = nullptr;
-            logi("BaseWallpaperManager::setVideoBackground","video stopped");
+            logInstance->logi("BaseWallpaperManager::setVideoBackground","video stopped");
             setVideoBackground();
         }
     }
@@ -94,7 +94,7 @@ void BaseWallpaperManager::setVideoBackground()
         setVideoBackground();
     }
 
-    logi("BaseWallpaperManager::setVideoBackground","video out");
+    logInstance->logi("BaseWallpaperManager::setVideoBackground","video out");
 }
 
 void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
@@ -202,6 +202,7 @@ QStringList BaseWallpaperManager::getWallpaperPaths()
 BaseWallpaperManager::BaseWallpaperManager()
 {
 
+    logInstance = LogDispacher::getInstance();
     for(auto screen: QGuiApplication::screens()){
         Wallpaper* wallpaper = new Wallpaper;
         wallpaper->setGeometry(screen->geometry());
@@ -211,8 +212,6 @@ BaseWallpaperManager::BaseWallpaperManager()
     gif = nullptr;
     graphShowTimer = nullptr;
     video = nullptr;
-
-
 
 }
 

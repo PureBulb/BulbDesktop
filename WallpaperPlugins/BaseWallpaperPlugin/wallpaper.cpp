@@ -9,6 +9,9 @@ Wallpaper::Wallpaper(QWidget *parent)
 {
     ui->setupUi(this);
     ui->backgroundLabel->installEventFilter(this);
+    // this->setMouseTracking(true);
+    ui->backgroundLabel->setMouseTracking(true);
+
     setWindowTitle("BulbWorkerW");
     setWindowFlags(windowFlags() | Qt::Dialog | Qt::FramelessWindowHint);
 
@@ -44,6 +47,9 @@ bool Wallpaper::eventFilter(QObject *o, QEvent *e)
     if(o == ui->backgroundLabel && e->type() == QEvent::MouseButtonDblClick){
         emit triggedIcons();
     }
+    if(e->type() == QEvent::MouseMove){
+        qDebug()<<"MOUSE-MOVE"<<((QMouseEvent*)e)->pos();
+    }
     return QWidget::eventFilter(o,e);
 }
 
@@ -55,4 +61,18 @@ void Wallpaper::paintEvent(QPaintEvent *event)
         painter.drawImage(QPoint(ui->backgroundLabel->x(),ui->backgroundLabel->y()),image);
 
     }
+}
+
+void Wallpaper::mouseMoveEvent(QMouseEvent *e)
+{
+    qDebug()<<"wallpaper move:"<<e->pos();
+}
+
+bool Wallpaper::nativeEvent(const QByteArray &eventType, void *message, long *result)
+{
+    MSG *msg = static_cast<MSG*>(message);
+    if(msg->message == 675){
+        return true;
+    }
+    return false;
 }

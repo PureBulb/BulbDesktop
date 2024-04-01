@@ -6,12 +6,13 @@
 #include "IWallpaperPlugin.h"
 #include "BaseWallpaperManager.h"
 #include "settingsform.h"
-
+#include "utils/logdispacher.h"
 class BaseWallpaperPlugin: public IWallpaperPlugin{
     Q_OBJECT
     Q_PLUGIN_METADATA(IID PLUGIN_IID FILE "BaseWallpaperPlugin.json")
     Q_INTERFACES(IWallpaperPlugin)
 private:
+    LogDispacher* logInstance;
     QHash<QString,QVariant> settings;
     BaseWallpaperManager wallpaperManager;
     SettingsForm* settingForm;

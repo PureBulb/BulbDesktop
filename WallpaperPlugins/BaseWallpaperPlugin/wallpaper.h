@@ -9,6 +9,7 @@
 #include <QList>
 #include <QTimer>
 #include <QDesktopWidget>
+#include <QMouseEvent>
 
 //#include "../utils/videoUtils/videoutils.h"
 
@@ -31,6 +32,8 @@ public slots:
 protected:
     bool eventFilter(QObject *o,QEvent *e) override;
     void paintEvent(QPaintEvent *event) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 signals:
     void triggedIcons();
 

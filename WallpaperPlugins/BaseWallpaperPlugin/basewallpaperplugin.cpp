@@ -7,12 +7,18 @@ void BaseWallpaperPlugin::bindWallPaperEvent()
         connect(wallpaper,&Wallpaper::triggedIcons,this,&BaseWallpaperPlugin::onTriggedIcons);
 
     }
+
 }
 
 BaseWallpaperPlugin::BaseWallpaperPlugin()
     :settingForm(nullptr)
 {
+    logInstance = LogDispacher::getInstance();
     connect(this,&BaseWallpaperPlugin::settingChangeSucceeded,&wallpaperManager,&BaseWallpaperManager::updateSettings);
+    connect(logInstance,&LogDispacher::sendLogd,this,[=](QString module,QString msg){emit reportDebug(module,msg);});
+    connect(logInstance,&LogDispacher::sendLogi,this,[=](QString module,QString msg){emit reportInfo(module,msg);});
+    connect(logInstance,&LogDispacher::sendLoge,this,[=](QString module,QString msg){emit reportError(module,msg);});
+    connect(logInstance,&LogDispacher::sendLogw,this,[=](QString module,QString msg){emit reportWarring(module,msg);});
 }
 
 void BaseWallpaperPlugin::loaded()

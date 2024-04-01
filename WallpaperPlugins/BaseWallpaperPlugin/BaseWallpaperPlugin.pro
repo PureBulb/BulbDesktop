@@ -17,10 +17,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     components/thumbnaillabel.cpp \
-    log.cpp \
     settingsform.cpp \
     utils/audioUtils/AudioUtils.cpp \
     utils/audioUtils/IAudioPlayer.cpp \
+    utils/logdispacher.cpp \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
     utils/videoUtils/AVPacketQueue.cpp \
@@ -39,11 +39,11 @@ SOURCES += \
 HEADERS += \
     common.h \
     components/thumbnaillabel.h \
-    log.h \
     settingsform.h \
     utils/AVConfig.h \
     utils/audioUtils/AudioUtils.h \
     utils/audioUtils/IAudioPlayer.h \
+    utils/logdispacher.h \
     utils/safequeue.h \
     utils/threadbase.h \
     utils/videoUtils/AVPacketQueue.h \

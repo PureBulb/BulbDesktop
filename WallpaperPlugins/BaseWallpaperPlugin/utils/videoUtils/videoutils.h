@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QObject>
 #include <QDir>
+#include "utils/logdispacher.h"
 // 纯c项目在c++ 中使用
 extern "C"{
     #include "libavcodec/avcodec.h"
@@ -63,6 +64,7 @@ private:
     AVFrameQueue    audioFrameQueue;
     bool            _stop;
     SyncClock       clock;
+    LogDispacher*   logInstance;
 
 };
 

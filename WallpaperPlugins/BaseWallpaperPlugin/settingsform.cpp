@@ -8,6 +8,7 @@ SettingsForm::SettingsForm(QHash<QString, QVariant> &_settings, QWidget *parent)
 {
     ui->setupUi(this);
     initUi();
+    instance = LogDispacher::getInstance();
     // connect(this,&SettingsForm::settingChanged,this,&SettingsForm::onSettingChanged);
 }
 
@@ -214,7 +215,7 @@ QStringList SettingsForm::getWallpaperPaths()
 void SettingsForm::updateSettings(QHash<QString, QVariant> setting)
 {
     setting = setting;
-    logi("SettingsForm::onSettingChanged","onSettingChanged");
+    instance->logd("SettingsForm::onSettingChanged","onSettingChanged");
     initUi();
 }
 
