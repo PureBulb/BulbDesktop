@@ -2,6 +2,7 @@
 #define WINDADAPTERV2_H
 
 #include <QMessageBox>
+#include <QApplication>
 #include <windows.h>
 #include "hookthread.h"
 

@@ -5,7 +5,6 @@ void BaseWallpaperPlugin::bindWallPaperEvent()
 {
     for(auto wallpaper:wallpaperManager.getWallpapers()){
         connect(wallpaper,&Wallpaper::triggedIcons,this,&BaseWallpaperPlugin::onTriggedIcons);
-
     }
 
 }
@@ -48,14 +47,14 @@ void BaseWallpaperPlugin::setSettings(QHash<QString, QVariant> _settings)
     wallpaperManager.setSettings(settings);
     if(settingForm == nullptr){
         settingForm = new SettingsForm(settings);
-        connect(settingForm,&SettingsForm::settingFormChanged,this,&BaseWallpaperPlugin::requestSettings);
+        connect(settingForm,&SettingsForm::settingFormChanged,this,[=](QHash<QString, QVariant> _settings){
+            emit requestUpdateSettings(_settings);
+        });
         connect(this,&BaseWallpaperPlugin::settingChangeSucceeded,settingForm,&SettingsForm::updateSettings);
     }
     else{
         settingForm->setSettings(settings);
     }
-
-
 }
 
 QVector<QWidget *> BaseWallpaperPlugin::getWallpapers()
@@ -91,7 +90,3 @@ void BaseWallpaperPlugin::stop()
     wallpaperManager.stop();
 }
 
-void BaseWallpaperPlugin::updatePluginSettings(QHash<QString, QVariant> _settings)
-{
-    setSettings(_settings);
-}

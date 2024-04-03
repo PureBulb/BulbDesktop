@@ -38,7 +38,13 @@ void WindAdapterV2::showIcon()
 
 void WindAdapterV2::installDesktopEventFilter(HWND wallpaper)
 {
-    while(SendMessage(hookthread->getMyWorkerW(), ADD_WALLPAPER_W, 0, (LPARAM) wallpaper)!= ADD_WALLPAPER_W);
+    int i = 0;
+    while(SendMessage(hookthread->getMyWorkerW(), ADD_WALLPAPER_W, 0, (LPARAM) wallpaper)!= ADD_WALLPAPER_W && i<INT_MAX)i++;
+    if(i == INT_MAX){
+        loge("WindAdapterV2::installDesktopEventFilter","钩子对接失败可能是dll注入失败无法启动程序");
+        QMessageBox::information(nullptr,"钩子对接失败","可能是dll注入失败无法启动程序");
+        QApplication::quit();
+    }
 }
 
 void WindAdapterV2::removeDesktopEventFilter(HWND wallpaper)

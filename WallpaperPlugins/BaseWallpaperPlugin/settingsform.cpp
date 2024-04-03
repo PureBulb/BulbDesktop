@@ -4,11 +4,12 @@
 SettingsForm::SettingsForm(QHash<QString, QVariant> &_settings, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SettingsForm),
-    setting(_settings)
+    setting(_settings),
+    inited(true)
 {
     ui->setupUi(this);
     initUi();
-    instance = LogDispacher::getInstance();
+    logInstance = LogDispacher::getInstance();
     // connect(this,&SettingsForm::settingChanged,this,&SettingsForm::onSettingChanged);
 }
 
@@ -33,8 +34,9 @@ void SettingsForm::on_addVieoBtn_clicked()
                 originPath.append(filename);
         }
         setting[INI_VIDEO_PATHS] = originPath;
+        emit settingFormChanged(setting);
     }
-    emit settingFormChanged(setting);
+
 }
 
 void SettingsForm::on_addGifBtn_clicked()
@@ -48,9 +50,9 @@ void SettingsForm::on_addGifBtn_clicked()
        }
 
        setting[INI_GIF_PATHS] = originPath;
-
+       emit settingFormChanged(setting);
    }
-    emit settingFormChanged(setting);
+
 }
 
 void SettingsForm::on_addGraphBtn_clicked()
@@ -65,9 +67,9 @@ void SettingsForm::on_addGraphBtn_clicked()
                 QMessageBox::information(nullptr,"图片已存在列表","不能重复添加");
         }
         setting[INI_GRAPH_PATHS] = originPath;
-
+        emit settingFormChanged(setting);
     }
-    emit settingFormChanged(setting);
+
 }
 
 void SettingsForm::on_delaySlider_valueChanged(int value)
@@ -75,8 +77,9 @@ void SettingsForm::on_delaySlider_valueChanged(int value)
     if(inited){
         ui->delayLabel->setText(QString::number(value)+QString("分钟"));
         setting[INI_GRAPH_DELAY] = value;
+        emit settingFormChanged(setting);
     }
-    emit settingFormChanged(setting);
+
 }
 
 void SettingsForm::on_typeComboBox_currentIndexChanged(int index)
@@ -89,8 +92,9 @@ void SettingsForm::on_typeComboBox_currentIndexChanged(int index)
             return ;
         }
         preType = WallpaperType(index-1);
+        emit settingFormChanged(setting);
     }
-    emit settingFormChanged(setting);
+
 }
 
 void SettingsForm::onRemoveThumbnail(QString filename)
@@ -128,9 +132,10 @@ void SettingsForm::onRemoveThumbnail(QString filename)
         }
         setting[INI_GIF_PATHS] = paths;
         ui->gifThumbnailLayout->removeWidget(senderObj);
+        emit settingFormChanged(setting);
     }
 
-    emit settingFormChanged(setting);
+
     initThumbnail();
 }
 
@@ -212,11 +217,12 @@ QStringList SettingsForm::getWallpaperPaths()
     }
 }
 
-void SettingsForm::updateSettings(QHash<QString, QVariant> setting)
+void SettingsForm::updateSettings(QHash<QString, QVariant> _setting)
 {
-    setting = setting;
-    instance->logd("SettingsForm::onSettingChanged","onSettingChanged");
+    setting = _setting;
+    logInstance->logd("SettingsForm::onSettingChanged","onSettingChanged");
     initUi();
+    inited = true;
 }
 
 

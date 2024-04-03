@@ -26,6 +26,7 @@ private:
     VideoUtils * video;
 
     QStringList getWallpaperPaths();
+    void getWallpapersFormScreen();
 public:
     BaseWallpaperManager();
     ~BaseWallpaperManager();

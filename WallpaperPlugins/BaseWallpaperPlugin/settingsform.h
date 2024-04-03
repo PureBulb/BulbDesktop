@@ -45,7 +45,8 @@ private:
     QHash<QString,QVariant>& setting;
     WallpaperType preType;
     bool inited;
-    LogDispacher* instance;
+    LogDispacher* logInstance;
+    // SettingDispacher* settingInstance;
 private:
     void initUi();
     void initThumbnail();

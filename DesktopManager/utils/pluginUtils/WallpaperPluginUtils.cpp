@@ -12,12 +12,15 @@ void WallpaperPluginUtils::object2Interface()
             plugins.insert(pluginName,instance);
             instance->loaded();
             connect(instance,&IWallpaperPlugin::triggedIcons,this,&WallpaperPluginUtils::onTriggedIcons);
-            connect(instance,&IWallpaperPlugin::requestSettings,this,&WallpaperPluginUtils::onSettingChanged);
+            //绑定设置更新事件
+            connect(instance,&IWallpaperPlugin::requestUpdateSettings,this,&WallpaperPluginUtils::onRequestUpdateSettings);
             //绑定日志功能
             connect(instance,&IWallpaperPlugin::reportDebug,this,&WallpaperPluginUtils::logDebugHandler);
             connect(instance,&IWallpaperPlugin::reportInfo,this,&WallpaperPluginUtils::logInfoHandler);
             connect(instance,&IWallpaperPlugin::reportWarring,this,&WallpaperPluginUtils::logWarringHandler);
             connect(instance,&IWallpaperPlugin::reportError,this,&WallpaperPluginUtils::logErrorHandler);
+
+
         }
 
     }
@@ -52,7 +55,6 @@ void WallpaperPluginUtils::nextWallpaper()
     if(activatePlugin!=plugins.end()){
         activatePlugin.value()->stop();
 
-
         activatePlugin++;
         if(activatePlugin==plugins.end()){
             nextWallpaper();
@@ -68,18 +70,7 @@ void WallpaperPluginUtils::nextWallpaper()
 
 }
 
-void WallpaperPluginUtils::onSettingChanged(QHash<QString, QVariant> _settings)
-{
 
-    for(auto i = plugins.keyValueBegin();i!=plugins.keyValueEnd();i++){
-        if((*i).second==sender()){
-            emit pluginSettingChanged((*i).first,_settings);
-            (*i).second->responseSettings(_settings);
-            break;
-        }
-    }
-    emit
-}
 
 
 
@@ -92,16 +83,7 @@ QVector<QWidget *> WallpaperPluginUtils::getWallpaperWidgets()
     return QVector<QWidget *>();
 }
 
-void WallpaperPluginUtils::onRequestSettings()
-{
-    QObject* obj = sender();
-    IWallpaperPlugin* instant = qobject_cast<IWallpaperPlugin*>(obj);
-    QString pluginName = plugins.key(instant);
-    qDebug()<<pluginName<<"request settings";
-    instant->setSettings(settingsManager->getPluginSettings(pluginName));
 
-
-}
 
 void WallpaperPluginUtils::onVolumeChanged(int value)
 {
@@ -121,6 +103,16 @@ void WallpaperPluginUtils::resume()
 void WallpaperPluginUtils::onTriggedIcons()
 {
     emit triggedIcons();
+}
+
+void WallpaperPluginUtils::onRequestUpdateSettings(QHash<QString, QVariant> _settings)
+{
+    QObject* obj = sender();
+    IWallpaperPlugin* instant = qobject_cast<IWallpaperPlugin*>(obj);
+    QString pluginName = plugins.key(instant);
+    logInfoHandler("WallpaperPluginUtils::onRequestUpdateSettings",pluginName+"request settings");
+    settingsManager->setPluginSettings(pluginName,_settings);
+    instant->responseSettings(_settings);
 }
 
 void WallpaperPluginUtils::logInfoHandler(QString module, QString msg)

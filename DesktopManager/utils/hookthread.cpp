@@ -7,21 +7,16 @@
 
 void HookThread::inject()
 {
-    #ifdef QT_DEBUG
-        QString workPath = "E:/project/Qt/build-BulbDesktop-Desktop_Qt_5_14_2_MinGW_64_bit-Debug/DesktopManager/bin/MinHookDllDemo.dll";
-//        QString workPath = QCoreApplication::applicationDirPath()+"/../bin/MinHookDllDemo.dll";
-        logi("inject",workPath);
-        const char  *dllPath = workPath.toStdString().c_str();
-    #else
-        QString workPath = QCoreApplication::applicationDirPath()+"/MinHookDllDemo.dll";
-        loge("inject",workPath);
-        const char  *dllPath = workPath.toStdString().c_str();
-    #endif
+
+    QString workPath = QCoreApplication::applicationDirPath()+"/MinHookDllDemo.dll";
+    logi("inject",workPath);
+    const char  *dllPath = workPath.toStdString().c_str();
+
 
     int buffSize = (strlen(dllPath) + 1) * sizeof(char) ;
     // 获取窗口所在的PID
     DWORD dwPID = 0;
-    qDebug()<<"inject into hwnd:"<<myWorkerW;
+    logi("HookThread::inject",QString("inject into hwnd:")+QString::number((long long)myWorkerW));
     GetWindowThreadProcessId(myWorkerW, &dwPID);
     if (dwPID == 0) {
         loge("inject","获取PID失败\n");
@@ -47,6 +42,7 @@ void HookThread::inject()
         loge("inject","特权信息查询失败\n");
         return;
     };
+    logi("HookThread::inject",QString("获取信息完成进入下一步"));
     //3.调节进程的访问令牌的特权属性
     // 这几行代码固定不变
     TOKEN_PRIVILEGES tkp;
@@ -63,7 +59,7 @@ void HookThread::inject()
         loge("inject","提升特权失败\n");
         return;
     };
-
+    logi("HookThread::inject",QString("打开特权完成"));
     //在远程进程中申请内存空间
     // 【参数1】程序的句柄对象
     // 【参数2】申请的内存地址，由系统分配，所以为NULL
@@ -98,7 +94,7 @@ void HookThread::inject()
         PTHREAD_START_ROUTINE pfnStartAssr =
             (PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle(L"Kernel32.dll"),
     "LoadLibraryA");
-
+        logi("HookThread::inject",QString("加载dll"));
         // 在远程进程中开辟线程
         // 【参数1】远程线程的句柄
         // 【参数2】线程属性。NULL表示使用默认属性
@@ -117,12 +113,14 @@ void HookThread::inject()
             return ;
         }
 
-        logi("inject",workPath);
+        logi("inject 完成",workPath);
         WaitForSingleObject(hRemoteThread, INFINITE);
+        logi("inject","关闭注入线程");
 //         关闭线程
-        CloseHandle(hRemoteThread);
+        // CloseHandle(hRemoteThread);
+        logi("inject","释放注入器");
 //         释放内存
-        VirtualFreeEx(hProcess, lpAddr, 0, MEM_FREE);
+        // VirtualFreeEx(hProcess, lpAddr, 0, MEM_FREE);
 
 }
 

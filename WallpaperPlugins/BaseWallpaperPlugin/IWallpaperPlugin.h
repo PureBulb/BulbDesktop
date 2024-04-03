@@ -38,7 +38,8 @@ signals:
     void displayFinished();
     // void settingsChanged(QHash<QString,QVariant> settings);
     //发送插件配置修改请求，处理成功后由responseSettings槽接受
-    void requestSettings(QHash<QString,QVariant> settings);
+    void requestUpdateSettings(QHash<QString,QVariant> settings);
+
     //隐藏桌面图标切换信号，由插件管理器接受
     void triggedIcons();
 protected slots:

@@ -6,6 +6,16 @@ QVector<Wallpaper *> BaseWallpaperManager::getWallpapers() const
     return wallpapers;
 }
 
+void BaseWallpaperManager::getWallpapersFormScreen()
+{
+    for(auto screen: QGuiApplication::screens()){
+        Wallpaper* wallpaper = new Wallpaper;
+        wallpaper->setGeometry(screen->geometry());
+        wallpapers.append(wallpaper);
+
+    }
+}
+
 void BaseWallpaperManager::nextWallpaper()
 {
     WallpaperType type = (WallpaperType)settings["type"].toInt();
@@ -33,7 +43,7 @@ void BaseWallpaperManager::setGifBackground()
     if(wallpaperPaths.size()>0){
         gif->setFileName(wallpaperPaths.front());
         gif->setScaledSize(wallpapers[0]->size());
-        for(auto wallpaper :wallpapers){
+        for(auto wallpaper :qAsConst(wallpapers)){
             wallpaper->setGif(gif);
         }
         gif->start();
@@ -54,7 +64,7 @@ void BaseWallpaperManager::setGraphBackground()
         connect(graphShowTimer,&QTimer::timeout,this,&BaseWallpaperManager::setGraphBackground);
     }
     if(wallpaperPaths.size()>0){
-        for(auto wallpaper : wallpapers)
+        for(auto wallpaper : qAsConst(wallpapers))
             wallpaper->setGraph(QPixmap(wallpaperPaths.front()));
         wallpaperPaths.pop_front();
         graphShowTimer->start();
@@ -68,24 +78,22 @@ void BaseWallpaperManager::setGraphBackground()
 
 void BaseWallpaperManager::setVideoBackground()
 {
-    logInstance->logi("BaseWallpaperManager::setVideoBackground","video entry");
+
     if(wallpaperPaths.size()>0){
         if(!video){
             video = new VideoUtils(wallpaperPaths.front());
             connect(video,&VideoUtils::displayFinished,this,&BaseWallpaperManager::setVideoBackground);
-            for(auto wallpaper:wallpapers)
+            for(auto wallpaper:qAsConst(wallpapers))
                 connect(video,&VideoUtils::sendDecodeImg,wallpaper,&Wallpaper::onDecodeImage);
             wallpaperPaths.pop_front();
-            logInstance->logi("BaseWallpaperManager::setVideoBackground","play entry");
             video->play();
-            logInstance->logi("BaseWallpaperManager::setVideoBackground","play out");
+            // logInstance->logi("BaseWallpaperManager::setVideoBackground","video started");
         }
         else{
-            logInstance->logi("BaseWallpaperManager::setVideoBackground","video stop");
             video->stop();
             video->deleteLater();
             video = nullptr;
-            logInstance->logi("BaseWallpaperManager::setVideoBackground","video stopped");
+            // logInstance->logi("BaseWallpaperManager::setVideoBackground","video stopped");
             setVideoBackground();
         }
     }
@@ -94,7 +102,7 @@ void BaseWallpaperManager::setVideoBackground()
         setVideoBackground();
     }
 
-    logInstance->logi("BaseWallpaperManager::setVideoBackground","video out");
+    // logInstance->logi("BaseWallpaperManager::setVideoBackground","video out");
 }
 
 void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
@@ -112,7 +120,10 @@ void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
 
 void BaseWallpaperManager::display()
 {
-    for(auto wallpaper :wallpapers){
+    if(wallpapers.size()==0){
+        getWallpapersFormScreen();
+    }
+    for(auto wallpaper :qAsConst(wallpapers)){
         wallpaper->show();
     }
     restart();
@@ -122,7 +133,7 @@ void BaseWallpaperManager::display()
 void BaseWallpaperManager::hide()
 {
     pause();
-    for(auto wallpaper :wallpapers){
+    for(auto wallpaper :qAsConst(wallpapers)){
         wallpaper->hide();
     }
 }
@@ -157,7 +168,7 @@ void BaseWallpaperManager::resume()
 
 void BaseWallpaperManager::stop()
 {
-    for(auto wallpaper:wallpapers)
+    for(auto wallpaper:qAsConst(wallpapers))
         wallpaper->deleteLater();
     wallpapers.clear();
     if(gif)
@@ -204,12 +215,7 @@ BaseWallpaperManager::BaseWallpaperManager()
 {
 
     logInstance = LogDispacher::getInstance();
-    for(auto screen: QGuiApplication::screens()){
-        Wallpaper* wallpaper = new Wallpaper;
-        wallpaper->setGeometry(screen->geometry());
-        wallpapers.append(wallpaper);
-
-    }
+    getWallpapersFormScreen();
     gif = nullptr;
     graphShowTimer = nullptr;
     video = nullptr;

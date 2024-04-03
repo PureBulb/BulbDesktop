@@ -33,7 +33,6 @@ public:
     void resume();
 
     void stop();
-public slots:
-    void updatePluginSettings(QHash<QString,QVariant> _settings);
+
 };
 #endif // BASEWALLPAPERPLUGIN_H

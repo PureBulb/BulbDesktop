@@ -4,7 +4,6 @@ void Manager::pluginsLoad()
 {
     assistantPluginUtils.load();
     wallpaperPluginUtils.load();
-    connect(&wallpaperPluginUtils,&WallpaperPluginUtils::pluginSettingChanged,this,&Manager::onPluginSettingsChanged);
     connect(&wallpaperPluginUtils,&WallpaperPluginUtils::triggedIcons,this,&Manager::onTrigggedIcons);
 }
 
@@ -31,7 +30,8 @@ void Manager::initTray()
     connect(trayIconMenu,&TrayIconMenu::volumeChange,&wallpaperPluginUtils,&WallpaperPluginUtils::onVolumeChanged);
     connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::pause);
     connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::resume);
-
+    //此功能因为前期设定没有插件化，目前保留接口但是弃用功能
+    // connect(trayIconMenu,&TrayIconMenu::nextWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::nextWallpaper);
     trayIcon->show();
 
 }
@@ -47,7 +47,6 @@ Manager::Manager(QObject *parent)
     winAdapter = WindAdapterV2::getInstance();
 
     pluginsLoad();
-
     wallpaperPluginUtils.setSettings(&settingsManager);
 
     wallpaperPluginUtils.nextWallpaper();

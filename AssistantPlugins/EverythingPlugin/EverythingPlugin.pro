@@ -20,7 +20,8 @@ SOURCES += \
     EverythingPlugin.cpp
 
 HEADERS += \
-    EverythingPlugin.h
+    EverythingPlugin.h \
+    log.h
 
 DISTFILES += EverythingPlugin.json
 

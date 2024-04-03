@@ -1,6 +1,6 @@
 #include "EverythingPlugin.h"
 #include <QtDebug>
-
+#include <log.h>
 EverythingPlugin::EverythingPlugin(QObject *parent)
     : QObject(parent)
 {
@@ -18,13 +18,68 @@ bool EverythingPlugin::query(QString queryStr, QList<QueryResult> &result)
     Everything_SetSearchW(queryStr.toStdWString().c_str());
     Everything_SetSort(EVERYTHING_SORT_DATE_MODIFIED_ASCENDING);
     Everything_SetMatchWholeWord(true);
-    Everything_QueryW(true);
+
+    if(!Everything_QueryW(true)){
+        switch(Everything_GetLastError()){
+        case EVERYTHING_OK:
+            break;
+        case EVERYTHING_ERROR_MEMORY:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_MEMORY");
+            break;
+        case EVERYTHING_ERROR_IPC:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_IPC");
+            break;
+        case EVERYTHING_ERROR_REGISTERCLASSEX:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_REGISTERCLASSEX");
+            break;
+        case EVERYTHING_ERROR_CREATEWINDOW:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATEWINDOW");
+            break;
+        case EVERYTHING_ERROR_CREATETHREAD:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATETHREAD");
+            break;
+        case EVERYTHING_ERROR_INVALIDINDEX:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDINDEX");
+            break;
+        case EVERYTHING_ERROR_INVALIDCALL:
+            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDCALL");
+            break;
+        }
+
+    }
     for(DWORD i = 0; i< Everything_GetNumResults();i++){
         QueryResult data;
         wchar_t buff[512];
         data.setType(Everything_IsFileResult(i)?file:folder);
         data.setTitle(QString::fromWCharArray(Everything_GetResultFileNameW(i)));
-        Everything_GetResultFullPathNameW(i,buff,512);
+        bool resultCode = Everything_GetResultFullPathNameW(i,buff,512);
+        if(!resultCode){
+            switch(Everything_GetLastError()){
+            case EVERYTHING_OK:
+                break;
+            case EVERYTHING_ERROR_MEMORY:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_MEMORY");
+                break;
+            case EVERYTHING_ERROR_IPC:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_IPC");
+                break;
+            case EVERYTHING_ERROR_REGISTERCLASSEX:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_REGISTERCLASSEX");
+                break;
+            case EVERYTHING_ERROR_CREATEWINDOW:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_CREATEWINDOW");
+                break;
+            case EVERYTHING_ERROR_CREATETHREAD:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_CREATETHREAD");
+                break;
+            case EVERYTHING_ERROR_INVALIDINDEX:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_INVALIDINDEX");
+                break;
+            case EVERYTHING_ERROR_INVALIDCALL:
+                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_INVALIDCALL");
+                break;
+            }
+        }
         data.setDescription(QString::fromWCharArray(buff));
         data.setItemClick(getOnItemClickFunc());
         data.setBtn1Click(getOnBtn1ClickFunc());

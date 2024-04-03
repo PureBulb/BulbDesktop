@@ -22,7 +22,7 @@ private:
     void object2Interface();
  public:
     WallpaperPluginUtils();
-
+     void setSettings(SettingManager *manager);
     // PluginUtils interface
     void load();
     void unload();
@@ -32,14 +32,12 @@ private:
 //    void setSettings(QHash<QString,QVariant> settings);
 
 signals:
-    void pluginSettingChanged(QString,QHash<QString, QVariant> );
+
     void triggedIcons();
 
 public slots:
     void nextWallpaper();
-    void onSettingChanged(QHash<QString, QVariant> _settings);
     QVector<QWidget *> getWallpaperWidgets();
-    void onRequestSettings();
     //value 0-100
     void onVolumeChanged(int value);
     void pause();
@@ -47,14 +45,14 @@ public slots:
 
     void onTriggedIcons();
     // BasePluginUtils interface
-
+    void onRequestUpdateSettings(QHash<QString, QVariant> _settings);
     void logInfoHandler(QString module,QString msg);
     void logDebugHandler(QString module,QString msg);
     void logWarringHandler(QString module,QString msg);
     void logErrorHandler(QString module,QString msg);
 
 public:
-    void setSettings(SettingManager *manager);
+
     QHash<QString,QWidget*> getSettingForms();
 };
 

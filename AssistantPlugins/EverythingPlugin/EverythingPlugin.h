@@ -4,6 +4,7 @@
 #include <IAssistantPlugin.h>
 #include <Everything.h>
 #include <QFileIconProvider>
+
 class EverythingPlugin : public QObject,public IAssistantPlugin
 {
     Q_OBJECT
