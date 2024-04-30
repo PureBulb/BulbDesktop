@@ -33,11 +33,13 @@ DisplayWorker::DisplayWorker()
     ,swrContext(nullptr)
     ,swsContext(nullptr)
     ,audioUtils(nullptr)
+    ,clock({0,0,0})
 {
 
 }
 
 DisplayWorker::DisplayWorker(AVCodecContext* _audioCodecContext,AVCodecContext* _videoCodecContext, AVFrameQueue *_videoFrames, AVFrameQueue *_audioFrames,AudioUtils* audio)
+    :clock({0,0,0})
 {
     setAduioCodecContext(_audioCodecContext);
     setVideoCodecContext(_videoCodecContext);

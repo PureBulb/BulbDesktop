@@ -24,6 +24,7 @@ void BaseWallpaperPlugin::loaded()
 {
     // you can bind event in this func
     bindWallPaperEvent();
+    logInstance->logi("BaseWallpaperPlugin::unloaded","base is loaded");
 }
 
 void BaseWallpaperPlugin::unloaded()

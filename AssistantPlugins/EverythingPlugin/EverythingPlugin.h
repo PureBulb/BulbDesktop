@@ -1,5 +1,5 @@
-#ifndef GENERICPLUGIN_H
-#define GENERICPLUGIN_H
+#ifndef EVERYTHINPLUGIN_H
+#define EVERYTHINPLUGIN_H
 
 #include <IAssistantPlugin.h>
 #include <Everything.h>

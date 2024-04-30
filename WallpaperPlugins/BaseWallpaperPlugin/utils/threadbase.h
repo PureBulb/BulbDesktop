@@ -19,16 +19,16 @@ protected:
     virtual void setThreadNotFinished();
     void lock();
     void unlock();
-    void waitResume();
+    virtual void waitResume();
     virtual void run() override;
 public:
     ThreadBase();
     virtual ~ThreadBase();
 
-    void stop();
-    void pause();
-    void resume();
-    void join();
+    virtual void stop();
+    virtual void pause();
+    virtual void resume();
+    virtual void join();
 };
 
 #endif // THREADBASE_H

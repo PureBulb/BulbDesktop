@@ -8,22 +8,22 @@ LogDispacher *LogDispacher::getInstance()
     return instance;
 }
 
-void LogDispacher::logd(QString module, QString msg)
+void LogDispacher::logd(const QString &module, const QString &msg)
 {
     emit sendLogd(module,msg);
 }
 
-void LogDispacher::logw(QString module, QString msg)
+void LogDispacher::logw(const QString &module, const QString &msg)
 {
     emit sendLogw(module,msg);
 }
 
-void LogDispacher::loge(QString module, QString msg)
+void LogDispacher::loge(const QString &module, const QString &msg)
 {
     emit sendLoge(module,msg);
 }
 
-void LogDispacher::logi(QString module, QString msg)
+void LogDispacher::logi(const QString &module, const QString &msg)
 {
     emit sendLogi(module,msg);
 }

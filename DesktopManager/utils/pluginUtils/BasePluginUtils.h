@@ -30,6 +30,11 @@ public:
     virtual void setSettings(SettingManager * settings);
 
     virtual ~BasePluginUtils();
+public slots:
+    void logInfoHandler(const QString &module, const QString &msg);
+    void logDebugHandler(const QString &module, const QString &msg);
+    void logWarringHandler(const QString &module, const QString &msg);
+    void logErrorHandler(const QString &module, const QString &msg);
 };
 
 #endif // PLUGINUTILS_H

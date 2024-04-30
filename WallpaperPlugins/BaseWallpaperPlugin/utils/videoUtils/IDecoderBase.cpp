@@ -4,7 +4,9 @@ IDecoderBase::IDecoderBase()
     :packetQueueInit(false)
     ,frameQueueInit(false)
     ,parmInit(false)
-
+    ,packets(nullptr)
+    ,frames(nullptr)
+    ,codecContext(nullptr)
 {}
 
 IDecoderBase::IDecoderBase(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCodecParameters *parm)

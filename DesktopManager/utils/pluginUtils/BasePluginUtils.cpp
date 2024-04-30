@@ -66,3 +66,24 @@ void BasePluginUtils::setSettings(SettingManager *settings)
 {
 
 }
+
+
+void BasePluginUtils::logInfoHandler(const QString &module, const QString &msg)
+{
+    logi("wallpaperPlugin::"+module,msg);
+}
+
+void BasePluginUtils::logDebugHandler(const QString &module, const QString &msg)
+{
+    logd("wallpaperPlugin::"+module,msg);
+}
+
+void BasePluginUtils::logWarringHandler(const QString &module, const QString &msg)
+{
+    logw("wallpaperPlugin::"+module,msg);
+}
+
+void BasePluginUtils::logErrorHandler(const QString &module, const QString &msg)
+{
+    loge("wallpaperPlugin::"+module,msg);
+}

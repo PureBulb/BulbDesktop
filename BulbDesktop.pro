@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS += \
     AssistantPlugins \
     DesktopManager \
+    PendantPlugins \
     WallpaperPlugins
 
 

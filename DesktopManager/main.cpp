@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     QString strKey = "Bulb Desktop wallpaper";
-    LPCWSTR wstrKey = strKey.toStdWString().c_str();
+    std::wstring str = strKey.toStdWString();
+    LPCWSTR wstrKey = str.c_str();
     HANDLE hMetex = CreateMutex(NULL,FALSE,wstrKey);
 
     if(GetLastError() == ERROR_ALREADY_EXISTS){

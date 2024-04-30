@@ -27,6 +27,7 @@ SOURCES += \
     utils/hookthread.cpp \
     utils/pluginUtils/AssistantPluginUtils.cpp \
     utils/pluginUtils/BasePluginUtils.cpp \
+    utils/pluginUtils/PendantPluginUtils.cpp \
     utils/pluginUtils/WallpaperPluginUtils.cpp \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
@@ -42,11 +43,13 @@ HEADERS += \
     log.h \
     plugins/IAssistantPlugin.h \
     plugins/IWallpaperPlugin.h \
+    plugins/IPendantPlugin.h \
     utils/AVConfig.h \
     utils/WindAdapterV2.h \
     utils/hookthread.h \
     utils/pluginUtils/AssistantPluginUtils.h \
     utils/pluginUtils/BasePluginUtils.h \
+    utils/pluginUtils/PendantPluginUtils.h \
     utils/pluginUtils/WallpaperPluginUtils.h \
     utils/safequeue.h \
     utils/threadbase.h \

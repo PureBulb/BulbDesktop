@@ -6,9 +6,14 @@
 VideoDecoder::VideoDecoder(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCodecParameters *parm)
     :IDecoderBase(_packets,_frames,parm)
     ,swsContext(nullptr)
+    ,startTime(0)
     ,timeBase({0,0})
     ,pauseDurationTime(0)
     ,pauseTime(0)
+    ,resumeTime(0)
+    ,clock(nullptr)
+
+
 {}
 
 VideoDecoder::~VideoDecoder()

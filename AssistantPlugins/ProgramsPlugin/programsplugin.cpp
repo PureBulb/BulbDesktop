@@ -74,7 +74,11 @@ void ProgramsPlugin::store(QList<QueryResult> &result)
 
              QString update_sql = QString()+ "replace into "+TABLE_NAME+"(filename,path,pinyin) values(:filename,:path,:pinyin)";
              QSqlQuery query;
-             query.prepare(update_sql);
+             bool res = query.prepare(update_sql);
+             if(!res){
+                 qDebug()<<"query faild";
+                 return ;
+             }
              query.bindValue(":filename",i.getTitle());
              query.bindValue(":path",i.getDescription());
              query.bindValue(":pinyin",(letter!=""?letter:i.getTitle()).toLower());

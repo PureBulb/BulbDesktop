@@ -66,6 +66,7 @@ AudioDecoder::AudioDecoder(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodec
     ,pts(AV_NOPTS_VALUE)
     ,clock(nullptr)
     ,volume(1.0)
+    ,logInstance(nullptr)
 
 {}
 

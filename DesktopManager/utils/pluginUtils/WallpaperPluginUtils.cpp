@@ -29,6 +29,7 @@ void WallpaperPluginUtils::object2Interface()
 WallpaperPluginUtils::WallpaperPluginUtils()
     :BasePluginUtils(WALLPAPER_PLUGINS_DIR)
     ,pluginIndex(0)
+    ,settingsManager(nullptr)
 {
 
 }
@@ -43,7 +44,7 @@ void WallpaperPluginUtils::load()
 
 void WallpaperPluginUtils::unload()
 {
-    for(auto plugin: plugins){
+    foreach(auto plugin,plugins){
         plugin->unloaded();
     }
 
@@ -115,25 +116,6 @@ void WallpaperPluginUtils::onRequestUpdateSettings(QHash<QString, QVariant> _set
     instant->responseSettings(_settings);
 }
 
-void WallpaperPluginUtils::logInfoHandler(QString module, QString msg)
-{
-    logi("wallpaperPlugin::"+module,msg);
-}
-
-void WallpaperPluginUtils::logDebugHandler(QString module, QString msg)
-{
-    logd("wallpaperPlugin::"+module,msg);
-}
-
-void WallpaperPluginUtils::logWarringHandler(QString module, QString msg)
-{
-    logw("wallpaperPlugin::"+module,msg);
-}
-
-void WallpaperPluginUtils::logErrorHandler(QString module, QString msg)
-{
-    loge("wallpaperPlugin::"+module,msg);
-}
 
 void WallpaperPluginUtils::setSettings(SettingManager *manager)
 {
@@ -147,7 +129,7 @@ void WallpaperPluginUtils::setSettings(SettingManager *manager)
 QHash<QString, QWidget *> WallpaperPluginUtils::getSettingForms()
 {
     QHash<QString,QWidget*> result;
-    for(auto key:plugins.keys()){
+    foreach(auto key,plugins.keys()){
         QWidget* settingForm = plugins[key]->getSettingWidget();
         if(settingForm!=nullptr)
             result.insert(key,settingForm);

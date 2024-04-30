@@ -46,10 +46,7 @@ public slots:
     void onTriggedIcons();
     // BasePluginUtils interface
     void onRequestUpdateSettings(QHash<QString, QVariant> _settings);
-    void logInfoHandler(QString module,QString msg);
-    void logDebugHandler(QString module,QString msg);
-    void logWarringHandler(QString module,QString msg);
-    void logErrorHandler(QString module,QString msg);
+
 
 public:
 

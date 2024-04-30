@@ -9,6 +9,7 @@ class SettingManager:public QObject
     Q_OBJECT
 private:
     QSettings settings;
+    void extracted(QHash<QString, QVariant> &result);
     QHash<QString,QVariant> getSettingsByGroup(QString groupName);
     void writeSettingsByGroup(QString groupName,QHash<QString,QVariant> _settings);
 public:

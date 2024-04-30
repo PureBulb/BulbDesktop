@@ -213,7 +213,8 @@ QStringList SettingsForm::getWallpaperPaths()
             return setting[INI_GRAPH_PATHS].toStringList();
         case WallpaperType::video:
             return setting[INI_VIDEO_PATHS].toStringList();
-
+        default:
+            return QStringList();
     }
 }
 

@@ -8,10 +8,10 @@ class LogDispacher:public QObject
     Q_OBJECT
 public:
     static LogDispacher* getInstance();
-    void logd(QString module,QString msg);
-    void logw(QString module,QString msg);
-    void loge(QString module,QString msg);
-    void logi(QString module,QString msg);
+    void logd(const QString &module, const QString &msg);
+    void logw(const QString &module, const QString &msg);
+    void loge(const QString &module, const QString &msg);
+    void logi(const QString &module, const QString &msg);
 
 private:
     static LogDispacher* instance;

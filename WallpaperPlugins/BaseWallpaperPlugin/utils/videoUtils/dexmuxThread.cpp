@@ -1,14 +1,14 @@
 #include "DexmuxThread.h"
 #include <QtDebug>
-DexmuxThread::DexmuxThread(QString _filePath, AVPacketQueue *_audioPacketQueue,AVPacketQueue *_videoPacketQueue)
+DexmuxThread::DexmuxThread(const QString &_filePath, AVPacketQueue *_audioPacketQueue,AVPacketQueue *_videoPacketQueue)
     :audioStreamIndex(-1)
     ,videoStreamIndex(-1)
     ,formatContex(nullptr)
+    ,filePath(_filePath)
 
 {
     audioPacketQueue = _audioPacketQueue;
     videoPacketQueue = _videoPacketQueue;
-    filePath = _filePath;
 }
 
 DexmuxThread::~DexmuxThread()

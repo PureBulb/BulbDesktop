@@ -24,8 +24,8 @@ private:
     AVPacketQueue *audioPacketQueue;
     void close();
 public:
-    explicit DexmuxThread(QString _filePath, AVPacketQueue *_audioPacketQueue,AVPacketQueue *_videoPacketQueue);
-    ~DexmuxThread();
+    explicit DexmuxThread(const QString &_filePath, AVPacketQueue *_audioPacketQueue, AVPacketQueue *_videoPacketQueue);
+    ~DexmuxThread() override;
     int open();
     AVCodecParameters * getAudioCodecParameters();
     AVCodecParameters * getvideoCodecParameters();

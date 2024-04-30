@@ -10,10 +10,11 @@ void HookThread::inject()
 
     QString workPath = QCoreApplication::applicationDirPath()+"/MinHookDllDemo.dll";
     logi("inject",workPath);
-    const char  *dllPath = workPath.toStdString().c_str();
 
+    std::string str = workPath.toStdString();
+    const char  *dllPath = str.c_str();
+    int buffSize = (strlen(dllPath) + 1) * sizeof(char);
 
-    int buffSize = (strlen(dllPath) + 1) * sizeof(char) ;
     // 获取窗口所在的PID
     DWORD dwPID = 0;
     logi("HookThread::inject",QString("inject into hwnd:")+QString::number((long long)myWorkerW));

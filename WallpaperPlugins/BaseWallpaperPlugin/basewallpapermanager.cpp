@@ -1,5 +1,6 @@
 #include "basewallpapermanager.h"
 #include <QtDebug>
+#include <QApplication>
 #include "BaseWallpaperManager.h"
 QVector<Wallpaper *> BaseWallpaperManager::getWallpapers() const
 {
@@ -8,9 +9,17 @@ QVector<Wallpaper *> BaseWallpaperManager::getWallpapers() const
 
 void BaseWallpaperManager::getWallpapersFormScreen()
 {
+    int x = 0;
+    int y = 0;
+    int w,h;
     for(auto screen: QGuiApplication::screens()){
+        int screenX,screenY;
         Wallpaper* wallpaper = new Wallpaper;
+        wallpaper->show();
         wallpaper->setGeometry(screen->geometry());
+        screen->geometry().getRect(&screenX,&screenY,&w,&h);
+        wallpaper->move(x,y);
+        x+=w;
         wallpapers.append(wallpaper);
 
     }
@@ -18,6 +27,7 @@ void BaseWallpaperManager::getWallpapersFormScreen()
 
 void BaseWallpaperManager::nextWallpaper()
 {
+
     WallpaperType type = (WallpaperType)settings["type"].toInt();
     if( type == WallpaperType::gif){
         setGifBackground();
@@ -87,7 +97,7 @@ void BaseWallpaperManager::setVideoBackground()
                 connect(video,&VideoUtils::sendDecodeImg,wallpaper,&Wallpaper::onDecodeImage);
             wallpaperPaths.pop_front();
             video->play();
-            // logInstance->logi("BaseWallpaperManager::setVideoBackground","video started");
+            logInstance->logi("BaseWallpaperManager::setVideoBackground","video started");
         }
         else{
             video->stop();

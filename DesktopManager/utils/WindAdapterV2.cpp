@@ -44,6 +44,7 @@ void WindAdapterV2::installDesktopEventFilter(HWND wallpaper)
         loge("WindAdapterV2::installDesktopEventFilter","钩子对接失败可能是dll注入失败无法启动程序");
         QMessageBox::information(nullptr,"钩子对接失败","可能是dll注入失败无法启动程序");
         QApplication::quit();
+        i++;
     }
 }
 

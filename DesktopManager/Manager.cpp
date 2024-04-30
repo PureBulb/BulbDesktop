@@ -53,7 +53,7 @@ Manager::Manager(QObject *parent)
 
     for(auto wallpaper:wallpaperPluginUtils.getWallpaperWidgets()){
        winAdapter->installDesktopEventFilter( (HWND)wallpaper->winId());
-       winAdapter->underOnProgmanW((HWND)wallpaper->winId());  
+       winAdapter->underOnProgmanW((HWND)wallpaper->winId());
     }
     initTray();
 

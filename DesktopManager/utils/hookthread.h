@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <windows.h>
 #include <tlhelp32.h>
+#include <string>
 #include "log.h"
 class HookThread:public QThread
 {

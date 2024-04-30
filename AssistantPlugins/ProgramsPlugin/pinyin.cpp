@@ -55,7 +55,7 @@ char ChineseLetterHelper::Convert(int n)
 
 QString ChineseLetterHelper::GetFirstLetter(const QString &src)
 {
-    wchar_t wchr;
+    wchar_t wchr='0';
     QString firstLetter;
     if(src.size() > 0)
     {
@@ -92,7 +92,7 @@ QString ChineseLetterHelper::GetFirstLetters(const QString &src)
     {
         QString str = src.at(i);
         QByteArray arr = str.toLocal8Bit();
-        wchar_t wchr;
+        wchar_t wchr = {};
 
         if(arr.size() == 1)
         {
