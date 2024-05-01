@@ -1,3 +1,5 @@
 {
-    "Keys" : [ ]
+    "plugin-name" : "Monitor",
+    "dependencies" : [ ],
+    "type" : "pendant"
 }

@@ -4,6 +4,9 @@ void Manager::pluginsLoad()
 {
     assistantPluginUtils.load();
     wallpaperPluginUtils.load();
+    //pendant test
+    pendantPluginUtils.load();
+    //
     connect(&wallpaperPluginUtils,&WallpaperPluginUtils::triggedIcons,this,&Manager::onTrigggedIcons);
 }
 
@@ -54,6 +57,13 @@ Manager::Manager(QObject *parent)
     for(auto wallpaper:wallpaperPluginUtils.getWallpaperWidgets()){
        winAdapter->installDesktopEventFilter( (HWND)wallpaper->winId());
        winAdapter->underOnProgmanW((HWND)wallpaper->winId());
+       //pendant test
+       BasePendantWidget* w = pendantPluginUtils.newPendant("Monitor",1400,300,380,600);
+       w->setParent(wallpaper);
+       w->show();
+       pendantPluginUtils.startEditorMode();
+       pendantPluginUtils.stopEditorMode();
+       //
     }
     initTray();
 

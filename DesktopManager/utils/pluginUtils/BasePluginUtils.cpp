@@ -21,14 +21,12 @@ void BasePluginUtils::load()
         QString realDir = (path.absolutePath()+"/"+ dirName+"/");
         SetDllDirectoryW(realDir.toStdWString().c_str());
         QString pluginName = realDir+dirName+".dll";
-        qDebug()<<realDir;
-        qDebug()<<pluginName;
         QFile file(pluginName);
         if (!file.exists())
         {
 
             QMessageBox::warning(nullptr,"错误信息","找不到文件"+pluginName);
-            qDebug()<<"[error]:can't find file :"+pluginName;
+            logErrorHandler("BasePluginUtils::load","can't find file :"+pluginName);
             return ;
         }
         QPluginLoader *pluginLoader = new QPluginLoader(pluginName);
@@ -70,20 +68,20 @@ void BasePluginUtils::setSettings(SettingManager *settings)
 
 void BasePluginUtils::logInfoHandler(const QString &module, const QString &msg)
 {
-    logi("wallpaperPlugin::"+module,msg);
+    logi(module,msg);
 }
 
 void BasePluginUtils::logDebugHandler(const QString &module, const QString &msg)
 {
-    logd("wallpaperPlugin::"+module,msg);
+    logd(module,msg);
 }
 
 void BasePluginUtils::logWarringHandler(const QString &module, const QString &msg)
 {
-    logw("wallpaperPlugin::"+module,msg);
+    logw(module,msg);
 }
 
 void BasePluginUtils::logErrorHandler(const QString &module, const QString &msg)
 {
-    loge("wallpaperPlugin::"+module,msg);
+    loge(module,msg);
 }

@@ -16,6 +16,7 @@
 #include "utils/WindAdapterV2.h"
 #include "utils/pluginUtils/AssistantPluginUtils.h"
 #include "utils/pluginUtils/wallpaperpluginutils.h"
+#include "utils/pluginUtils/PendantPluginUtils.h"
 
 class Manager:public QObject
 {
@@ -25,6 +26,7 @@ private:
     WindAdapterV2* winAdapter;
     AssistantPluginUtils assistantPluginUtils;
     WallpaperPluginUtils wallpaperPluginUtils;
+    PendantPluginUtils pendantPluginUtils;
     SettingManager settingsManager;
 
     QSystemTrayIcon *trayIcon;

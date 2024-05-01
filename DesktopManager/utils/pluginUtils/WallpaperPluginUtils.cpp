@@ -10,7 +10,7 @@ void WallpaperPluginUtils::object2Interface()
         if(instance){
             QString pluginName = loader->metaData().value("MetaData").toObject().value("plugin-name").toString();
             plugins.insert(pluginName,instance);
-            instance->loaded();
+
             connect(instance,&IWallpaperPlugin::triggedIcons,this,&WallpaperPluginUtils::onTriggedIcons);
             //绑定设置更新事件
             connect(instance,&IWallpaperPlugin::requestUpdateSettings,this,&WallpaperPluginUtils::onRequestUpdateSettings);
@@ -19,6 +19,8 @@ void WallpaperPluginUtils::object2Interface()
             connect(instance,&IWallpaperPlugin::reportInfo,this,&WallpaperPluginUtils::logInfoHandler);
             connect(instance,&IWallpaperPlugin::reportWarring,this,&WallpaperPluginUtils::logWarringHandler);
             connect(instance,&IWallpaperPlugin::reportError,this,&WallpaperPluginUtils::logErrorHandler);
+
+            instance->loaded();
 
 
         }

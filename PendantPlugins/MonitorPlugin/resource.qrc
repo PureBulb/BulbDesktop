@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MonitorPlugin">
+        <file>MonitorQml.qml</file>
+    </qresource>
+</RCC>

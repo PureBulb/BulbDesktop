@@ -15,12 +15,13 @@ public:
     explicit PendantPluginUtils(QObject *parent = nullptr);
     virtual  ~PendantPluginUtils() override;
 
+    void load() override;
     void object2Interface();
 
     void startEditorMode();
     void stopEditorMode();
 
-    void newPendant(QString pluginName,int x,int y,int w,int h);
+    BasePendantWidget* newPendant(QString pluginName,int x,int y,int w,int h);
 };
 
 #endif // PENDANTPLUGINUTILS_H
