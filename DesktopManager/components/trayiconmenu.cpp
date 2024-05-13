@@ -61,3 +61,9 @@ void TrayIconMenu::on_volumeSlider_valueChanged(int value)
     ui->volumeLabel->setText(QString::number(value)+"%");
     emit volumeChange(value);
 }
+
+void TrayIconMenu::on_editBtn_clicked()
+{
+    emit triggedEditMode();
+}
+

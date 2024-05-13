@@ -4,9 +4,7 @@ void Manager::pluginsLoad()
 {
     assistantPluginUtils.load();
     wallpaperPluginUtils.load();
-    //pendant test
     pendantPluginUtils.load();
-    //
     connect(&wallpaperPluginUtils,&WallpaperPluginUtils::triggedIcons,this,&Manager::onTrigggedIcons);
 }
 
@@ -30,9 +28,12 @@ void Manager::initTray()
     trayIcon->setContextMenu(menu);
 
     connect(trayIconMenu,&TrayIconMenu::exit,this,&Manager::onExit);
+    connect(trayIconMenu,&TrayIconMenu::triggedEditMode,this,&Manager::onTriggedEditMode);
+
     connect(trayIconMenu,&TrayIconMenu::volumeChange,&wallpaperPluginUtils,&WallpaperPluginUtils::onVolumeChanged);
     connect(trayIconMenu,&TrayIconMenu::pauseWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::pause);
     connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::resume);
+
     //此功能因为前期设定没有插件化，目前保留接口但是弃用功能
     // connect(trayIconMenu,&TrayIconMenu::nextWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::nextWallpaper);
     trayIcon->show();
@@ -43,6 +44,7 @@ void Manager::initTray()
 
 Manager::Manager(QObject *parent)
     :QObject(parent)
+    ,isEditMode(false)
     ,winAdapter(nullptr)
     ,hideIcons(false)
 {
@@ -51,6 +53,7 @@ Manager::Manager(QObject *parent)
 
     pluginsLoad();
     wallpaperPluginUtils.setSettings(&settingsManager);
+    pendantPluginUtils.setSettings(&settingsManager);
 
     wallpaperPluginUtils.nextWallpaper();
 
@@ -58,13 +61,12 @@ Manager::Manager(QObject *parent)
        winAdapter->installDesktopEventFilter( (HWND)wallpaper->winId());
        winAdapter->underOnProgmanW((HWND)wallpaper->winId());
        //pendant test
-       BasePendantWidget* w = pendantPluginUtils.newPendant("Monitor",1400,300,380,600);
-       w->setParent(wallpaper);
-       w->show();
-       pendantPluginUtils.startEditorMode();
-       pendantPluginUtils.stopEditorMode();
+       // pendantPluginUtils.newPendant("Monitor",500,500,500,500);
+       pendantPluginUtils.createByConfig(wallpaper);
+       // pendantPluginUtils.stopEditorMode();
        //
     }
+
     initTray();
 
 
@@ -98,4 +100,16 @@ void Manager::onExit()
     UnregisterHotKey((HWND)assistantForm->winId(),atomId);
     GlobalDeleteAtom(atomId);
     QApplication::quit();
+}
+
+void Manager::onTriggedEditMode()
+{
+    if(!isEditMode){
+        pendantPluginUtils.startEditorMode();
+    }
+    else{
+        pendantPluginUtils.stopEditorMode();
+    }
+    isEditMode=!isEditMode;
+
 }

@@ -22,6 +22,7 @@ class Manager:public QObject
 {
     Q_OBJECT
 private:
+    bool isEditMode;
     SettingWidget* settingWidget;
     WindAdapterV2* winAdapter;
     AssistantPluginUtils assistantPluginUtils;
@@ -46,6 +47,7 @@ protected slots:
     void onPluginSettingsChanged(QString pluginName,QHash<QString, QVariant> _settings);
     void onTrigggedIcons();
     void onExit();
+    void onTriggedEditMode();
 
 };
 

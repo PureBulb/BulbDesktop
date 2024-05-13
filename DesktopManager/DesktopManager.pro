@@ -20,7 +20,7 @@ SOURCES += \
     SettingManager.cpp \
     components/assistantitem.cpp \
     components/trayiconmenu.cpp \
-    context.cpp \
+    # context.cpp \
     log.cpp \
     main.cpp \
     utils/WindAdapterV2.cpp \
@@ -39,7 +39,7 @@ HEADERS += \
     SettingManager.h \
     components/assistantitem.h \
     components/trayiconmenu.h \
-    context.h \
+    # context.h \
     log.h \
     plugins/IAssistantPlugin.h \
     plugins/IWallpaperPlugin.h \

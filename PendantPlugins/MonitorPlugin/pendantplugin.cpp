@@ -14,7 +14,7 @@ void PendantPlugin::loaded()
     logInstance->logd("PendantPlugin::loaded","MonitorPlugin is loaded");
 }
 
-BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h)
+BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uint64_t id)
 {
 
     BasePendantWidget* widget = new MonitorWidget();
@@ -30,5 +30,12 @@ BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h)
         widget->setWindowFlags(widget->windowFlags() & (~Qt::FramelessWindowHint));
         logInstance->logd("PendantPlugin::createNewWidget::EditModeend",QString::number(widget->windowFlags()));
     }
+    connect(widget,&BasePendantWidget::changeWidget,this,[=](uint64_t id,QRect geometry){emit changePendant(id,geometry);});
+    connect(widget,&BasePendantWidget::closeWidget,this,[=](uint64_t id){emit closePendant(id);});
+    widget->setId(id);
+    if(id==0){
+        widget->setId(QDateTime::currentMSecsSinceEpoch());
+    }
     return widget;
 }
+

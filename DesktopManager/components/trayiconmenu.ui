@@ -84,6 +84,13 @@
     </spacer>
    </item>
    <item>
+    <widget class="QPushButton" name="editBtn">
+     <property name="text">
+      <string>切換編輯模式</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="assistorBtn">
      <property name="text">
       <string>唤醒快捷助手</string>

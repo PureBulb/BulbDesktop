@@ -7,6 +7,7 @@
 #include <QPluginMetaData>
 #include <QDialog>
 #include <QDebug>
+#include <QEvent>
 class BasePendantWidget:public QWidget
 {
     Q_OBJECT
@@ -15,7 +16,8 @@ protected:
     uint64_t id;
 public:
     BasePendantWidget(QWidget* parent):QWidget(parent),_parent(parent){};
-    virtual uint64_t getId(){return 0;};
+    virtual uint64_t getId(){return id;};
+    virtual void setId(uint64_t _id){id = _id;};
     void editMode(){
         setWindowFlags(windowFlags() & (~Qt::FramelessWindowHint));
         QWidget::setParent(nullptr);
@@ -30,6 +32,18 @@ public:
         _parent = parent;
         QWidget::setParent(_parent);
     };
+    bool event(QEvent *e) override{
+        if(e->type() == QEvent::Resize || e->type() == QEvent::Move){
+            emit changeWidget(id,geometry());
+        }
+        if(e->type() == QEvent::Close){
+            emit closeWidget(id);
+
+        }
+    };
+signals:
+    void changeWidget(uint64_t id,QRect geometry);
+    void closeWidget(uint64_t id);
 };
 
 class IPendantPlugin: public QObject
@@ -57,13 +71,19 @@ public:
             widget->closeEditMode();
         }
     }
-    virtual BasePendantWidget* createNewWidget(int x,int y,int w,int h){return nullptr;}; // 返回已经初始化的挂件让插件管理器显示
+    // 返回已经初始化的挂件让插件管理器显示
+    // id建议使用64位时间戳避免冲突
+    virtual BasePendantWidget* createNewWidget(int x,int y,int w,int h,uint64_t id=0){return nullptr;};
 signals:
     // log 信号，在本例子中信号由LogDispacher发出 该接口继承者接受处理并发送给插件管理类处理
     void reportError(QString module, QString msg);
     void reportInfo(QString module, QString msg);
     void reportWarring(QString module, QString msg);
     void reportDebug(QString module, QString msg);
+
+    void closePendant(uint64_t id);
+    void changePendant(uint64_t id,QRect rect);
+
 
 };
 QT_BEGIN_NAMESPACE

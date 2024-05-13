@@ -4,7 +4,8 @@
 #include <QObject>
 #include <IPendantPlugin.h>
 #include <logdispacher.h>
-#include <monitorwidget.h>.h>
+#include <monitorwidget.h>
+#include <QDateTime>
 class PendantPlugin : public IPendantPlugin
 {
     Q_OBJECT
@@ -15,8 +16,8 @@ private:
     LogDispacher* logInstance;
 public:
     explicit PendantPlugin();
-    void loaded();
-    BasePendantWidget * createNewWidget(int x,int y,int w,int h);
+    void loaded() override;
+    BasePendantWidget * createNewWidget(int x, int y, int w, int h, uint64_t id=0) override;
 };
 
 #endif // PENDANTPLUGIN_H

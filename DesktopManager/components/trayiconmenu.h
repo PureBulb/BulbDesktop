@@ -35,12 +35,14 @@ private slots:
 
     void on_volumeSlider_valueChanged(int value);
 
+    void on_editBtn_clicked();
+
 signals:
     void volumeChange(int value);
     void nextWallpaper();
     void pauseWallpaper();
     void resumeWallpaper();
-
+    void triggedEditMode();
     void exit();
 private:
     Ui::TrayIconMenu *ui;

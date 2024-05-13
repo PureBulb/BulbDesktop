@@ -3,6 +3,7 @@
 QHash<QString, QVariant> SettingManager::getSettingsByGroup(QString groupName)
 {
     QHash<QString,QVariant> result;
+
     settings.beginGroup(groupName);
     for(auto key:settings.allKeys()){
         result[key] = settings.value(key);
