@@ -3,10 +3,10 @@
 PendantPlugin::PendantPlugin() {
     logInstance = LogDispacher::getInstance();
 
-    connect(logInstance,&LogDispacher::sendLogd,this,[=](QString module,QString msg){emit reportDebug(module,msg);});
-    connect(logInstance,&LogDispacher::sendLogi,this,[=](QString module,QString msg){emit reportInfo(module,msg);});
-    connect(logInstance,&LogDispacher::sendLoge,this,[=](QString module,QString msg){emit reportError(module,msg);});
-    connect(logInstance,&LogDispacher::sendLogw,this,[=](QString module,QString msg){emit reportWarring(module,msg);});
+    connect(logInstance,&LogDispacher::sendLogd,this,&PendantPlugin::reportDebug);
+    connect(logInstance,&LogDispacher::sendLogi,this,&PendantPlugin::reportInfo);
+    connect(logInstance,&LogDispacher::sendLoge,this,&PendantPlugin::reportError);
+    connect(logInstance,&LogDispacher::sendLogw,this,&PendantPlugin::reportWarring);
 }
 
 void PendantPlugin::loaded()
