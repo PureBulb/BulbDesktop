@@ -1,8 +1,8 @@
 param($type,$sourceDir)
 $buildtype=""
-$pwdPath=pwd
-echo "source dir: $sourceDir"
-echo "build dir: $pwdPath"
+$pwdPath=Get-Location
+Write-Output "source dir: $sourceDir"
+Write-Output "build dir: $pwdPath"
 if($type -eq "debug"){
     $buildtype="debug"
 }
@@ -12,34 +12,59 @@ elseif($type -eq "release"){
 elseif($type -eq "profile"){
     $buildtype="release"
 }
+# define what plugin do you have and what type they are
+$AssistantPlugins=@("EverythingPlugin","ProgramsPlugin")
+$WallpaperPlugins=@("BaseWallPaperPlugin")
+$PendantPlugins=@("MonitorPlugin")
+$allTypePlugins=@{AssistantPlugins = $AssistantPlugins;WallpaperPlugins = $WallpaperPlugins;PendantPlugins = $PendantPlugins}
 
-$EverythingPluginDllPath="$pwdPath\AssistantPlugins\EverythingPlugin\$buildtype\EverythingPlugin.dll"
-$ProgramsPluginDllPath="$pwdPath\AssistantPlugins\ProgramsPlugin\$buildtype\ProgramsPlugin.dll"
-
-$WAllpaperPluginDllPath="$pwdPath\WallpaperPlugins\BaseWallPaperPlugin\$buildtype\BaseWallPaperPlugin.dll"
-
-$MonitorPluginDllPath="$pwdPath\PendantPlugins\MonitorPlugin\$buildtype\MonitorPlugin.dll"
-echo "coping plugins..."
-$pluginsDllPath=@($EverythingPluginDllPath,$ProgramsPluginDllPath,$WAllpaperPluginDllPath,$MonitorPluginDllPath)
-foreach ($element in $pluginsDllPath) {
-  if(Test-Path -Path $element){
-    $temp = $element.Split("\")
-    $temp = $temp[$temp.Count-1]
-    $dirName = $temp.Split(".")[0]
-    $debugDir = "$pwdPath\DesktopManager\$dirName"
-    if (-Not (Test-Path -Path $debugDir)) {
-        New-Item -Path $debugDir -ItemType Directory
-    }
-    Copy-Item -Path $element "$debugDir\" -Force
-    if($type -eq "release"){
-        $releaseDir = "$pwdPath\DesktopManager\$buildPath\$dirName"
-        if (-Not (Test-Path -Path $releaseDir)) {
-            New-Item -Path $releaseDir -ItemType Directory
-        }
-        Copy-Item -Path $element "$releaseDir\" -Force
+Write-Output "coping plugins..."
+foreach ($pluginType in $allTypePlugins.Keys){
+    foreach($pluginName in $($allTypePlugins[$pluginType])){
+        $dependenceShPath = "$sourceDir/$pluginType/$pluginName/dependence.ps1"
         
+        if(Test-Path -Path $dependenceShPath){
+            invoke-expression -Command "$dependenceShPath $buildtype $sourceDir"
+        }
+        
+        $dllPath="$pwdPath/$pluginType/$pluginName/$buildtype/*.dll"
+        $debugPath="$pwdPath/DesktopManager/$pluginType/$pluginName"
+        
+        if (-Not (Test-Path -Path $debugPath)) {
+            New-Item -Path $debugPath -ItemType Directory
+        }
+        Copy-Item -Path $dllPath  $debugPath -Recurse -Force 
+
+        if($buildtype -eq "release"){
+            $buildPath="$pwdPath/DesktopManager/$buildtype/$pluginType/$pluginName"
+            Copy-Item -Path $dllPath  $buildPath -Recurse -Force 
+        }
+        Write-Output "finished $pluginName"
     }
-  } 
-  echo "finished $dirName"
+
+
 }
-echo "copy finished "
+Write-Output "copy finished "
+
+Write-Output "coping settings..."
+Write-Output "copy finished "
+
+Write-Output "coping hook..."
+#because it use exe Relative paths to inject hook so it just copy to exe path
+$hookPath = "$sourceDir/MinHookDllDemo/MinHookDllDemo.dll"
+$exePath="$pwdPath/DesktopManager/$buildtype/"
+Copy-Item -Path $hookPath  $exePath -Recurse -Force
+
+Write-Output "copy finished "
+
+Write-Output "create some dir"
+$thumbnailDir = "$pwdPath/DesktopManager/thumbnail"
+if (-Not (Test-Path -Path $thumbnailDir)) {
+    New-Item -Path $thumbnailDir -ItemType Directory
+}
+if($buildtype -eq "release"){
+    $thumbnailDir="$pwdPath/DesktopManager/$buildtype/thumbnail"
+    New-Item -Path $thumbnailDir -ItemType Directory
+}
+Write-Output "create finished "
+

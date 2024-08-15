@@ -23,7 +23,8 @@ HEADERS += \
     EverythingPlugin.h \
     log.h
 
-DISTFILES += EverythingPlugin.json
+DISTFILES += EverythingPlugin.json \
+    dependence.ps1
 
 # Default rules for deployment.
 unix {

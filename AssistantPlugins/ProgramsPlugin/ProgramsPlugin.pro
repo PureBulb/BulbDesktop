@@ -24,7 +24,8 @@ HEADERS += \
     pinyin.h \
     programsplugin.h
 
-DISTFILES += ProgramsPlugin.json
+DISTFILES += ProgramsPlugin.json \
+    dependence.ps1
 
 # Default rules for deployment.
 unix {

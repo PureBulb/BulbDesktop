@@ -22,6 +22,7 @@ HEADERS += \
     pendantplugin.h
 
 DISTFILES += MonitorPlugin.json \
+    dependence.ps1 \
     MonitorQml.qml
 
 # Default rules for deployment.

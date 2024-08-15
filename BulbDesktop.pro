@@ -11,3 +11,6 @@ CONFIG += qt \
     qt
 
 QT += widgets
+
+
+DISTFILES += dependence.ps1
