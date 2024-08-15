@@ -19,6 +19,6 @@ graph.paths=resource/images/test.jpg
 type=2 
 graph.delay=20
 gif.paths=@Invalid()
-
-```
 5. 复制项目中的依赖，进入项目目录```MinHookDllDemo/MinHookDllDemo.dll``` 复制粘贴到编译目录```DesktopManager\release\```中
+```
+
