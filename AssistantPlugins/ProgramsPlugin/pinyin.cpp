@@ -1,4 +1,4 @@
-#include "pinyin.h"
+﻿#include "pinyin.h"
 bool ChineseLetterHelper::In(wchar_t start, wchar_t end, wchar_t code)
 {
     if (code >= start && code <= end)
