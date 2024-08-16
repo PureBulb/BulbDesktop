@@ -1,7 +1,9 @@
 #include "wallpaper.h"
 #include "ui_Wallpaper.h"
-
-#include <QtDebug>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QScreen>
+#include "utils/logdispacher.h"
 
 Wallpaper::Wallpaper(QWidget *parent)
     :QWidget(parent)
@@ -45,6 +47,7 @@ void Wallpaper::onDecodeImage(QImage _image)
 bool Wallpaper::eventFilter(QObject *o, QEvent *e)
 {
     //minihook 已经可以钩住 鼠标的 hover move lbtnclick lbtndblclick rbtnclick rbtndblclick mbtnclick mbtndblclick事件
+
     if(o == ui->backgroundLabel && e->type() == QEvent::MouseButtonDblClick){
         emit triggedIcons();
     }
@@ -73,12 +76,31 @@ void Wallpaper::paintEvent(QPaintEvent *event)
 
 
 
+
 bool Wallpaper::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
     MSG *msg = static_cast<MSG*>(message);
+
     //屏蔽鼠标离开事件，否则hook发送消息这边接收后总是会多一个leave消息导致捕获鼠标移动事件失败
-    if(msg->message == 675){
+    if(msg->message == WM_MOUSELEAVE){
         return true;
     }
-    return false;
+//    if(msg->message == WM_MOUSEMOVE ){
+//        auto point = QCursor::pos();
+//        if(screen()->geometry().contains(point)){
+//            return false;
+//        }
+//        else{
+//            return true;
+//        }
+//    }
+    if(msg->message == WM_LBUTTONDBLCLK){
+        auto point = QCursor::pos();
+        QMouseEvent event(QEvent::MouseButtonDblClick, QPoint(msg->pt.x, msg->pt.y), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        if(screen()->geometry().contains(point))
+            QApplication::sendEvent(ui->backgroundLabel,&event);
+        return true;
+    }
+
+    return QWidget::nativeEvent(eventType,message,result);
 }

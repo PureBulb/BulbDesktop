@@ -1,6 +1,6 @@
 #include "AudioDecoder.h"
 #include "QtDebug"
-
+#include "libavutil/version.h"
 
 void AudioDecoder::setAudio(AudioUtils *value)
 {

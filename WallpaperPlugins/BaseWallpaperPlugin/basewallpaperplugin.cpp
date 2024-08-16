@@ -1,5 +1,5 @@
 #include "BaseWallpaperPlugin.h"
-#include "QDebug"
+
 
 void BaseWallpaperPlugin::bindWallPaperEvent()
 {
