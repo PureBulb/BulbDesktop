@@ -35,6 +35,37 @@ void PendantPluginUtils::createByConfig(QWidget* parent)
 
 }
 
+void PendantPluginUtils::createByConfig(const QVector<QWidget *> &wallpapers)
+{
+    QHash<QString,QVariant> setting = settingsManager->getPluginSettings(PLUGIN_SETTING_NAME);
+    foreach(auto pendantObject,setting["pendants"].toJsonArray()){
+        QJsonObject obj = pendantObject.toObject();
+        int x = obj["x"].toInt();
+        int y = obj["y"].toInt();
+        int w = obj["w"].toInt();
+        int h = obj["h"].toInt();
+        uint64_t id = obj["id"].toString().toULongLong();
+        QString pluginName = obj["name"].toString();
+        for(auto wallpaper : wallpapers){
+            auto screenRect = wallpaper->screen()->geometry();
+            if(
+                    screenRect.x()<=x   &&
+                    screenRect.y()<=y   &&
+                    (screenRect.x()+screenRect.width())>=(x+w) &&
+                    (screenRect.y()+screenRect.height())>=(y+h)
+               ){
+                qDebug()<<wallpaper->screen()->geometry()<<QRect{x,y,w,h};
+                BasePendantWidget* widget = plugins[pluginName]->createNewWidget(x,y,w,h,id);
+//                TODO: 如果要用这种方式要保存绝对 x,y和相对 x,y
+//                widget->setParent(wallpaper);
+
+                widget->raise();
+                widget->show();
+            }
+        }
+    }
+}
+
 void PendantPluginUtils::object2Interface()
 {
     foreach(auto loader,loaders){
@@ -91,6 +122,7 @@ BasePendantWidget *PendantPluginUtils::newPendant(QString pluginName, int x, int
     array.append(pendant);
     settings["pendants"] = array;
     settingsManager->setPluginSettings(PLUGIN_SETTING_NAME,settings);
+    widget->show();
     return widget;
 }
 

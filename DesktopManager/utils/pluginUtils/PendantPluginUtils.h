@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QHash>
+#include <QScreen>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QtConcurrent/QtConcurrent>
@@ -28,6 +29,7 @@ public:
     void stopEditorMode();
 
     void createByConfig(QWidget* parent);
+    void createByConfig(const QVector<QWidget*>& wallpapers);
     BasePendantWidget* newPendant(QString pluginName,int x,int y,int w,int h);
     void setSettings(SettingManager* setting) override;
 private slots:

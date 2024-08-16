@@ -57,14 +57,21 @@ Manager::Manager(QObject *parent)
 
     wallpaperPluginUtils.nextWallpaper();
 
+
     for(auto wallpaper:wallpaperPluginUtils.getWallpaperWidgets()){
        winAdapter->installDesktopEventFilter( (HWND)wallpaper->winId());
        winAdapter->underOnProgmanW((HWND)wallpaper->winId());
-       //pendant test
-       // pendantPluginUtils.newPendant("Monitor",500,500,500,500);
-       pendantPluginUtils.createByConfig(wallpaper);
-       // pendantPluginUtils.stopEditorMode();
-       //
+
+
+
+
+    }
+    if(wallpaperPluginUtils.getWallpaperWidgets().size()>0){
+        //pendant test
+//        pendantPluginUtils.newPendant("Monitor",500,500,400,665);
+        pendantPluginUtils.createByConfig(wallpaperPluginUtils.getWallpaperWidgets());
+        // pendantPluginUtils.stopEditorMode();
+        //
     }
 
     initTray();

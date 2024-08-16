@@ -63,7 +63,8 @@ HEADERS += \
 FORMS += \
     settingsform.ui \
     wallpaper.ui
-DISTFILES += BaseWallpaperPlugin.json
+DISTFILES += BaseWallpaperPlugin.json \
+    dependence.ps1
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
