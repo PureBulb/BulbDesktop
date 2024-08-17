@@ -43,11 +43,25 @@ public:
     void setIconFunc(const std::function<QIcon(QueryResult)> &value){
         iconFunc = std::bind(value,*this);
     };
-
+    void setLeftBtnName(QString name){
+        leftBtnName = name;
+    }
+    void setRightBtnName(QString name){
+        rightBtnName = name;
+    }
+    QString getLeftBtnName(){
+        return leftBtnName;
+    }
+    QString getRightBtnName(){
+        return rightBtnName;
+    }
 private:
 
     QString title;
     QString description;
+    QString leftBtnName;
+    QString rightBtnName;
+
     ResultType type;
     std::function<void()> itemClick;    //when you are setting it please use IAssistantPlugin::returnItemClickFunc to get the call function
     std::function<void()> btn1Click;    //when you are setting it please use IAssistantPlugin::returnBtn1ClickFunc to get the call function

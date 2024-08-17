@@ -23,6 +23,7 @@ public:
 
     void unload();
 
+    void logEverythingError();
     // IAssistantPlugin interface
 protected:
     void onItemClick(QueryResult result);

@@ -50,7 +50,8 @@ void ProgramsPlugin::findExecAndLinkFromSubDir(QFileInfo info, QList<QueryResult
             data.setItemClick(getOnItemClickFunc());
             data.setBtn1Click(getOnBtn1ClickFunc());
             data.setBtn2Click(getOnBtn2ClickFunc());
-
+            data.setRightBtnName("执行");
+            data.setLeftBtnName("打开文件夹");
             result.append(data);
         }
     }

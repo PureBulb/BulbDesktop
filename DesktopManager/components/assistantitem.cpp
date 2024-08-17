@@ -25,6 +25,8 @@ AssistantItem::AssistantItem(QueryResult &result, QListWidget *parent) :
     setIcon(getIconFunc());
     setTitle(result.getTitle());
     setDescription(result.getDescription());
+    setLeftBtnName(result.getLeftBtnName());
+    setRightBtnName(result.getRightBtnName());
 
 }
 
@@ -45,6 +47,18 @@ AssistantItem *AssistantItem::setTitle(QString title)
 AssistantItem *AssistantItem::setDescription(QString description)
 {
     ui->descriptLabel->setText(description);
+    return this;
+}
+
+AssistantItem *AssistantItem::setLeftBtnName(QString name)
+{
+    ui->openBtn->setText(name);
+    return this;
+}
+
+AssistantItem *AssistantItem::setRightBtnName(QString name)
+{
+    ui->entryBtn->setText(name);
     return this;
 }
 

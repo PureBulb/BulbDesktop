@@ -22,6 +22,8 @@ public:
     AssistantItem* setIcon(QIcon image);
     AssistantItem* setTitle(QString title);
     AssistantItem* setDescription(QString description);
+    AssistantItem* setLeftBtnName(QString name);
+    AssistantItem* setRightBtnName(QString name);
     ~AssistantItem();
 signals:
     void clicked();

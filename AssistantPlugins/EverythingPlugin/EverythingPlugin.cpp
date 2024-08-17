@@ -20,32 +20,7 @@ bool EverythingPlugin::query(QString queryStr, QList<QueryResult> &result)
     Everything_SetMatchWholeWord(true);
 
     if(!Everything_QueryW(true)){
-        switch(Everything_GetLastError()){
-        case EVERYTHING_OK:
-            break;
-        case EVERYTHING_ERROR_MEMORY:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_MEMORY");
-            break;
-        case EVERYTHING_ERROR_IPC:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_IPC");
-            break;
-        case EVERYTHING_ERROR_REGISTERCLASSEX:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_REGISTERCLASSEX");
-            break;
-        case EVERYTHING_ERROR_CREATEWINDOW:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATEWINDOW");
-            break;
-        case EVERYTHING_ERROR_CREATETHREAD:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATETHREAD");
-            break;
-        case EVERYTHING_ERROR_INVALIDINDEX:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDINDEX");
-            break;
-        case EVERYTHING_ERROR_INVALIDCALL:
-            loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDCALL");
-            break;
-        }
-
+        logEverythingError();
     }
     for(DWORD i = 0; i< Everything_GetNumResults();i++){
         QueryResult data;
@@ -54,38 +29,15 @@ bool EverythingPlugin::query(QString queryStr, QList<QueryResult> &result)
         data.setTitle(QString::fromWCharArray(Everything_GetResultFileNameW(i)));
         bool resultCode = Everything_GetResultFullPathNameW(i,buff,512);
         if(!resultCode){
-            switch(Everything_GetLastError()){
-            case EVERYTHING_OK:
-                break;
-            case EVERYTHING_ERROR_MEMORY:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_MEMORY");
-                break;
-            case EVERYTHING_ERROR_IPC:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_IPC");
-                break;
-            case EVERYTHING_ERROR_REGISTERCLASSEX:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_REGISTERCLASSEX");
-                break;
-            case EVERYTHING_ERROR_CREATEWINDOW:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_CREATEWINDOW");
-                break;
-            case EVERYTHING_ERROR_CREATETHREAD:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_CREATETHREAD");
-                break;
-            case EVERYTHING_ERROR_INVALIDINDEX:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_INVALIDINDEX");
-                break;
-            case EVERYTHING_ERROR_INVALIDCALL:
-                loge("EverythingPlugin::query:Q","EVERYTHING_ERROR_INVALIDCALL");
-                break;
-            }
+            logEverythingError();
         }
         data.setDescription(QString::fromWCharArray(buff));
         data.setItemClick(getOnItemClickFunc());
         data.setBtn1Click(getOnBtn1ClickFunc());
         data.setBtn2Click(getOnBtn2ClickFunc());
         data.setIconFunc(getGetIconFunc());
-
+        data.setRightBtnName("打开文件");
+        data.setLeftBtnName("打开文件夹");
         result.push_back(data);
     }
     qDebug()<<"EverythingPlugin query finished";
@@ -100,6 +52,36 @@ void EverythingPlugin::loaded()
 void EverythingPlugin::unload()
 {
     qDebug()<<"Everything plugin is unloaded";
+}
+
+void EverythingPlugin::logEverythingError()
+{
+    switch(Everything_GetLastError()){
+    case EVERYTHING_OK:
+        break;
+    case EVERYTHING_ERROR_MEMORY:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_MEMORY");
+        break;
+    case EVERYTHING_ERROR_IPC:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_IPC");
+        break;
+    case EVERYTHING_ERROR_REGISTERCLASSEX:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_REGISTERCLASSEX");
+        break;
+    case EVERYTHING_ERROR_CREATEWINDOW:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATEWINDOW");
+        break;
+    case EVERYTHING_ERROR_CREATETHREAD:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_CREATETHREAD");
+        break;
+    case EVERYTHING_ERROR_INVALIDINDEX:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDINDEX");
+        break;
+    case EVERYTHING_ERROR_INVALIDCALL:
+        loge("EverythingPlugin::query:S","EVERYTHING_ERROR_INVALIDCALL");
+        break;
+    }
+
 }
 
 void EverythingPlugin::onItemClick(QueryResult result)
