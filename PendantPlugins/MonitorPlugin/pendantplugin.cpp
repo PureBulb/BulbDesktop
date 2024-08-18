@@ -18,6 +18,7 @@ BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uin
 {
 
     BasePendantWidget* widget = new MonitorWidget();
+    widget->editMode();
     widget->setGeometry(x,y,w,h);
     widgets.append(widget);
     if(!isEditMode){

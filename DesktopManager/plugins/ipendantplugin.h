@@ -4,43 +4,100 @@
 #include <stdint.h>
 #include <QWidget>
 #include <QList>
+#include <QMoveEvent>
+#include <QScreen>
 #include <QPluginMetaData>
 #include <QDialog>
 #include <QDebug>
 #include <QEvent>
+//Fix: 进入编辑模式时配置文件出错
 class BasePendantWidget:public QWidget
 {
     Q_OBJECT
 protected:
-    QWidget* _parent;
     uint64_t id;
+    QRect globalRect;
+    QRect relativeRect;
+    bool isEditMode;
 public:
-    BasePendantWidget(QWidget* parent):QWidget(parent),_parent(parent){};
+    BasePendantWidget(QWidget* parent):QWidget{parent},globalRect{this->rect()},relativeRect{this->rect()},isEditMode{false}{};
     virtual uint64_t getId(){return id;};
     virtual void setId(uint64_t _id){id = _id;};
+
     void editMode(){
+        isEditMode = true;
+
         setWindowFlags(windowFlags() & (~Qt::FramelessWindowHint));
-        QWidget::setParent(nullptr);
+        setParent(nullptr);
         show();
     }
-    void closeEditMode(){
-        setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-        QWidget::setParent(_parent);
+    void closeEditMode(const QVector<QWidget*>& wallpapers){
+        isEditMode = false;
+        setWindowFlags(windowFlags()|Qt::FramelessWindowHint);
+        setParent(findBestParent(wallpapers));
         show();
     }
     void setParent(QWidget* parent){
-        _parent = parent;
-        QWidget::setParent(_parent);
+        if(parent){
+
+            qDebug()<<parent->geometry()<<parent->geometry().contains(geometry());
+        }
+
+        if(isEditMode){
+            raise();
+            show();
+            move(globalRect.x(),globalRect.y());
+            QWidget::setParent(parent);
+        }
+        else{
+            QWidget::setParent(parent);
+            raise();
+            show();
+            move(relativeRect.x(),relativeRect.y());
+        }
+
     };
     bool event(QEvent *e) override{
-        if(e->type() == QEvent::Resize || e->type() == QEvent::Move){
+        switch(e->type()){
+        case QEvent::Move:{ // 创建窗口时最好能触发move事件
+            if(isEditMode){
+                QRect screenGeometry = screen()->geometry();
+                QPoint pos = dynamic_cast<QMoveEvent*>(e)->pos();
+                globalRect.moveTo(pos);
+                relativeRect.moveTo(pos.x()-screenGeometry.x(),pos.y()-screenGeometry.y());
+                qDebug()<<globalRect<<relativeRect<<screenGeometry<<pos;
+            }
+        }
+        case QEvent::Resize:
+            relativeRect.setWidth(geometry().width());
+            relativeRect.setHeight(geometry().height());
+            globalRect.setWidth(geometry().width());
+            globalRect.setHeight(geometry().height());
             emit changeWidget(id,geometry());
-        }
-        if(e->type() == QEvent::Close){
+            break;
+        case QEvent::Close:
             emit closeWidget(id);
-
+            break;
+        default:
+            break;
         }
+        return QWidget::event(e);
     };
+    QWidget* findBestParent(const QVector<QWidget*>& wallpapers){
+        for(auto wallpaper : wallpapers){
+            auto screenRect = wallpaper->screen()->geometry();
+            if(
+                screenRect.x()<=geometry().x()   &&
+                screenRect.y()<=geometry().y()&&
+                (screenRect.x()+screenRect.width())>=(geometry().x()+geometry().width()) &&
+                (screenRect.y()+screenRect.height())>=(geometry().y()+geometry().height())
+                ){
+                qDebug()<<wallpaper->screen()->geometry()<<QRect{geometry()};
+                return wallpaper;
+            }
+        }
+        return nullptr;
+    }
 signals:
     void changeWidget(uint64_t id,QRect geometry);
     void closeWidget(uint64_t id);
@@ -65,10 +122,10 @@ public:
             widget->editMode();
         }
     }
-    void endEditMode(){
+    void endEditMode(const QVector<QWidget*>& wallpapers){
         isEditMode = false;
         foreach (auto widget, widgets) {
-            widget->closeEditMode();
+            widget->closeEditMode(wallpapers);
         }
     }
     // 返回已经初始化的挂件让插件管理器显示

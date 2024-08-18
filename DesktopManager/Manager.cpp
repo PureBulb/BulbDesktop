@@ -68,7 +68,7 @@ Manager::Manager(QObject *parent)
     }
     if(wallpaperPluginUtils.getWallpaperWidgets().size()>0){
         //pendant test
-//        pendantPluginUtils.newPendant("Monitor",500,500,400,665);
+        // pendantPluginUtils.newPendant("Monitor",500,100,400,665);
         pendantPluginUtils.createByConfig(wallpaperPluginUtils.getWallpaperWidgets());
         // pendantPluginUtils.stopEditorMode();
         //
@@ -115,7 +115,7 @@ void Manager::onTriggedEditMode()
         pendantPluginUtils.startEditorMode();
     }
     else{
-        pendantPluginUtils.stopEditorMode();
+        pendantPluginUtils.stopEditorMode(wallpaperPluginUtils.getWallpaperWidgets());
     }
     isEditMode=!isEditMode;
 

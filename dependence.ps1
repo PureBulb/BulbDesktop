@@ -28,16 +28,18 @@ foreach ($pluginType in $allTypePlugins.Keys){
         }
         
         $dllPath="$pwdPath/$pluginType/$pluginName/$buildtype/*.dll"
+        $exePath="$pwdPath/$pluginType/$pluginName/$buildtype/*.exe"
         $debugPath="$pwdPath/DesktopManager/$pluginType/$pluginName"
         
         if (-Not (Test-Path -Path $debugPath)) {
             New-Item -Path $debugPath -ItemType Directory
         }
         Copy-Item -Path $dllPath  $debugPath -Recurse -Force 
-
+        Copy-Item -Path $exePath  $debugPath -Recurse -Force
         if($buildtype -eq "release"){
             $buildPath="$pwdPath/DesktopManager/$buildtype/$pluginType/$pluginName"
             Copy-Item -Path $dllPath  $buildPath -Recurse -Force 
+            Copy-Item -Path $exePath  $buildPath -Recurse -Force
         }
         Write-Output "finished $pluginName"
     }

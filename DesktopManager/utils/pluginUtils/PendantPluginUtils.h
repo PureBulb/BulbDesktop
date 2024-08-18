@@ -26,8 +26,9 @@ public:
     void object2Interface();
 
     void startEditorMode();
-    void stopEditorMode();
+    void stopEditorMode(const QVector<QWidget *> &wallpapers);
 
+    [[deprecated( "use void createByConfig(const QVector<QWidget*>& wallpapers)" )]]\
     void createByConfig(QWidget* parent);
     void createByConfig(const QVector<QWidget*>& wallpapers);
     BasePendantWidget* newPendant(QString pluginName,int x,int y,int w,int h);

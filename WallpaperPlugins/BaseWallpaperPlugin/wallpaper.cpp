@@ -13,7 +13,7 @@ Wallpaper::Wallpaper(QWidget *parent)
     ui->backgroundLabel->installEventFilter(this);
     // this->setMouseTracking(true);
     ui->backgroundLabel->setMouseTracking(true);
-
+    ui->backgroundLabel->lower();
     setWindowTitle("BulbWorkerW");
     setWindowFlags(windowFlags() | Qt::Dialog | Qt::FramelessWindowHint);
 
@@ -71,7 +71,7 @@ void Wallpaper::paintEvent(QPaintEvent *event)
     }
     //展示鼠标痕迹
     painter.drawLine(lstTestx,lstTesty,testx,testy);
-
+    QWidget::paintEvent(event);
 }
 
 

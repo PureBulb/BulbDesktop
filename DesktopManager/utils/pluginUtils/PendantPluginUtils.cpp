@@ -46,23 +46,11 @@ void PendantPluginUtils::createByConfig(const QVector<QWidget *> &wallpapers)
         int h = obj["h"].toInt();
         uint64_t id = obj["id"].toString().toULongLong();
         QString pluginName = obj["name"].toString();
-        for(auto wallpaper : wallpapers){
-            auto screenRect = wallpaper->screen()->geometry();
-            if(
-                    screenRect.x()<=x   &&
-                    screenRect.y()<=y   &&
-                    (screenRect.x()+screenRect.width())>=(x+w) &&
-                    (screenRect.y()+screenRect.height())>=(y+h)
-               ){
-                qDebug()<<wallpaper->screen()->geometry()<<QRect{x,y,w,h};
-                BasePendantWidget* widget = plugins[pluginName]->createNewWidget(x,y,w,h,id);
-//                TODO: 如果要用这种方式要保存绝对 x,y和相对 x,y
-//                widget->setParent(wallpaper);
 
-                widget->raise();
-                widget->show();
-            }
-        }
+        BasePendantWidget* widget = plugins[pluginName]->createNewWidget(x,y,w,h,id);
+        widget->raise();
+        widget->show();
+        plugins[pluginName]->endEditMode(wallpapers);
     }
 }
 
@@ -100,10 +88,10 @@ void PendantPluginUtils::startEditorMode()
     }
 }
 
-void PendantPluginUtils::stopEditorMode()
+void PendantPluginUtils::stopEditorMode(const QVector<QWidget *> &wallpapers)
 {
     foreach (auto plugin, plugins) {
-        plugin->endEditMode();
+        plugin->endEditMode(wallpapers);
     }
 }
 
@@ -130,6 +118,8 @@ void PendantPluginUtils::setSettings(SettingManager *setting)
 {
     settingsManager = setting;
 }
+
+
 
 void PendantPluginUtils::onPendantChange(uint64_t id, QRect geometry)
 {
