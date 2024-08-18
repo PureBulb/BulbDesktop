@@ -10,7 +10,7 @@
 #include <QDialog>
 #include <QDebug>
 #include <QEvent>
-//Fix: 进入编辑模式时配置文件出错
+//FIXME: 进入编辑模式时配置文件出错
 class BasePendantWidget:public QWidget
 {
     Q_OBJECT
