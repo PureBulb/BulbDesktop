@@ -10,7 +10,6 @@
 #include <QDialog>
 #include <QDebug>
 #include <QEvent>
-//FIXME: 进入编辑模式时配置文件出错
 class BasePendantWidget:public QWidget
 {
     Q_OBJECT
@@ -38,11 +37,6 @@ public:
         show();
     }
     void setParent(QWidget* parent){
-        if(parent){
-
-            qDebug()<<parent->geometry()<<parent->geometry().contains(geometry());
-        }
-
         if(isEditMode){
             raise();
             show();
@@ -65,15 +59,16 @@ public:
                 QPoint pos = dynamic_cast<QMoveEvent*>(e)->pos();
                 globalRect.moveTo(pos);
                 relativeRect.moveTo(pos.x()-screenGeometry.x(),pos.y()-screenGeometry.y());
-                qDebug()<<globalRect<<relativeRect<<screenGeometry<<pos;
             }
         }
         case QEvent::Resize:
-            relativeRect.setWidth(geometry().width());
-            relativeRect.setHeight(geometry().height());
-            globalRect.setWidth(geometry().width());
-            globalRect.setHeight(geometry().height());
-            emit changeWidget(id,geometry());
+            if(isEditMode){
+                relativeRect.setWidth(geometry().width());
+                relativeRect.setHeight(geometry().height());
+                globalRect.setWidth(geometry().width());
+                globalRect.setHeight(geometry().height());
+                emit changeWidget(id,geometry());
+            }
             break;
         case QEvent::Close:
             emit closeWidget(id);
@@ -91,8 +86,7 @@ public:
                 screenRect.y()<=geometry().y()&&
                 (screenRect.x()+screenRect.width())>=(geometry().x()+geometry().width()) &&
                 (screenRect.y()+screenRect.height())>=(geometry().y()+geometry().height())
-                ){
-                qDebug()<<wallpaper->screen()->geometry()<<QRect{geometry()};
+            ){
                 return wallpaper;
             }
         }
