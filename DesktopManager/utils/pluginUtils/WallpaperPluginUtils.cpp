@@ -52,15 +52,20 @@ void WallpaperPluginUtils::unload()
 
 }
 
-
 void WallpaperPluginUtils::nextWallpaper()
+{
+    emit activatePlugin.value()->nextWallpaper();
+}
+
+
+void WallpaperPluginUtils::nextPlugin()
 {
     if(activatePlugin!=plugins.end()){
         activatePlugin.value()->stop();
 
         activatePlugin++;
         if(activatePlugin==plugins.end()){
-            nextWallpaper();
+            nextPlugin();
             return;
         }
         activatePlugin.value()->activated();

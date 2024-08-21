@@ -5,6 +5,7 @@
 #include <QString>
 #include <QFile>
 #include <QDir>
+#include <QCoreApplication>
 #include <windows.h>
 #include <QPluginLoader>
 #include <QMessageBox>

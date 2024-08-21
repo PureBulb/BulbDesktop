@@ -17,7 +17,7 @@ BasePluginUtils::BasePluginUtils(QString pathName, QObject *parent)
 
 void BasePluginUtils::load()
 {
-    for(auto dirName:subDir){
+    for(const auto &dirName:qAsConst(subDir)){
         QString realDir = (path.absolutePath()+"/"+ dirName+"/");
         SetDllDirectoryW(realDir.toStdWString().c_str());
         QString pluginName = realDir+dirName+".dll";
@@ -46,7 +46,7 @@ void BasePluginUtils::load()
 
 void BasePluginUtils::unload()
 {
-    for(auto loader:loaders){
+    for(auto loader:qAsConst(loaders)){
         if(!loader->unload()){
             qDebug()<<loader->errorString();
         }
@@ -55,7 +55,7 @@ void BasePluginUtils::unload()
 
 BasePluginUtils::~BasePluginUtils()
 {
-    for(auto loader:loaders){
+    for(auto loader:qAsConst(loaders)){
         loader->deleteLater();
     }
 }

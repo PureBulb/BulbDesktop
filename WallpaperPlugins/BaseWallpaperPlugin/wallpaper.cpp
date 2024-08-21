@@ -57,6 +57,8 @@ bool Wallpaper::eventFilter(QObject *o, QEvent *e)
         lstTesty = testy;
         testx = ((QMouseEvent*)e)->x();
         testy = ((QMouseEvent*)e)->y();
+
+
     }
     return QWidget::eventFilter(o,e);
 }
@@ -85,15 +87,18 @@ bool Wallpaper::nativeEvent(const QByteArray &eventType, void *message, long *re
     if(msg->message == WM_MOUSELEAVE){
         return true;
     }
-//    if(msg->message == WM_MOUSEMOVE ){
-//        auto point = QCursor::pos();
-//        if(screen()->geometry().contains(point)){
-//            return false;
-//        }
-//        else{
-//            return true;
-//        }
-//    }
+   if(msg->message == WM_MOUSEMOVE ){
+        auto point = QCursor::pos();
+        *result=true;
+        QMouseEvent event(QEvent::MouseMove, QPoint(point.x()-screen()->geometry().x(), point.y()-screen()->geometry().y()), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+        qDebug()<<winId()<<screen()->geometry().contains(point);
+        if(screen()->geometry().contains(point))
+           QApplication::sendEvent(ui->backgroundLabel,&event);
+        return true;
+        // qDebug()<<winId()<<pos<<screen()->geometry()<< QPoint(msg->pt.x, msg->pt.y);
+        // msg->pt.x = pos.x();
+        // msg->pt.y = pos.y();
+   }
     if(msg->message == WM_LBUTTONDBLCLK){
         auto point = QCursor::pos();
         QMouseEvent event(QEvent::MouseButtonDblClick, QPoint(msg->pt.x, msg->pt.y), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);

@@ -2,7 +2,7 @@
 #define ASSISTANTPLUGINUTILS_H
 
 #include <plugins/IAssistantPlugin.h>
-#include <algorithm>
+#include <QCoreApplication>
 #include <QList>
 
 #include "BasePluginUtils.h"

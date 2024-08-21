@@ -1,9 +1,12 @@
 #include "AssistantPluginUtils.h"
+#include "log.h"
 #include <QtDebug>
 
 void AssistantPluginUtils::object2Interface()
 {
-    for(auto loader:loaders){
+    logd(QString("AssistantPluginUtils::object2Interface"),QCoreApplication::applicationDirPath());
+
+    for(auto loader:qAsConst(loaders)){
 
         QObject* instance = loader->instance();
         IAssistantPlugin* plugin = qobject_cast<IAssistantPlugin*>(instance);
@@ -45,6 +48,10 @@ QList<QueryResult> AssistantPluginUtils::query(QString query)
 
 void AssistantPluginUtils::load()
 {
+
+    if(!SetDllDirectoryA(QCoreApplication::applicationDirPath().toStdString().c_str())){
+        MessageBox(0,L"error",L"error",0);
+    }
     BasePluginUtils::load();
     object2Interface();
 }

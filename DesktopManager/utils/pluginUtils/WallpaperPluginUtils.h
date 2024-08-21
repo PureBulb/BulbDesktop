@@ -37,6 +37,7 @@ signals:
 
 public slots:
     void nextWallpaper();
+    void nextPlugin();
     QVector<QWidget *> getWallpaperWidgets();
     //value 0-100
     void onVolumeChanged(int value);

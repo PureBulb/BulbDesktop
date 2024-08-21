@@ -50,7 +50,7 @@ public slots:
     //接受来自管理类的处理结果转交给settingChangeSucceeded 让他通知该插件所有需要设置的类
     void responseSettings(QHash<QString,QVariant> settings){emit settingChangeSucceeded(settings);}
 signals:
-
+    void nextWallpaper();
     void settingChangeSucceeded(QHash<QString, QVariant> _settings);
     // log 信号，在本例子中信号由LogDispacher发出 该接口继承者接受处理并发送给插件管理类处理
     void reportError(QString module, QString msg);

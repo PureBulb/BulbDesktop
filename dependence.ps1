@@ -38,6 +38,9 @@ foreach ($pluginType in $allTypePlugins.Keys){
         Copy-Item -Path $exePath  $debugPath -Recurse -Force
         if($buildtype -eq "release"){
             $buildPath="$pwdPath/DesktopManager/$buildtype/$pluginType/$pluginName"
+            if (-Not (Test-Path -Path $buildPath)) {
+                New-Item -Path $buildPath -ItemType Directory
+            }
             Copy-Item -Path $dllPath  $buildPath -Recurse -Force 
             Copy-Item -Path $exePath  $buildPath -Recurse -Force
         }

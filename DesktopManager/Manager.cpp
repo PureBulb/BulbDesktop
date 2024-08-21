@@ -35,7 +35,7 @@ void Manager::initTray()
     connect(trayIconMenu,&TrayIconMenu::resumeWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::resume);
 
     //此功能因为前期设定没有插件化，目前保留接口但是弃用功能
-    // connect(trayIconMenu,&TrayIconMenu::nextWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::nextWallpaper);
+    connect(trayIconMenu,&TrayIconMenu::nextWallpaper,&wallpaperPluginUtils,&WallpaperPluginUtils::nextWallpaper);
     trayIcon->show();
 
 }
@@ -55,7 +55,7 @@ Manager::Manager(QObject *parent)
     wallpaperPluginUtils.setSettings(&settingsManager);
     pendantPluginUtils.setSettings(&settingsManager);
 
-    wallpaperPluginUtils.nextWallpaper();
+    wallpaperPluginUtils.nextPlugin();
 
 
     for(auto wallpaper:wallpaperPluginUtils.getWallpaperWidgets()){

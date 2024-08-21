@@ -3,4 +3,8 @@ $pwdPath = Get-Location
 echo "==============make programs plugin dependence=============="
 echo $type
 echo $sourceDir
+$local:buildPath = "$pwdPath/AssistantPlugins/ProgramsPlugin/$buildType/"
+if($buildType -eq "release"){
+# make windeployqt
+}
 echo "==========================finished==========================="

@@ -20,6 +20,8 @@ BaseWallpaperPlugin::BaseWallpaperPlugin()
     connect(logInstance,&LogDispacher::sendLoge,this,&BaseWallpaperPlugin::reportError);
     connect(logInstance,&LogDispacher::sendLogw,this,&BaseWallpaperPlugin::reportWarring);
 
+    connect(this,&BaseWallpaperPlugin::nextWallpaper,&wallpaperManager,&BaseWallpaperManager::nextWallpaper);
+
 }
 
 void BaseWallpaperPlugin::loaded()
