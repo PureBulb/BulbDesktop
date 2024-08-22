@@ -4,7 +4,7 @@
 
 #include <Windows.h>
 #include <QFile>
-
+#include <cmath>
 #include <QMutex>
 #include <QByteArray>
 #include "utils/logdispacher.h"

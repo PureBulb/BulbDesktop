@@ -1,6 +1,5 @@
 #include "AudioDecoder.h"
 #include "QtDebug"
-#include "libavutil/version.h"
 
 void AudioDecoder::setAudio(AudioUtils *value)
 {
@@ -145,21 +144,32 @@ void AudioDecoder::decode()
                 emit displayAudio(av_gettime());
                 decodeFinished = true;
                 unlock();
+                double lastPts = INFINITY ;
                 while(!frames->isEmpty() && !_stop){
                     waitResume();
                     frame = frames->dequeue(1);
                     char out[60000] ={0};
+                    double currentPts = frame->pts*av_q2d(timeBase);
                     int len = toPCM(*frame,out);
                     buffer.append(out,len);
                     av_frame_unref(frame);
-                    av_frame_free(&frame);
+
                     //判断所需要的是否大于空闲空间，进行写入以免造成覆写
                     while(audio->getFree()<audio->getPeriodSize()){
                         QThread::msleep(1);
                     }
-                    audio->writeData(buffer.mid(0,audio->getPeriodSize()));
+                    bool writeResult = audio->writeData(buffer.mid(0,audio->getPeriodSize()));
                     buffer.remove(0,audio->getPeriodSize());
+                    if(!writeResult){
+                        volatile double diff = lastPts - clock->getClock();
+                        while(diff>0){
+                            msleep(1);
+                            diff = lastPts - clock->getClock();
 
+                        }
+                    }
+                    lastPts = currentPts;
+                    av_frame_free(&frame);
                 }
 
 
