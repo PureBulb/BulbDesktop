@@ -33,6 +33,7 @@ SOURCES += \
     utils/safequeue.cpp \
     utils/threadbase.cpp \
     widgets/AssistantForm.cpp \
+    widgets/PendantChoseWidget.cpp \
     widgets/SettingWidget.cpp
 
 HEADERS += \
@@ -45,7 +46,6 @@ HEADERS += \
     plugins/IAssistantPlugin.h \
     plugins/IWallpaperPlugin.h \
     plugins/IPendantPlugin.h \
-    utils/AVConfig.h \
     utils/WindAdapterV2.h \
     utils/hookthread.h \
     utils/pluginUtils/AssistantPluginUtils.h \
@@ -56,11 +56,13 @@ HEADERS += \
     utils/threadbase.h \
     utils/videoUtils/videoUtils.h\
     widgets/AssistantForm.h \
+    widgets/PendantChoseWidget.h \
     widgets/SettingWidget.h
 
 FORMS += \
     components/assistantitem.ui \
     components/trayiconmenu.ui \
+    widgets/PendantChoseWidget.ui \
     widgets/SettingWidget.ui \
     widgets/assistantform.ui
 

@@ -119,7 +119,7 @@ void SettingsForm::onRemoveThumbnail(QString filename)
         }
         paths.removeAll(filename);
         setting[INI_VIDEO_PATHS] = paths;
-        auto children = ui->videoThumbnailLayout->children();
+
         ui->videoThumbnailLayout->removeWidget(senderObj);
     }
 

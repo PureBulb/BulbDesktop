@@ -61,7 +61,7 @@
         <item>
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -105,7 +105,29 @@
        </widget>
       </item>
       <item>
-       <layout class="QGridLayout" name="videoThumbnailLayout"/>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>471</width>
+           <height>83</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="videoThumbnailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -136,7 +158,26 @@
        </widget>
       </item>
       <item>
-       <layout class="QGridLayout" name="gifThumbnailLayout"/>
+       <widget class="QScrollArea" name="scrollArea_2">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents_3">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>471</width>
+           <height>83</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gifThumbnailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -190,7 +231,7 @@
            </size>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
          </widget>
         </item>
@@ -210,7 +251,26 @@
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="graphThumbnailLayout"/>
+       <widget class="QScrollArea" name="scrollArea_3">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents_4">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>471</width>
+           <height>63</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="graphThumbnailLayout"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
     </widget>
