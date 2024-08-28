@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/MonitorPlugin">
         <file>MonitorQml.qml</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>

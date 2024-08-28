@@ -1,10 +1,9 @@
 #include <QApplication>
-
-#include <utils/pluginUtils/wallpaperpluginutils.h>
 #include <Manager.h>
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
     QString strKey = "Bulb Desktop wallpaper";
     std::wstring str = strKey.toStdWString();

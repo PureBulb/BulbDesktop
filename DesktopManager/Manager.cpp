@@ -70,6 +70,8 @@ Manager::Manager(QObject *parent)
         //pendant test
         // pendantPluginUtils.newPendant("Monitor",500,100,400,665);
         pendantPluginUtils.createByConfig(wallpaperPluginUtils.getWallpaperWidgets());
+        auto test = pendantPluginUtils.getPluginThumbnailByName("Monitor");
+
         // pendantPluginUtils.stopEditorMode();
         //
     }

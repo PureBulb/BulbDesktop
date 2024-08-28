@@ -19,6 +19,7 @@ QTPLUGIN += qtaudio_windows \
 SOURCES += \
     Manager.cpp \
     SettingManager.cpp \
+    components/PendantIconform.cpp \
     components/assistantitem.cpp \
     components/trayiconmenu.cpp \
     # context.cpp \
@@ -39,6 +40,7 @@ SOURCES += \
 HEADERS += \
     Manager.h \
     SettingManager.h \
+    components/PendantIconform.h \
     components/assistantitem.h \
     components/trayiconmenu.h \
     # context.h \
@@ -60,6 +62,7 @@ HEADERS += \
     widgets/SettingWidget.h
 
 FORMS += \
+    components/PendantIconform.ui \
     components/assistantitem.ui \
     components/trayiconmenu.ui \
     widgets/PendantChoseWidget.ui \

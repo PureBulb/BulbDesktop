@@ -40,3 +40,9 @@ BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uin
     return widget;
 }
 
+QImage PendantPlugin::getIcon()
+{
+    return QImage (":/MonitorPlugin/icon.png");
+
+}
+

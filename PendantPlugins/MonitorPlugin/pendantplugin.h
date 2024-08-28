@@ -6,6 +6,7 @@
 #include <logdispacher.h>
 #include <monitorwidget.h>
 #include <QDateTime>
+#include <QUrl>
 class PendantPlugin : public IPendantPlugin
 {
     Q_OBJECT
@@ -18,6 +19,7 @@ public:
     explicit PendantPlugin();
     void loaded() override;
     BasePendantWidget * createNewWidget(int x, int y, int w, int h, uint64_t id=0) override;
+    QImage getIcon() override;
 };
 
 #endif // PENDANTPLUGIN_H

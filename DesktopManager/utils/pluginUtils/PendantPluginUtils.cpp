@@ -64,7 +64,7 @@ void PendantPluginUtils::object2Interface()
         if(instance){
             QString pluginName = loader->metaData().value("MetaData").toObject().value("plugin-name").toString();
             plugins.insert(pluginName,instance);
-
+            icons.insert(pluginName,instance->getIcon());
 
             //绑定日志功能
             connect(instance,&IPendantPlugin::reportDebug,this,&BasePluginUtils::logDebugHandler);
@@ -117,6 +117,16 @@ BasePendantWidget *PendantPluginUtils::newPendant(QString pluginName, int x, int
 void PendantPluginUtils::setSettings(SettingManager *setting)
 {
     settingsManager = setting;
+}
+
+QHash<QString, QImage> PendantPluginUtils::getPluginThumbnails()
+{
+    return icons;
+}
+
+QImage PendantPluginUtils::getPluginThumbnailByName(const QString &name)
+{
+    return icons[name];
 }
 
 

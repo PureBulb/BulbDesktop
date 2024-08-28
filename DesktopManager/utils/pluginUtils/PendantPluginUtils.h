@@ -15,6 +15,7 @@ class PendantPluginUtils : public BasePluginUtils
 {
 private:
     QHash<QString,IPendantPlugin *> plugins;
+    QHash<QString,QImage> icons;
     SettingManager* settingsManager;
     const char PLUGIN_SETTING_NAME[50]= "PendantPluginUtils";
 public:
@@ -33,6 +34,9 @@ public:
     void createByConfig(const QVector<QWidget*>& wallpapers);
     BasePendantWidget* newPendant(QString pluginName,int x,int y,int w,int h);
     void setSettings(SettingManager* setting) override;
+    QHash<QString,QImage> getPluginThumbnails();
+    QImage getPluginThumbnailByName(const QString& name);
+
 private slots:
     void onPendantChange(uint64_t id,QRect geometry);
     void onPendantClose(uint64_t id);

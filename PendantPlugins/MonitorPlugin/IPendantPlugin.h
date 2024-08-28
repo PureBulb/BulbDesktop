@@ -10,6 +10,7 @@
 #include <QDialog>
 #include <QDebug>
 #include <QEvent>
+#include <QImage>
 class BasePendantWidget:public QWidget
 {
     Q_OBJECT
@@ -125,6 +126,7 @@ public:
     // 返回已经初始化的挂件让插件管理器显示
     // id建议使用64位时间戳避免冲突
     virtual BasePendantWidget* createNewWidget(int x,int y,int w,int h,uint64_t id=0){return nullptr;};
+    virtual QImage getIcon(){return QImage();};
 signals:
     // log 信号，在本例子中信号由LogDispacher发出 该接口继承者接受处理并发送给插件管理类处理
     void reportError(QString module, QString msg);
