@@ -9,6 +9,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include "BasePluginUtils.h"
 #include "../../plugins/IPendantPlugin.h"
+#include "../../widgets/PendantChoseWidget.h"
 #define PENDANT_PLUGINS_DIR "./PendantPlugins"
 
 class PendantPluginUtils : public BasePluginUtils
@@ -17,6 +18,7 @@ private:
     QHash<QString,IPendantPlugin *> plugins;
     QHash<QString,QImage> icons;
     SettingManager* settingsManager;
+    PendantChoseWidget pendantChooseWidget;
     const char PLUGIN_SETTING_NAME[50]= "PendantPluginUtils";
 public:
     explicit PendantPluginUtils(QObject *parent = nullptr);
