@@ -25,6 +25,7 @@ SOURCES += \
     # context.cpp \
     log.cpp \
     main.cpp \
+    utils/EventBus.cpp \
     utils/WindAdapterV2.cpp \
     utils/hookthread.cpp \
     utils/pluginUtils/AssistantPluginUtils.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     plugins/IAssistantPlugin.h \
     plugins/IWallpaperPlugin.h \
     plugins/IPendantPlugin.h \
+    utils/EventBus.h \
     utils/WindAdapterV2.h \
     utils/hookthread.h \
     utils/pluginUtils/AssistantPluginUtils.h \

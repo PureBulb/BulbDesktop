@@ -65,6 +65,9 @@ void PendantPluginUtils::object2Interface()
             QString pluginName = loader->metaData().value("MetaData").toObject().value("plugin-name").toString();
             plugins.insert(pluginName,instance);
             icons.insert(pluginName,instance->getIcon());
+            int i =10;
+            while(i--)
+                pendantChooseWidget.insert(instance->getIcon(),pluginName);
 
             //绑定日志功能
             connect(instance,&IPendantPlugin::reportDebug,this,&BasePluginUtils::logDebugHandler);
@@ -86,6 +89,12 @@ void PendantPluginUtils::startEditorMode()
     foreach (auto plugin, plugins) {
         plugin->startEditMode();
     }
+    pendantChooseWidget.show();
+    auto rect = pendantChooseWidget.screen()->geometry();
+    rect.setWidth(rect.width()*0.3);
+
+    pendantChooseWidget.setGeometry(rect);
+    WindAdapterV2::getInstance()->hideIcon();
 }
 
 void PendantPluginUtils::stopEditorMode(const QVector<QWidget *> &wallpapers)
@@ -93,6 +102,8 @@ void PendantPluginUtils::stopEditorMode(const QVector<QWidget *> &wallpapers)
     foreach (auto plugin, plugins) {
         plugin->endEditMode(wallpapers);
     }
+    pendantChooseWidget.hide();
+    WindAdapterV2::getInstance()->showIcon();
 }
 
 BasePendantWidget *PendantPluginUtils::newPendant(QString pluginName, int x, int y, int w, int h)

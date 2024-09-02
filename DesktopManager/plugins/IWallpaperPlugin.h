@@ -5,6 +5,38 @@
 #include <QPluginMetaData>
 #include <QHash>
 #include <QVariant>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QDebug>
+#include <QMimeData>
+class EventHandler :public QObject{
+    Q_OBJECT
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override{
+        if(event->type() == QEvent::DragEnter){
+            auto e = static_cast<QDragEnterEvent*>(event);
+            if(e->mimeData()->hasFormat("pendant")){
+                QString pendantName(e->mimeData()->data("pendant"));
+                e->accept();
+                return true;
+            }
+            else{
+                e->ignore();
+            }
+        }
+        if (event->type() == QEvent::Drop){
+            auto e = static_cast<QDropEvent*>(event);
+            e->accept();
+            qDebug()<<e->mimeData()->data("pendant");
+            emit pendantDrop(e->mimeData()->data("pendant"),e->pos());
+            return true;
+
+        }
+        return false;
+    }
+signals:
+    void pendantDrop(QString pendantName,QPoint pos);
+};
 
 //注意:本接口可能会在不久的未来将setting部分抽离成独立的类用来专门管理设置通信（目前冒泡式有点冗余）
 class IWallpaperPlugin:public QObject
@@ -12,7 +44,7 @@ class IWallpaperPlugin:public QObject
     Q_OBJECT
 protected:
     QWidget* wallpaper;
-
+    EventHandler eventHandler;
 public:
     IWallpaperPlugin(){}
     virtual void loaded() {}
@@ -20,14 +52,14 @@ public:
     virtual void activated() {}
     virtual void finished() {}
     //当插件加载后会调用该函数传入属于本类的设置
-    virtual void setSettings(QHash<QString,QVariant> settings){}
+    virtual void setSettings( [[maybe_unused]]QHash<QString,QVariant> settings){}
     //返回壁纸窗口，vector是为了支持多屏
-    virtual QVector<QWidget *> getWallpapers() {}
+    virtual QVector<QWidget *> getWallpapers() {return {};}
     //返回设置窗口
-    virtual QWidget* getSettingWidget() {}
+    virtual QWidget* getSettingWidget() {return {};}
 
     //value 0-100
-    virtual void setVolume(uint8_t value) {}
+    virtual void setVolume( [[maybe_unused]]uint8_t value) {}
     virtual void pause() {}
     virtual void resume() {}
     virtual void display() {}
@@ -57,7 +89,7 @@ signals:
     void reportInfo(QString module, QString msg);
     void reportWarring(QString module, QString msg);
     void reportDebug(QString module, QString msg);
-
+    void pendantDropDispathcer(QString pendantName,QPoint pos);
 };
 /*
  * json meta demo

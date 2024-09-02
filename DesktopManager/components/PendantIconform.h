@@ -5,6 +5,9 @@
 #include <QImage>
 #include <QString>
 #include <QPixmap>
+#include <QMouseEvent>
+#include <QMimeData>
+#include <QDrag>
 namespace Ui {
 class PendantIconForm;
 }
@@ -18,7 +21,11 @@ public:
     explicit PendantIconForm(QImage icon,QString name,QWidget *parent = nullptr);
     void setIcon(QImage icon);
     void setName(QString& name);
+    QString getName();
+    QImage getIcon();
     ~PendantIconForm();
+protected:
+    bool event(QEvent* event) override;
 
 private:
     Ui::PendantIconForm *ui;

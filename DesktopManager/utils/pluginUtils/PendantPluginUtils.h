@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QtConcurrent/QtConcurrent>
+#include "../../utils/WindAdapterV2.h"
 #include "BasePluginUtils.h"
 #include "../../plugins/IPendantPlugin.h"
 #include "../../widgets/PendantChoseWidget.h"

@@ -16,7 +16,7 @@ Wallpaper::Wallpaper(QWidget *parent)
     ui->backgroundLabel->lower();
     setWindowTitle("BulbWorkerW");
     setWindowFlags(windowFlags() | Qt::Dialog | Qt::FramelessWindowHint);
-
+    setAcceptDrops(true);
 }
 
 Wallpaper::~Wallpaper()
