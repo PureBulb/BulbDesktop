@@ -65,9 +65,8 @@ void PendantPluginUtils::object2Interface()
             QString pluginName = loader->metaData().value("MetaData").toObject().value("plugin-name").toString();
             plugins.insert(pluginName,instance);
             icons.insert(pluginName,instance->getIcon());
-            int i =10;
-            while(i--)
-                pendantChooseWidget.insert(instance->getIcon(),pluginName);
+
+            pendantChooseWidget.insert(instance->getIcon(),pluginName);
 
             //绑定日志功能
             connect(instance,&IPendantPlugin::reportDebug,this,&BasePluginUtils::logDebugHandler);
