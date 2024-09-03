@@ -57,6 +57,7 @@ Manager::Manager(QObject *parent)
 
     wallpaperPluginUtils.nextPlugin();
 
+    pendantPluginUtils.installDragDropHandler(wallpaperPluginUtils.getWallpaperWidgets());
 
     for(auto wallpaper:wallpaperPluginUtils.getWallpaperWidgets()){
        winAdapter->installDesktopEventFilter( (HWND)wallpaper->winId());

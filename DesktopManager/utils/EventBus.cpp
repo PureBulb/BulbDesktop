@@ -3,3 +3,9 @@
 EventBus::EventBus(QObject *parent)
     : QObject{parent}
 {}
+
+bool EventBus::event(QEvent *event)
+{
+
+    return QObject::event(event);
+}

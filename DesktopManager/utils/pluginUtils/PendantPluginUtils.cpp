@@ -3,7 +3,7 @@
 PendantPluginUtils::PendantPluginUtils(QObject *parent)
     :BasePluginUtils(PENDANT_PLUGINS_DIR,parent)
 {
-
+    connect(&handler,&DragDropEventHandler::pendantDrop,this,&PendantPluginUtils::onDropPendantEvent);
 }
 
 PendantPluginUtils::~PendantPluginUtils()
@@ -140,7 +140,12 @@ QImage PendantPluginUtils::getPluginThumbnailByName(const QString &name)
     return icons[name];
 }
 
-
+void PendantPluginUtils::installDragDropHandler(const QVector<QWidget *> &wallpapers)
+{
+    for(auto wallpaper:wallpapers){
+        wallpaper->installEventFilter(&handler);
+    }
+}
 
 void PendantPluginUtils::onPendantChange(uint64_t id, QRect geometry)
 {
@@ -182,4 +187,9 @@ void PendantPluginUtils::onPendantClose(uint64_t id)
         settingsManager->setPluginSettings(PLUGIN_SETTING_NAME,settings);
     });
 
+}
+
+void PendantPluginUtils::onDropPendantEvent(QString pendantName, QPoint pos)
+{
+    auto widget = newPendant(pendantName,pos.x(),pos.y(),100,100);
 }

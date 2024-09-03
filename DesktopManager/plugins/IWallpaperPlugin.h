@@ -5,38 +5,7 @@
 #include <QPluginMetaData>
 #include <QHash>
 #include <QVariant>
-#include <QEvent>
-#include <QDragEnterEvent>
-#include <QDebug>
-#include <QMimeData>
-class EventHandler :public QObject{
-    Q_OBJECT
-protected:
-    bool eventFilter(QObject *obj, QEvent *event) override{
-        if(event->type() == QEvent::DragEnter){
-            auto e = static_cast<QDragEnterEvent*>(event);
-            if(e->mimeData()->hasFormat("pendant")){
-                QString pendantName(e->mimeData()->data("pendant"));
-                e->accept();
-                return true;
-            }
-            else{
-                e->ignore();
-            }
-        }
-        if (event->type() == QEvent::Drop){
-            auto e = static_cast<QDropEvent*>(event);
-            e->accept();
-            qDebug()<<e->mimeData()->data("pendant");
-            emit pendantDrop(e->mimeData()->data("pendant"),e->pos());
-            return true;
 
-        }
-        return false;
-    }
-signals:
-    void pendantDrop(QString pendantName,QPoint pos);
-};
 
 //注意:本接口可能会在不久的未来将setting部分抽离成独立的类用来专门管理设置通信（目前冒泡式有点冗余）
 class IWallpaperPlugin:public QObject
@@ -44,7 +13,7 @@ class IWallpaperPlugin:public QObject
     Q_OBJECT
 protected:
     QWidget* wallpaper;
-    EventHandler eventHandler;
+
 public:
     IWallpaperPlugin(){}
     virtual void loaded() {}
@@ -89,7 +58,7 @@ signals:
     void reportInfo(QString module, QString msg);
     void reportWarring(QString module, QString msg);
     void reportDebug(QString module, QString msg);
-    void pendantDropDispathcer(QString pendantName,QPoint pos);
+
 };
 /*
  * json meta demo
