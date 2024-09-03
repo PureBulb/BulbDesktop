@@ -1,4 +1,4 @@
-QT += widgets quickwidgets quick
+QT += widgets quickwidgets quick qml
 
 TEMPLATE = lib
 CONFIG += plugin

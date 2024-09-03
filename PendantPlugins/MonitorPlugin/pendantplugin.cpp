@@ -16,7 +16,6 @@ void PendantPlugin::loaded()
 
 BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uint64_t id)
 {
-
     BasePendantWidget* widget = new MonitorWidget();
     widget->editMode();
     widget->setGeometry(x,y,w,h);

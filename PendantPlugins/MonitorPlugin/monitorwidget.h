@@ -5,6 +5,8 @@
 #include <IPendantPlugin.h>
 #include <QQmlContext>
 #include <QDir>
+#include <QQmlEngine>
+#include <logdispacher.h>
 namespace Ui {
 class MonitorWidget;
 }

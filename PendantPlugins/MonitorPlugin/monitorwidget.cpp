@@ -7,12 +7,12 @@ MonitorWidget::MonitorWidget(QWidget *parent)
 {
     ui->setupUi(this);
     //设置主窗口透明
-
+    // setAttribute(Qt::WA_DeleteOnClose,true);
     setAttribute(Qt::WA_TranslucentBackground);
     //设置背景透明
+    ui->quickWidget->engine()->addImportPath(QApplication::applicationDirPath()+"/qml");
     ui->quickWidget->setAttribute(Qt::WA_AlwaysStackOnTop);
     ui->quickWidget->setClearColor(QColor(Qt::transparent));
-
     ui->quickWidget->setSource(QUrl("qrc:/MonitorPlugin/MonitorQml.qml"));
     // setAttribute(Qt::WA_TranslucentBackground);
     ui->quickWidget->rootContext()->setContextProperty("methods",this);

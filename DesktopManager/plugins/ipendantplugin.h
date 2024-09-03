@@ -19,8 +19,9 @@ protected:
     QRect globalRect;
     QRect relativeRect;
     bool isEditMode;
+    bool m_isClose;
 public:
-    BasePendantWidget(QWidget* parent):QWidget{parent},globalRect{this->rect()},relativeRect{this->rect()},isEditMode{false}{};
+    BasePendantWidget(QWidget* parent):QWidget{parent},globalRect{this->rect()},relativeRect{this->rect()},isEditMode{false},m_isClose{false}{};
     virtual uint64_t getId(){return id;};
     virtual void setId(uint64_t _id){id = _id;};
 
@@ -29,13 +30,19 @@ public:
 
         setWindowFlags(windowFlags() & (~Qt::FramelessWindowHint));
         setParent(nullptr);
-        show();
+        if(!m_isClose)
+            show();
+        else
+            hide();
     }
     void closeEditMode(const QVector<QWidget*>& wallpapers){
         isEditMode = false;
         setWindowFlags(windowFlags()|Qt::FramelessWindowHint);
         setParent(findBestParent(wallpapers));
-        show();
+        if(!m_isClose)
+            show();
+        else
+            hide();
     }
     void setParent(QWidget* parent){
         if(isEditMode){
@@ -46,7 +53,7 @@ public:
         }
         else{
             QWidget::setParent(parent);
-            raise();
+            //raise();
             show();
             move(relativeRect.x(),relativeRect.y());
         }
@@ -72,6 +79,7 @@ public:
             }
             break;
         case QEvent::Close:
+            m_isClose = true;
             emit closeWidget(id);
             break;
         default:
