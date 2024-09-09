@@ -48,6 +48,7 @@ void PendantPluginUtils::createByConfig(const QVector<QWidget *> &wallpapers)
         QString pluginName = obj["name"].toString();
 
         BasePendantWidget* widget = plugins[pluginName]->createNewWidget(x,y,w,h,id);
+        widget->move(widget->pos().x()+8,widget->pos().y()+31); //纠正初始化位移
         widget->raise();
         widget->show();
         plugins[pluginName]->endEditMode(wallpapers);

@@ -29,3 +29,51 @@ QString MonitorWidget::getUsername()
     QDir dir;
     return dir.home().dirName();
 }
+__int64 MonitorWidget::Filetime2Int64(const FILETIME &ftime)
+{
+    LARGE_INTEGER li;
+    li.LowPart = ftime.dwLowDateTime;
+    li.HighPart = ftime.dwHighDateTime;
+    return li.QuadPart;
+}
+
+__int64 MonitorWidget::CompareFileTime2(const FILETIME &preTime, const FILETIME &nowTime)
+{
+    return Filetime2Int64(nowTime) - Filetime2Int64(preTime);
+}
+
+double MonitorWidget::getCpuUsage()
+{
+    FILETIME preIdleTime;
+    FILETIME preKernelTime;
+    FILETIME preUserTime;
+    GetSystemTimes(&preIdleTime, &preKernelTime, &preUserTime);
+
+    Sleep(1000);
+
+    FILETIME idleTime;
+    FILETIME kernelTime;
+    FILETIME userTime;
+    GetSystemTimes(&idleTime, &kernelTime, &userTime);
+
+    auto idle = CompareFileTime2(preIdleTime, idleTime);
+    auto kernel = CompareFileTime2(preKernelTime, kernelTime);
+    auto user = CompareFileTime2(preUserTime, userTime);
+
+    if (kernel + user == 0)
+        return 0;
+
+    return 1.0*(kernel + user - idle) / (kernel + user);
+}
+
+unsigned long MonitorWidget::getMemoryRate()
+{
+    MEMORYSTATUSEX memStatus;
+    memStatus.dwLength = sizeof(memStatus);
+
+    GlobalMemoryStatusEx(&memStatus);
+    int nAvail = (int)(memStatus.ullAvailPhys / Byte2MB);
+    int nTotal = (int)(memStatus.ullTotalPhys / Byte2MB);
+    return memStatus.dwMemoryLoad;
+    // cout << "Memory: " <<  << "%, " << nAvail << "/" << nTotal << endl;
+}

@@ -15,11 +15,25 @@ Rectangle{
         radius: 30
         anchors.margins: 20
         anchors.left: parent.left
-        Text {
-            id: time_text
-            text: getCurrentTime()
+        Rectangle{
+            id: time_info
+            width: 80
+            height: 50
+            color: '#00000000'
             anchors.centerIn: time
-
+            Text {
+                id: time_text
+                text: getCurrentTime()
+                font.pointSize: 22
+                //anchors.horizontalCenter: parent
+            }
+            Text{
+                id: time_describe
+                text: qsTr("Local Time")
+                font.pointSize: 10
+                anchors.bottom: time_info.bottom
+                leftPadding: 5
+            }
         }
     }
     Rectangle{
@@ -31,10 +45,31 @@ Rectangle{
         anchors.margins: 20
         anchors.right: parent.right
         Text {
-            id: monitor_xxx
-            text: "hello" + methods.getUsername()
+            id: monitor_user
+            text: "hello: " + methods.getUsername()
             anchors.top: parent.top
-            anchors.topMargin: 15
+            anchors.topMargin: 20
+            font.weight: Font.Bold
+            leftPadding: 15
+            font.pointSize: 10
+        }
+        Text {
+            id: monitor_cpu
+            text: "cpu: " + (methods.getCpuUsage()*100 ).toFixed(2)+"%"
+            anchors.top: monitor_user.bottom
+            anchors.topMargin: 20
+            font.weight: Font.Bold
+            leftPadding: 15
+            font.pointSize: 10
+        }
+        Text {
+            id: monitor_memory
+            text: "memory: " + methods.getMemoryRate() +"%"
+            anchors.top: monitor_cpu.bottom
+            anchors.topMargin: 20
+            font.weight: Font.Bold
+            leftPadding: 15
+            font.pointSize: 10
         }
     }
     Rectangle{
@@ -84,6 +119,10 @@ Rectangle{
         repeat: true //重复
         onTriggered:{
             time_text.text = getCurrentTime();
+            monitor_cpu.text =  "cpu: " + (methods.getCpuUsage()*100).toFixed(2) +"%"
+            monitor_memory.text = "memory: " + methods.getMemoryRate() +"%"
+
+
         }
     }
     Component.onCompleted: {
