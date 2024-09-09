@@ -47,15 +47,14 @@ public:
     void setParent(QWidget* parent){
         if(isEditMode){
             raise();
-            show();
             move(globalRect.x(),globalRect.y());
             QWidget::setParent(parent);
         }
         else{
-            QWidget::setParent(parent);
-            //raise();
             show();
             move(relativeRect.x(),relativeRect.y());
+            QWidget::setParent(parent);
+            qDebug()<<parent;
         }
 
     };
@@ -91,11 +90,13 @@ public:
         for(auto wallpaper : wallpapers){
             auto screenRect = wallpaper->screen()->geometry();
             if(
-                screenRect.x()<=geometry().x()   &&
-                screenRect.y()<=geometry().y()&&
-                (screenRect.x()+screenRect.width())>=(geometry().x()+geometry().width()) &&
-                (screenRect.y()+screenRect.height())>=(geometry().y()+geometry().height())
-            ){
+                screenRect.contains(globalRect)
+                // screenRect.x()<=geometry().x()   &&
+                // screenRect.y()<=geometry().y()&&
+                // (screenRect.x()+screenRect.width())>=(geometry().x()+geometry().width()) &&
+                // (screenRect.y()+screenRect.height())>=(geometry().y()+geometry().height())
+              )
+            {
                 return wallpaper;
             }
         }
