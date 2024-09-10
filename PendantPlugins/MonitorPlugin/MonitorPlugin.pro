@@ -22,8 +22,10 @@ HEADERS += \
     pendantplugin.h
 
 DISTFILES += MonitorPlugin.json \
+    module/Progress.qml \
     dependence.ps1 \
-    MonitorQml.qml
+    MonitorQml.qml \
+    module/qmldir
 
 # Default rules for deployment.
 unix {
@@ -36,3 +38,5 @@ RESOURCES += \
 
 FORMS += \
     monitorwidget.ui
+QML_IMPORT_PATH += $$PWD/
+QML_DESIGNER_IMPORT_PATH += $$PWD/

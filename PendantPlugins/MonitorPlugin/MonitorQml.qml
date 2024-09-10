@@ -49,31 +49,55 @@ Rectangle{
             text: "hello: " + methods.getUsername()
             anchors.top: parent.top
             anchors.topMargin: 20
-            font.weight: Font.Bold
+            font.bold: true
             leftPadding: 15
             font.pointSize: 10
         }
-        Text {
+        Rectangle{
             id: monitor_cpu
-            text: "cpu: " + (methods.getCpuUsage()*100 ).toFixed(2)+"%"
             anchors.top: monitor_user.bottom
-            anchors.topMargin: 20
-            font.weight: Font.Bold
-            leftPadding: 15
-            font.pointSize: 10
+            width: parent.width
+            height: 50
+            color: '#00000000'
+            Text {
+                id: monitor_cpu_text
+                text: "cpu: " + (methods.getCpuUsage()*100 ).toFixed(2)+"%"
+                anchors.topMargin: 20
+                font.bold: true
+                leftPadding: 15
+                font.pointSize: 10
+            }
+            Text{
+                id: monitor_cpu_graph
+                anchors.top: monitor_cpu_text.bottom
+                leftPadding: 15
+                text: "        "
+            }
         }
-        Text {
+        Rectangle{
             id: monitor_memory
-            text: "memory: " + methods.getMemoryRate() +"%"
             anchors.top: monitor_cpu.bottom
-            anchors.topMargin: 20
-            font.weight: Font.Bold
-            leftPadding: 15
-            font.pointSize: 10
+            width: parent.width
+            height: 50
+            color: '#00000000'
+            Text {
+                id: monitor_memory_text
+                text: "memory: " + methods.getMemoryRate() +"%"
+                anchors.topMargin: 20
+                font.bold: Font.Bold
+                leftPadding: 15
+                font.pointSize: 10
+                Text{
+                    id: monitor_memory_graph
+                    anchors.top: monitor_memory_text.bottom
+                    leftPadding: 15
+                    text: "        "
+                }
+            }
         }
     }
     Rectangle{
-        id: wether
+        id: weather
         color: root.itemBackgroundColor
         width: parent.width - 40
         height: 130
@@ -83,10 +107,82 @@ Rectangle{
         anchors.topMargin: 35
         anchors.leftMargin: 20
         anchors.rightMargin: 20
-        Text {
-            id: wether_xxx
-            text: qsTr("15:00")
-            anchors.centerIn: wether
+        Rectangle{
+            id: weather_icon_temp
+            height: 0.6*parent.height
+            width: parent.width
+            color: "#00000000"
+            Text{
+                id: weather_icon
+                text:  "☁"
+                font.pointSize: 50
+                leftPadding: 20
+            }
+            Text{
+                id: weather_temp
+                text:  ""
+                font.pointSize: 25
+                anchors.left: weather_icon.right
+                topPadding: 20
+                leftPadding: 20
+
+            }
+        }
+        Rectangle{
+            id: weather_infos
+            anchors.top: weather_icon_temp.bottom
+            color: "#00000000"
+            width: parent.width
+            height: 0.4*parent.height
+            Text{
+                id: weather_description
+                font.pointSize: 10
+                leftPadding: 25
+                text: "天气:"
+            }
+            Text{
+                id: weather_max_temp
+                font.pointSize: 10
+                anchors.left: weather_description.right
+                text: "最大温度:"
+                leftPadding:50
+            }
+
+            Text{
+                id: weather_wind_speed
+                anchors.left: weather_max_temp.right
+                font.pointSize: 10
+                text: "风速:"
+                leftPadding:50
+            }
+            Text{
+                id: weather_city
+                font.pointSize: 15
+                anchors.top: weather_description.bottom
+                text: ""
+                leftPadding:20
+                topPadding: 15
+                font.bold: true
+            }
+            Text{
+                id: weather_min_temp
+                font.pointSize: 10
+                text: "最小温度"
+                anchors.top: weather_max_temp.bottom
+                anchors.left: weather_max_temp.left
+                leftPadding:50
+                topPadding: 20
+            }
+            Text{
+                id: weather_humidity
+                font.pointSize: 10
+                text: "湿度:"
+                anchors.top: weather_wind_speed.bottom
+                anchors.left: weather_wind_speed.left
+                leftPadding:50
+                topPadding: 20
+            }
+
         }
     }
 
@@ -97,20 +193,75 @@ Rectangle{
         height: 80
         radius: 30
         anchors.left: parent.left
-        anchors.top: wether.bottom
+        anchors.top: weather.bottom
         anchors.topMargin: 35
         anchors.leftMargin: 20
         anchors.rightMargin: 20
 
-        Text {
-            id: dashboard_xxx
-            text: qsTr("15:00")
-            anchors.centerIn: dashboard
+        Rectangle{
+            id: dashboard_day
+            height: parent.height - 20
+            width: 50
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: 10
+            anchors.leftMargin: 20
+            color: "#FFFFFF"
+            Text {
+                anchors.fill: parent
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: Qt.formatDateTime(new Date(), "dd");
+                font.pointSize: 15
+            }
         }
+
+
     }
 
     function getCurrentTime(){
         return Qt.formatDateTime(new Date(), "hh:mm");
+
+    }
+    function getGraph(num){
+        let graphs = ["▁","▂","▃","▄","▅","▅","▇","█"]
+        if(num<12.5)
+            return graphs[0]
+        if(num<25)
+            return graphs[1]
+        if(num<37.5)
+            return graphs[2]
+        if(num<50)
+            return graphs[3]
+        if(num<62.5)
+            return graphs[4]
+        if(num<75)
+            return graphs[5]
+        if(num<87.5)
+            return graphs[6]
+        if(num<=100)
+            return graphs[7]
+    }
+    function getweather(){
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+                console.log('HEADERS_RECEIVED')
+            } else if(xhr.readyState === XMLHttpRequest.DONE) {
+                console.log('GET weather DONE')
+                let object = JSON.parse(xhr.responseText);
+                console.log(object.main.temp_max)
+                weather_temp.text = object.main.temp+"°c"
+                weather_description.text = ""+object.weather[0].description
+                weather_max_temp.text =  "最大温度:"+object.main.temp_max
+                weather_min_temp.text =  "最小温度:"+object.main.temp_min
+                weather_wind_speed.text = "风速:"+object.wind.speed
+                weather_city.text = ""+object.name
+                weather_humidity.text = "湿度:"+object.main.humidity
+            }
+        }
+        xhr.open("GET", "http://api.openweathermap.org/data/2.5/weather?q=huizhou&appid=2be809d34a2cb2fd8e356f2b9bfd710d&lang=zh_cn&units=metric");
+        xhr.send();
 
     }
     Timer{
@@ -119,16 +270,22 @@ Rectangle{
         repeat: true //重复
         onTriggered:{
             time_text.text = getCurrentTime();
-            monitor_cpu.text =  "cpu: " + (methods.getCpuUsage()*100).toFixed(2) +"%"
-            monitor_memory.text = "memory: " + methods.getMemoryRate() +"%"
-
+            monitor_cpu_text.text =  "cpu: " + (methods.getCpuUsage()*100).toFixed(2) +"%"
+            monitor_memory_text.text = "memory: " + methods.getMemoryRate() +"%"
+            let temp = monitor_cpu_graph.text.split('')
+            temp.shift()
+            monitor_cpu_graph.text = temp.join('')
+            temp = monitor_memory_graph.text.split('')
+            temp.shift()
+            monitor_memory_graph.text = temp.join('')
+            monitor_cpu_graph.text+=getGraph((methods.getCpuUsage()*100).toFixed(2))
+            monitor_memory_graph.text+=getGraph(methods.getMemoryRate())
 
         }
     }
     Component.onCompleted: {
         timer.start();
+        getweather();
     }
-
-
 }
 
