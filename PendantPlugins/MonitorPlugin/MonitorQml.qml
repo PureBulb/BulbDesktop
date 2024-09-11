@@ -304,13 +304,15 @@ Rectangle{
             time_text.text = getCurrentTime();
             monitor_cpu_text.text =  "cpu: " + cpuUsage +"%"
             monitor_memory_text.text = "memory: " + memoryUsage +"%"
+
+            monitor_cpu_graph.text+= getGraph(cpuUsage)
+            monitor_memory_graph.text+= getGraph(memoryUsage)
             let temp = monitor_cpu_graph.text.split('')
             temp.shift()
             monitor_cpu_graph.text = temp.join('')
             temp = monitor_memory_graph.text.split('')
             temp.shift()
             monitor_memory_graph.text = temp.join('')
-
 
             cpu_progress.value = cpuUsage
             memory_progress.value = memoryUsage

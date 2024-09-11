@@ -36,6 +36,7 @@ BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uin
     if(id==0){
         widget->setId(QDateTime::currentMSecsSinceEpoch());
     }
+    widget->setWindowTitle("Monitor");
     return widget;
 }
 
