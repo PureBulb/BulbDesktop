@@ -1,7 +1,7 @@
 QT += widgets quickwidgets quick qml
 
 TEMPLATE = lib
-CONFIG += plugin
+CONFIG += plugin concurrent
 
 CONFIG += c++17
 

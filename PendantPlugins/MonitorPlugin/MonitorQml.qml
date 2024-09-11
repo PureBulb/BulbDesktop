@@ -1,5 +1,5 @@
 import QtQuick 2.12
-
+import "qrc:/MonitorPlugin/Module/"
 Rectangle{
     id: root
     property var itemBackgroundColor: "#DEFFFFFF"
@@ -216,6 +216,34 @@ Rectangle{
             }
         }
 
+        Progress{
+            id: cpu_progress
+            width: 50
+            height: parent.height -20
+            anchors.top: parent.top
+            anchors.left: dashboard_day.right
+            anchors.topMargin: 20
+            anchors.leftMargin: 20
+            value: 50
+            fontPx: 10
+            speed: 0.5
+
+        }
+
+        Progress{
+            id: memory_progress
+            width: 50
+            height: parent.height -20
+            waveColor: "#FF575D"
+            anchors.top: parent.top
+            anchors.left: cpu_progress.right
+            anchors.topMargin: 20
+            anchors.leftMargin: 20
+            value: 50
+            fontPx: 10
+            speed: 0.5
+        }
+
 
     }
 
@@ -264,27 +292,39 @@ Rectangle{
         xhr.send();
 
     }
+    property real cpuUsage: 0
+    property real memoryUsage: 0
     Timer{
-        id: timer
+        id: timer_1s
         interval: 1000 //间隔(单位毫秒):1000毫秒=1秒
         repeat: true //重复
         onTriggered:{
+            getMonitorInfo()
+
             time_text.text = getCurrentTime();
-            monitor_cpu_text.text =  "cpu: " + (methods.getCpuUsage()*100).toFixed(2) +"%"
-            monitor_memory_text.text = "memory: " + methods.getMemoryRate() +"%"
+            monitor_cpu_text.text =  "cpu: " + cpuUsage +"%"
+            monitor_memory_text.text = "memory: " + memoryUsage +"%"
             let temp = monitor_cpu_graph.text.split('')
             temp.shift()
             monitor_cpu_graph.text = temp.join('')
             temp = monitor_memory_graph.text.split('')
             temp.shift()
             monitor_memory_graph.text = temp.join('')
-            monitor_cpu_graph.text+=getGraph((methods.getCpuUsage()*100).toFixed(2))
-            monitor_memory_graph.text+=getGraph(methods.getMemoryRate())
 
+
+            cpu_progress.value = cpuUsage
+            memory_progress.value = memoryUsage
         }
     }
+    function getMonitorInfo(){
+        let infos = methods.getInfos()
+        cpuUsage = (infos.cpuUsage).toFixed(2);
+        memoryUsage =  infos.memoryUsage
+    }
+
+
     Component.onCompleted: {
-        timer.start();
+        timer_1s.start();
         getweather();
     }
 }

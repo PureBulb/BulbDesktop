@@ -68,13 +68,7 @@ Manager::Manager(QObject *parent)
 
     }
     if(wallpaperPluginUtils.getWallpaperWidgets().size()>0){
-        //pendant test
-        // pendantPluginUtils.newPendant("Monitor",500,100,400,665);
         pendantPluginUtils.createByConfig(wallpaperPluginUtils.getWallpaperWidgets());
-        auto test = pendantPluginUtils.getPluginThumbnailByName("Monitor");
-
-        // pendantPluginUtils.stopEditorMode();
-        //
     }
 
     initTray();

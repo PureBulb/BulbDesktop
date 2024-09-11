@@ -8,8 +8,9 @@
 #include <QDir>
 #include <QQmlEngine>
 #include <logdispacher.h>
-
+#include <QVariantMap>
 #include <sysinfoapi.h>
+#include <QtConcurrent/QtConcurrent>
 namespace Ui {
 class MonitorWidget;
 }
@@ -26,6 +27,8 @@ public:
     Q_INVOKABLE QString getUsername();
     Q_INVOKABLE double getCpuUsage();
     Q_INVOKABLE unsigned long getMemoryRate();
+    Q_INVOKABLE QVariantMap getInfos();
+    int test;
 private:
     Ui::MonitorWidget *ui;
 
@@ -33,6 +36,7 @@ private:
     __int64 CompareFileTime2(const FILETIME &preTime, const FILETIME &nowTime);
 
     const int Byte2MB = 1024 * 1024;
+    QVariantMap infos;
 
 };
 

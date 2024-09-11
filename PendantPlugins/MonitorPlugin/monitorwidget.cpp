@@ -28,6 +28,7 @@ MonitorWidget::~MonitorWidget()
 QString MonitorWidget::getUsername()
 {
     QDir dir;
+    infos.insert("username", dir.home().dirName());
     return dir.home().dirName();
 }
 __int64 MonitorWidget::Filetime2Int64(const FILETIME &ftime)
@@ -64,17 +65,30 @@ double MonitorWidget::getCpuUsage()
     if (kernel + user == 0)
         return 0;
 
+    infos.insert("cpuUsage",(1.0*(kernel + user - idle) / (kernel + user))*100);
     return 1.0*(kernel + user - idle) / (kernel + user);
 }
 
 unsigned long MonitorWidget::getMemoryRate()
 {
+
     MEMORYSTATUSEX memStatus;
     memStatus.dwLength = sizeof(memStatus);
 
     GlobalMemoryStatusEx(&memStatus);
     int nAvail = (int)(memStatus.ullAvailPhys / Byte2MB);
     int nTotal = (int)(memStatus.ullTotalPhys / Byte2MB);
+    infos.insert("memoryUsage", memStatus.dwMemoryLoad*1.0);
     return memStatus.dwMemoryLoad;
     // cout << "Memory: " <<  << "%, " << nAvail << "/" << nTotal << endl;
+}
+
+QVariantMap MonitorWidget::getInfos()
+{
+    QtConcurrent::run([=](){
+        getCpuUsage();
+        getUsername();
+        getMemoryRate();
+    });
+    return infos;
 }

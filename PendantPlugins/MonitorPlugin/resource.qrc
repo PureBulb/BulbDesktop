@@ -2,7 +2,7 @@
     <qresource prefix="/MonitorPlugin">
         <file>MonitorQml.qml</file>
         <file>icon.png</file>
-        <file>Module/progress.qml</file>
+        <file>Module/Progress.qml</file>
         <file>Module/qmldir</file>
     </qresource>
 </RCC>

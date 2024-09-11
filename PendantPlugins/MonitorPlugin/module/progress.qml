@@ -92,7 +92,7 @@ Item {
     Timer {
         running: visible
         repeat: true
-        interval: 35
+        interval: 200
         onTriggered:{
             //波浪移动
             offset += speed;
