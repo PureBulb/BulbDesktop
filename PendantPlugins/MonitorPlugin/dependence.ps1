@@ -5,6 +5,6 @@ echo $type
 echo $sourceDir
 $local:buildPath = "$pwdPath/PendantPlugins/MonitorPlugin/$buildType/"
 if($buildType -eq "release"){
-# make windeployqt
+windeployqt "$buildPath/MonitorPlugin.dll" --qmldir "$sourceDir/PendantPlugins/MonitorPlugin"
 }
 echo "==========================finished==========================="

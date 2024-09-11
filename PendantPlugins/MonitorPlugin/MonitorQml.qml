@@ -46,12 +46,14 @@ Rectangle{
         anchors.right: parent.right
         Text {
             id: monitor_user
+            width: parent.width
             text: "hello: " + methods.getUsername()
             anchors.top: parent.top
             anchors.topMargin: 20
             font.bold: true
             leftPadding: 15
             font.pointSize: 10
+            elide: Text.ElideRight
         }
         Rectangle{
             id: monitor_cpu
@@ -100,7 +102,7 @@ Rectangle{
         id: weather
         color: root.itemBackgroundColor
         width: parent.width - 40
-        height: 130
+        height: 150
         radius: 30
         anchors.left: parent.left
         anchors.top: time.bottom
@@ -157,7 +159,7 @@ Rectangle{
             }
             Text{
                 id: weather_city
-                font.pointSize: 15
+                font.pointSize: 12
                 anchors.top: weather_description.bottom
                 text: ""
                 leftPadding:20

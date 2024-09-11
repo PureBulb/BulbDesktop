@@ -8,6 +8,6 @@ $local:ffmpegDependencePath = "$sourceDir/ffmpeg/bin/*.*"
 $local:buildPath = "$pwdPath/WallpaperPlugins/BaseWallPaperPlugin/$buildType/"
 Copy-Item -Path $ffmpegDependencePath  $buildPath -Recurse -Force
 if($buildType -eq "release"){
-# make windeployqt
+windeployqt "$buildPath/BaseWallPaperPlugin.dll"
 }
 echo "==========================finished==========================="

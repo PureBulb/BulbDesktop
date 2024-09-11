@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
         }
         return -1;
     }
+    QString QtPluginsPath = QCoreApplication::applicationDirPath()+"/plugins";
+    QApplication::addLibraryPath(QtPluginsPath);
     Manager manager;
     return a.exec();
 }

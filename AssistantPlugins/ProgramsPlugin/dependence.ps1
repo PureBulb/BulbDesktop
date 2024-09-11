@@ -5,6 +5,6 @@ echo $type
 echo $sourceDir
 $local:buildPath = "$pwdPath/AssistantPlugins/ProgramsPlugin/$buildType/"
 if($buildType -eq "release"){
-# make windeployqt
+windeployqt "$buildPath/ProgramsPlugin.dll"
 }
 echo "==========================finished==========================="

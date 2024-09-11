@@ -5,6 +5,9 @@ void BaseWallpaperPlugin::bindWallPaperEvent()
 {
     for(auto wallpaper:wallpaperManager.getWallpapers()){
         connect(wallpaper,&Wallpaper::triggedIcons,this,&BaseWallpaperPlugin::onTriggedIcons);
+        //init
+        wallpaper->acceptDrops();
+        wallpaper->installEventFilter(&eventHandler);
     }
 
 }
@@ -22,6 +25,7 @@ BaseWallpaperPlugin::BaseWallpaperPlugin()
 
     connect(this,&BaseWallpaperPlugin::nextWallpaper,&wallpaperManager,&BaseWallpaperManager::nextWallpaper);
 
+    connect(&eventHandler,&EventHandler::pendantDrop,this,&BaseWallpaperPlugin::pendantDropDispathcer);
 }
 
 void BaseWallpaperPlugin::loaded()
