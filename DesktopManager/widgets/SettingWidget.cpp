@@ -6,6 +6,7 @@ SettingWidget::SettingWidget(QWidget *parent) :
     ui(new Ui::SettingWidget)
 {
     ui->setupUi(this);
+    setWindowTitle("设置");
 }
 
 SettingWidget::~SettingWidget()

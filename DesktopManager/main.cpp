@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
         return -1;
     }
     QString QtPluginsPath = QCoreApplication::applicationDirPath()+"/plugins";
+    QString QtQmlPath = QCoreApplication::applicationDirPath()+"/qml";
     QApplication::addLibraryPath(QtPluginsPath);
     Manager manager;
     return a.exec();

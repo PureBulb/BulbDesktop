@@ -6,8 +6,8 @@ Write-Output "build dir: $pwdPath"
 $exePath="$pwdPath/DesktopManager/$buildtype/"
 Add-Type -AssemblyName PresentationFramework
 # line 7 line 8 please enter your Qt environment
-$path1="E:\environment\qt\5.14.2\mingw73_64\bin"
-$path2="E:/environment/qt/Tools/mingw730_64\bin"
+$path1="C:\Qt\Qt5.14.2\5.14.2\mingw13_64\bin"
+$path2="C:\Qt\Qt5.14.2\Tools\mingw1310_64\bin"
 
 $env:path+="$path2;$path2"
 if(!(Test-Path -Path $path1) -and !(Test-Path -Path $path2)){
@@ -94,6 +94,8 @@ windeployqt $pwdPath/DesktopManager/$buildtype
 Write-Output "copy Qt plugins"
 $QtPluginPath = "$path1/../plugins"
 Copy-Item -Path $QtPluginPath $exePath -Recurse -Force
+$QtQmlPath = "$path1/../qml"
+Copy-Item -Path $QtQmlPath $exePath -Recurse -Force
 Write-Output "copy finished "
 if($buildtype -eq "release"){
     Write-Output "cleaning....."

@@ -7,6 +7,7 @@
 #include <monitorwidget.h>
 #include <QDateTime>
 #include <QUrl>
+#include <QHash>
 class PendantPlugin : public IPendantPlugin
 {
     Q_OBJECT
@@ -15,11 +16,13 @@ class PendantPlugin : public IPendantPlugin
 
 private:
     LogDispacher* logInstance;
+    QHash<QString, QVariant> settings;
 public:
     explicit PendantPlugin();
     void loaded() override;
     BasePendantWidget * createNewWidget(int x, int y, int w, int h, uint64_t id=0) override;
     QImage getIcon() override;
+    void setSettings(QHash<QString,QVariant> settings) override;
 };
 
 #endif // PENDANTPLUGIN_H

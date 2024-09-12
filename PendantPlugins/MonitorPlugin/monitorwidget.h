@@ -23,6 +23,7 @@ public:
     explicit MonitorWidget(QWidget *parent = nullptr);
 
     ~MonitorWidget();
+    void setCity(const QString& city);
 
     Q_INVOKABLE QString getUsername();
     Q_INVOKABLE double getCpuUsage();

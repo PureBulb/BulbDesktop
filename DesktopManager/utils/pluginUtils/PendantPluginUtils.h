@@ -78,6 +78,8 @@ private slots:
     void onPendantChange(uint64_t id,QRect geometry);
     void onPendantClose(uint64_t id);
     void onDropPendantEvent(QString pendantName,QPoint pos);
+
+    void onRequestUpdateSettings(QHash<QString, QVariant> _settings);
 };
 
 #endif // PENDANTPLUGINUTILS_H

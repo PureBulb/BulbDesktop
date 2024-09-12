@@ -25,6 +25,11 @@ MonitorWidget::~MonitorWidget()
     delete ui;
 }
 
+void MonitorWidget::setCity(const QString &city)
+{
+    infos.insert("city", city);
+}
+
 QString MonitorWidget::getUsername()
 {
     QDir dir;
@@ -76,8 +81,8 @@ unsigned long MonitorWidget::getMemoryRate()
     memStatus.dwLength = sizeof(memStatus);
 
     GlobalMemoryStatusEx(&memStatus);
-    int nAvail = (int)(memStatus.ullAvailPhys / Byte2MB);
-    int nTotal = (int)(memStatus.ullTotalPhys / Byte2MB);
+    // int nAvail = (int)(memStatus.ullAvailPhys / Byte2MB);
+    // int nTotal = (int)(memStatus.ullTotalPhys / Byte2MB);
     infos.insert("memoryUsage", memStatus.dwMemoryLoad*1.0);
     return memStatus.dwMemoryLoad;
     // cout << "Memory: " <<  << "%, " << nAvail << "/" << nTotal << endl;

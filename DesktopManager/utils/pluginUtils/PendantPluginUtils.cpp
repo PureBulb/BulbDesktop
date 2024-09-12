@@ -78,6 +78,8 @@ void PendantPluginUtils::object2Interface()
             connect(instance,&IPendantPlugin::changePendant,this,&::PendantPluginUtils::onPendantChange);
             connect(instance,&IPendantPlugin::closePendant,this,&::PendantPluginUtils::onPendantClose);
 
+            connect(instance,&IPendantPlugin::requestUpdateSettings,this,&PendantPluginUtils::onRequestUpdateSettings);
+
             instance->loaded();
         }
 
@@ -128,6 +130,10 @@ BasePendantWidget *PendantPluginUtils::newPendant(QString pluginName, int x, int
 void PendantPluginUtils::setSettings(SettingManager *setting)
 {
     settingsManager = setting;
+    for(auto plugin = plugins.begin();plugin!=plugins.end();plugin++){
+        auto settings = settingsManager->getPluginSettings(plugin.key());
+        plugin.value()->setSettings(settings);
+    }
 }
 
 QHash<QString, QImage> PendantPluginUtils::getPluginThumbnails()
@@ -192,4 +198,13 @@ void PendantPluginUtils::onPendantClose(uint64_t id)
 void PendantPluginUtils::onDropPendantEvent(QString pendantName, QPoint pos)
 {
     auto widget = newPendant(pendantName,pos.x(),pos.y(),100,100);
+}
+
+void PendantPluginUtils::onRequestUpdateSettings(QHash<QString, QVariant> _settings)
+{
+    QObject* obj = sender();
+    IPendantPlugin* instant = qobject_cast<IPendantPlugin*>(obj);
+    QString pluginName = plugins.key(instant);
+    logInfoHandler("PendantPluginUtils::onRequestUpdateSettings",pluginName+"request settings");
+    settingsManager->setPluginSettings(pluginName,_settings);
 }

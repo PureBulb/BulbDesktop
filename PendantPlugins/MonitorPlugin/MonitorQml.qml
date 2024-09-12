@@ -288,12 +288,18 @@ Rectangle{
                 weather_wind_speed.text = "风速:"+object.wind.speed
                 weather_city.text = ""+object.name
                 weather_humidity.text = "湿度:"+object.main.humidity
+                methodsIsInit = true
             }
         }
-        xhr.open("GET", "http://api.openweathermap.org/data/2.5/weather?q=huizhou&appid=2be809d34a2cb2fd8e356f2b9bfd710d&lang=zh_cn&units=metric");
+
+        let url = "http://api.openweathermap.org/data/2.5/weather?q="+methods.getInfos().city+"&appid=2be809d34a2cb2fd8e356f2b9bfd710d&lang=zh_cn&units=metric"
+
+        console.log(url)
+        xhr.open("GET",url );
         xhr.send();
 
     }
+    property bool methodsIsInit: false
     property real cpuUsage: 0
     property real memoryUsage: 0
     Timer{
@@ -324,6 +330,9 @@ Rectangle{
         let infos = methods.getInfos()
         cpuUsage = (infos.cpuUsage).toFixed(2);
         memoryUsage =  infos.memoryUsage
+        if(!methodsIsInit){
+            getweather()
+        }
     }
 
 

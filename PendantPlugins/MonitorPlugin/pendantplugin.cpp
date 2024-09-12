@@ -11,6 +11,8 @@ PendantPlugin::PendantPlugin() {
 
 void PendantPlugin::loaded()
 {
+    MonitorWidget widget;
+
     logInstance->logd("PendantPlugin::loaded","MonitorPlugin is loaded");
 }
 
@@ -37,6 +39,7 @@ BasePendantWidget *PendantPlugin::createNewWidget(int x, int y, int w, int h,uin
         widget->setId(QDateTime::currentMSecsSinceEpoch());
     }
     widget->setWindowTitle("Monitor");
+    static_cast<MonitorWidget*>(widget)->setCity(settings["city"].toString());
     return widget;
 }
 
@@ -44,5 +47,14 @@ QImage PendantPlugin::getIcon()
 {
     return QImage (":/MonitorPlugin/icon.png");
 
+}
+
+void PendantPlugin::setSettings(QHash<QString, QVariant> _settings)
+{
+    settings = _settings;
+    if(settings.find("city")==settings.end()){
+        settings["city"]="beijing";
+        emit requestUpdateSettings(settings);
+    }
 }
 
