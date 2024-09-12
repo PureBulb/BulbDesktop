@@ -27,6 +27,7 @@ public:
 
     void setGif(QMovie *gif);
     void setGraph(QPixmap pixmap);
+    void cleanGraph();
 public slots:
     void onDecodeImage(QImage _image);
 protected:

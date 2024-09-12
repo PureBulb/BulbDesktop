@@ -95,13 +95,14 @@ public:
                 // screenRect.y()<=geometry().y()&&
                 // (screenRect.x()+screenRect.width())>=(geometry().x()+geometry().width()) &&
                 // (screenRect.y()+screenRect.height())>=(geometry().y()+geometry().height())
-              )
+                )
             {
                 return wallpaper;
             }
         }
         return nullptr;
     }
+
 signals:
     void changeWidget(uint64_t id,QRect geometry);
     void closeWidget(uint64_t id);
@@ -115,7 +116,7 @@ protected:
     bool isEditMode = false;
 public:
     IPendantPlugin(){};
-
+    virtual void setSettings([[maybe_unused]]QHash<QString,QVariant> settings){};
     virtual void loaded() {} //在这里通读取配置
     virtual void unloaded() {foreach(auto widget,widgets){widget->deleteLater();}} //卸载时要清除资源
     virtual void activated() {} // 在这里将配置中的挂件全部初始化
@@ -146,6 +147,7 @@ signals:
     void closePendant(uint64_t id);
     void changePendant(uint64_t id,QRect rect);
 
+    void requestUpdateSettings(QHash<QString,QVariant> settings);
 
 };
 QT_BEGIN_NAMESPACE

@@ -31,8 +31,13 @@ void Wallpaper::setGif(QMovie *gif)
 
 void Wallpaper::setGraph(QPixmap pixmap)
 {
-    ui->backgroundLabel->setPixmap(pixmap);
-    ui->backgroundLabel->setScaledContents(true);
+    ui->backgroundLabel->setPixmap(pixmap.scaled( ui->backgroundLabel->size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    ui->backgroundLabel->setAlignment(Qt::AlignCenter);
+}
+
+void Wallpaper::cleanGraph()
+{
+    ui->backgroundLabel->clear();
 }
 
 

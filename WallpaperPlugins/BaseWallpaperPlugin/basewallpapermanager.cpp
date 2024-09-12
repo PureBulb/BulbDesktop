@@ -93,8 +93,10 @@ void BaseWallpaperManager::setVideoBackground()
         if(!video){
             video = new VideoUtils(wallpaperPaths.front());
             connect(video,&VideoUtils::displayFinished,this,&BaseWallpaperManager::setVideoBackground);
-            for(auto wallpaper:qAsConst(wallpapers))
+            for(auto wallpaper:qAsConst(wallpapers)){
                 connect(video,&VideoUtils::sendDecodeImg,wallpaper,&Wallpaper::onDecodeImage);
+                wallpaper->cleanGraph();
+            }
             wallpaperPaths.pop_front();
             video->play();
             logInstance->logi("BaseWallpaperManager::setVideoBackground","video started");
@@ -120,8 +122,11 @@ void BaseWallpaperManager::setSettings(QHash<QString, QVariant> _settings)
     qDebug()<<_settings;    //没有我会被优化掉，无语死了
     settings = _settings;
 
-    graphShowDelay = settings["graph.graphShowDelay"].toUInt();
-
+    bool flag;
+    graphShowDelay = settings[INI_GRAPH_DELAY].toInt(&flag);
+    if(!flag){
+        logInstance->logd("BaseWallpaperManager::setSetting","graphShowDelay is null");
+    }
     //TODO: re-init?
     // restart();
 
