@@ -24,15 +24,17 @@ int DexmuxThread::open()
     //打开文件
     res = avformat_open_input(&formatContex,filePath.toStdString().c_str(),nullptr,nullptr);
     if(formatContex == nullptr){
-        QString msg("can not open file,res=%1");
-        msg = msg.arg(res);
+        QString msg("can not open file,res=%1,error message:%2");
+        char errStr[50];
+        av_strerror(res,errStr,50);
+        msg = msg.arg(res).arg(errStr);
         emit error(module,msg);
         return res;
     }
     //寻找流信息
     res = avformat_find_stream_info(formatContex,nullptr);
     if(res == AVERROR_EOF){
-        emit error(module,QString("reached file end,res=%1").arg(res));
+        LogDispacher::getInstance()->loge(module,QString("reached file end,res=%1").arg(res));
         close();
         return -1;
     }
@@ -40,7 +42,10 @@ int DexmuxThread::open()
     videoStreamIndex = av_find_best_stream(formatContex,AVMEDIA_TYPE_VIDEO,-1,-1,nullptr,0);
     audioStreamIndex = av_find_best_stream(formatContex,AVMEDIA_TYPE_AUDIO,-1,-1,nullptr,0);
     if(videoStreamIndex < 0 || audioStreamIndex <0){
-        emit error(module,QString("viedoStreamIndex=%1,audiostreamIndex=%2").arg(videoStreamIndex,audioStreamIndex));
+        LogDispacher::getInstance()->logw(module,QString("viedoStreamIndex=%x,audiostreamIndex=%x").arg(videoStreamIndex,audioStreamIndex));
+    }
+    if(videoStreamIndex < 0 && audioStreamIndex <0){
+        LogDispacher::getInstance()->loge(module,QString("viedoStreamIndex=%x,audiostreamIndex=%x").arg(videoStreamIndex,audioStreamIndex));
         close();
         return -1;
     }
@@ -50,7 +55,7 @@ int DexmuxThread::open()
 AVCodecParameters *DexmuxThread::getAudioCodecParameters()
 {
 
-    if(formatContex!=nullptr){
+    if(formatContex!=nullptr && audioStreamIndex>=0){
 
         return formatContex->streams[audioStreamIndex]->codecpar;
     }
@@ -60,7 +65,7 @@ AVCodecParameters *DexmuxThread::getAudioCodecParameters()
 //返回视频解码器参数
 AVCodecParameters *DexmuxThread::getvideoCodecParameters()
 {
-    if(formatContex!=nullptr){
+    if(formatContex!=nullptr && videoStreamIndex>=0){
 
         return formatContex->streams[videoStreamIndex]->codecpar;
     }
@@ -69,7 +74,7 @@ AVCodecParameters *DexmuxThread::getvideoCodecParameters()
 
 AVRational DexmuxThread::getVideoTimeBase()
 {
-    if(formatContex!=nullptr){
+    if(formatContex!=nullptr && videoStreamIndex>=0){
 
         return formatContex->streams[videoStreamIndex]->time_base;
     }
@@ -78,11 +83,28 @@ AVRational DexmuxThread::getVideoTimeBase()
 
 AVRational DexmuxThread::getAudioTimeBase()
 {
-    if(formatContex!=nullptr){
+    if(formatContex!=nullptr && audioStreamIndex >= 0){
 
         return formatContex->streams[audioStreamIndex]->time_base;
     }
     return  AVRational{0,0};
+}
+
+ClockType DexmuxThread::getClockType()
+{
+    if(videoStreamIndex>=0 && audioStreamIndex>=0){
+        return ClockType::AUDIO_MASTER;
+    }
+
+    if(videoStreamIndex<0 && audioStreamIndex<0){
+        return ClockType::CLOCK_TYPE_ERROR;
+    }
+    if(videoStreamIndex<0){
+        return ClockType::AUDIO_MASTER;
+    }
+    if(audioStreamIndex<0){
+        return ClockType::VIDEO_MASTER;
+    }
 }
 //从流中读取数据包放到队列
 void DexmuxThread::run()

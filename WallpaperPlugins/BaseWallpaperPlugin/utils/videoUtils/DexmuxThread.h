@@ -9,11 +9,14 @@ extern "C"{
 #include "IDecoderBase.h"
 #include "AvFrameQueue.h"
 #include "AVPacketQueue.h"
+#include "../logdispacher.h"
+#include "syncclock.h"
 class DexmuxThread:public ThreadBase
 {
     Q_OBJECT
 signals:
     void error(QString module,QString msg);
+    void warring(QString module,QString msg);
     void readPacketFinished();
 private:
     int audioStreamIndex;
@@ -31,6 +34,7 @@ public:
     AVCodecParameters * getvideoCodecParameters();
     AVRational getVideoTimeBase();
     AVRational getAudioTimeBase();
+    ClockType getClockType();
 protected:
     void run() override;
 

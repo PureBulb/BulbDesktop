@@ -276,11 +276,8 @@ Rectangle{
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
-                console.log('HEADERS_RECEIVED')
             } else if(xhr.readyState === XMLHttpRequest.DONE) {
-                console.log('GET weather DONE')
                 let object = JSON.parse(xhr.responseText);
-                console.log(object.main.temp_max)
                 weather_temp.text = object.main.temp+"°c"
                 weather_description.text = ""+object.weather[0].description
                 weather_max_temp.text =  "最大温度:"+object.main.temp_max
@@ -294,7 +291,6 @@ Rectangle{
 
         let url = "http://api.openweathermap.org/data/2.5/weather?q="+methods.getInfos().city+"&appid=2be809d34a2cb2fd8e356f2b9bfd710d&lang=zh_cn&units=metric"
 
-        console.log(url)
         xhr.open("GET",url );
         xhr.send();
 

@@ -12,7 +12,7 @@ VideoDecoder::VideoDecoder(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCod
     ,pauseTime(0)
     ,resumeTime(0)
     ,clock(nullptr)
-
+    ,isFirstFrame(true)
 
 {}
 
@@ -61,6 +61,10 @@ void VideoDecoder::decode()
             waitResume();
             AVFrame* frame = av_frame_alloc();
             res = avcodec_receive_frame(codecContext,frame);
+            if(clockType == ClockType::VIDEO_MASTER && isFirstFrame){
+                isFirstFrame = false;
+                clock->setClock(frame->pts*av_q2d(timeBase));
+            }
             if(res == 0){
 //                frames->enqueue(frame);
 //                avpicture_fill(frame->data,)
@@ -141,7 +145,6 @@ void VideoDecoder::toImage(AVFrame &frame)
         int h = sws_scale(swsContext,frame.data,frame.linesize,0,frame.height,pFrameRGB->data,pFrameRGB->linesize);
         QImage tmpImg((uchar *)rgbBuffer,frame.width,frame.height,QImage::Format_RGB32);
         QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
-
         double pts = frame.pts *av_q2d(timeBase);
         volatile double diff = pts - clock->getClock();
         while(diff>0){

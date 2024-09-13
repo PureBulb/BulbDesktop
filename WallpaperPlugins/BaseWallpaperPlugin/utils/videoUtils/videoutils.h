@@ -30,6 +30,7 @@ public:
     VideoUtils(QString path);
     ~VideoUtils();
     void play();
+    bool haveError;
     static QImage getThumbnail(QString filename);
     static void deleteThumbnail(QString filename);
 public slots:

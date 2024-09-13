@@ -12,6 +12,9 @@ extern "C"{
 #include "libswresample/swresample.h"
 #include "libavutil/time.h"
 }
+#include "syncclock.h"
+
+
 class IDecoderBase:public ThreadBase
 {
     Q_OBJECT
@@ -25,7 +28,7 @@ public:
     virtual void init(AVPacketQueue* _packets,AVFrameQueue* _frames,AVCodecParameters *parm);
 
     AVCodecContext *getCodecContext() const;
-
+    void setClockType(ClockType type);
 protected:
     virtual void decode() = 0;
     bool isInit();
@@ -37,6 +40,7 @@ protected:
     AVPacketQueue *packets;
     AVFrameQueue *frames;
     AVCodecContext* codecContext;
+    ClockType clockType;
 signals:
     void error(QString,QString);
     void decodeFinished();

@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QMutex>
+#include "logdispacher.h"
 class ThreadBase :public QThread
 {
     Q_OBJECT

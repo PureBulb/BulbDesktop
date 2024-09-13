@@ -3,11 +3,14 @@
 
 VideoUtils::VideoUtils(QString path)
     :_stop(false)
+    ,haveError(false)
 {
     logInstance = LogDispacher::getInstance();
     audio = AudioUtils::getInstance();
     dmt = new DexmuxThread(path,&audioPacketQueue,&videoPacketQueue);
-    dmt->open();
+    if(0>dmt->open()){
+        haveError = true;
+    }
     audioDecoder = new AudioDecoder(&audioPacketQueue,&audioFrameQueue,dmt->getAudioCodecParameters());
     videoDecoder = new VideoDecoder(&videoPacketQueue,&videoFrameQueue,dmt->getvideoCodecParameters());
     videoDecoder->setTimeBase(dmt->getVideoTimeBase());
@@ -34,15 +37,25 @@ VideoUtils::~VideoUtils()
 
 void VideoUtils::play()
 {
+    if(!haveError){
+        clock = SyncClock();
+        audioDecoder->setClockType(dmt->getClockType());
+        videoDecoder->setClockType(dmt->getClockType());
+        audioDecoder->setClock(&clock);
+        videoDecoder->setClock(&clock);
+        audio->start();
 
-    clock = SyncClock();
-    audioDecoder->setClock(&clock);
-    videoDecoder->setClock(&clock);
-    audio->start();
-    audioDecoder->setAudio(audio);
-    dmt->start();
-    QThread::msleep(100);
-    audioDecoder->start();
+        audioDecoder->setAudio(audio);
+        dmt->start();
+        QThread::msleep(100);
+
+        if(dmt->getvideoCodecParameters() && dmt->getAudioCodecParameters()==nullptr){
+            videoDecoder->start();
+        }
+        else{
+            audioDecoder->start();
+        }
+    }
 
 }
 
@@ -149,9 +162,11 @@ void VideoUtils::onVideoDecoderImg(QImage img)
 
 void VideoUtils::videoStart()
 {
-    videoDecoder->start();
-}
+    if(dmt->getvideoCodecParameters()){
+        videoDecoder->start();
 
+    }
+}
 void VideoUtils::onDisplayFinished()
 {
     if(!_stop)

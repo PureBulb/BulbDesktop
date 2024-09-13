@@ -24,6 +24,7 @@ private:
     qint64          pauseTime;
     qint64          resumeTime;
     SyncClock*      clock;
+    bool            isFirstFrame;
     void toImage(AVFrame &frame);
 
 public:

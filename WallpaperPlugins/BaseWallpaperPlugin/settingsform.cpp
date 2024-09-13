@@ -125,16 +125,16 @@ void SettingsForm::onRemoveThumbnail(QString filename)
 
     else if(senderObj->getType() == WallpaperType::gif){
         QStringList paths = setting[INI_GIF_PATHS].toStringList();
-        paths.removeAll(filename);
         if(paths.size()<=1){
             QMessageBox::information(nullptr,"警告","至少要有一个壁纸");
             return;
         }
+        paths.removeAll(filename);
         setting[INI_GIF_PATHS] = paths;
         ui->gifThumbnailLayout->removeWidget(senderObj);
-        emit settingFormChanged(setting);
-    }
 
+    }
+    emit settingFormChanged(setting);
 
     initThumbnail();
 }

@@ -10,6 +10,12 @@ IDecoderBase::IDecoderBase()
 {}
 
 IDecoderBase::IDecoderBase(AVPacketQueue *_packets, AVFrameQueue *_frames, AVCodecParameters *parm)
+    :packetQueueInit(false)
+    ,frameQueueInit(false)
+    ,parmInit(false)
+    ,packets(nullptr)
+    ,frames(nullptr)
+    ,codecContext(nullptr)
 {
     init(_packets,_frames,parm);
 }
@@ -44,13 +50,18 @@ void IDecoderBase::setParameters(AVCodecParameters *parm)
     //复制参数给上下文
     res = avcodec_parameters_to_context(codecContext,parm);
     if(res<0){
-//        emit error(module,"avcodec_parameters_to_context failed");
+        avcodec_free_context(&codecContext);
+        codecContext = nullptr;
+        LogDispacher::getInstance()->loge("IDecoderBase::setParameters",QString("复制参数给上下文出错：%1").arg(res));
         return ;
     }
     //寻找最佳解码器
     const AVCodec* codec = avcodec_find_decoder(codecContext->codec_id);
     res = avcodec_open2(codecContext,codec,NULL);
     if(res < 0){
+        avcodec_free_context(&codecContext);
+        codecContext = nullptr;
+        LogDispacher::getInstance()->loge("IDecoderBase::setParameters",QString("寻找解码器出错：%1").arg(res));
 //        emit error(module,"avcodec_open2 failed");
         return;
     }
@@ -85,6 +96,11 @@ void IDecoderBase::setThreadFinished()
 AVCodecContext *IDecoderBase::getCodecContext() const
 {
     return codecContext;
+}
+
+void IDecoderBase::setClockType(ClockType type)
+{
+    clockType = type;
 }
 
 IDecoderBase::~IDecoderBase()

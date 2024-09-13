@@ -7,6 +7,11 @@
 extern "C"{
 #include "libavutil/time.h"
 }
+enum class ClockType:int{
+    VIDEO_MASTER,
+    AUDIO_MASTER,
+    CLOCK_TYPE_ERROR
+};
 class SyncClock
 {
 public:

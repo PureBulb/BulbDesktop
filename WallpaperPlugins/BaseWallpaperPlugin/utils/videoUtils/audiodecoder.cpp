@@ -101,7 +101,7 @@ void AudioDecoder::decode()
         }
         // 送包
 
-        AVPacket* pkt = packets->dequeue(10);
+        AVPacket* pkt = packets->dequeue(20);
         if(pkt){
             res = avcodec_send_packet(codecContext,pkt);
             if (res < 0) {  // 送入数据包失败
@@ -144,7 +144,7 @@ void AudioDecoder::decode()
                 emit displayAudio(av_gettime());
                 decodeFinished = true;
                 unlock();
-                double lastPts = INFINITY ;
+
                 while(!frames->isEmpty() && !_stop){
                     waitResume();
                     frame = frames->dequeue(1);
@@ -161,23 +161,19 @@ void AudioDecoder::decode()
                     bool writeResult = audio->writeData(buffer.mid(0,audio->getPeriodSize()));
                     buffer.remove(0,audio->getPeriodSize());
                     if(!writeResult){
-                        volatile double diff = lastPts - clock->getClock();
-                        while(diff>0){
-                            msleep(1);
-                            diff = lastPts - clock->getClock();
-
-                        }
+                        while(true){}
                     }
-                    lastPts = currentPts;
+
                     av_frame_free(&frame);
                 }
-
 
                 return;
             }
             av_frame_unref(frame);
             av_frame_free(&frame);
             frame = nullptr;
+
+
         }
     }
 }
