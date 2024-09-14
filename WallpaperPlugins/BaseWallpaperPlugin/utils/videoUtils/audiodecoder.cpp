@@ -161,7 +161,7 @@ void AudioDecoder::decode()
                     bool writeResult = audio->writeData(buffer.mid(0,audio->getPeriodSize()));
                     buffer.remove(0,audio->getPeriodSize());
                     if(!writeResult){
-                        while(true){}
+                        while(!_stop){}
                     }
 
                     av_frame_free(&frame);
